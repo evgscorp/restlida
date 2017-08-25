@@ -8,7 +8,7 @@ $settings = array(
 		'adapter' => 'Mysql',	/* Possible Values: Mysql, Postgres, Sqlite */
 		'host' => 'localhost',
 		'username' => 'misql',
-        	'password' => 'miliCante',
+        	'password' => '*',
 		'name' => 'millida',
 		'port' => 3306
 	),
@@ -18,7 +18,7 @@ $settings = array(
         'host'     => 'localhost',
         'port'     => 3306,
         'username' => 'misql',
-        'password' => 'miliCante',
+        'password' => '*',
         'dbname'   => 'oauth2',
     )
 );
