@@ -47,7 +47,7 @@ class Session implements SessionInterface
     {
         $this->db->insert(
             $this->tables['oauth_sessions'],
-            [$clientId, $ownerType, $ownerId],
+            [1, $ownerType, $ownerId],
             ['client_id', 'owner_type', 'owner_id']
         );
         return $this->db->lastInsertId();
