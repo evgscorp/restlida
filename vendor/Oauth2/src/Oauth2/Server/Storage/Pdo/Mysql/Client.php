@@ -78,7 +78,7 @@ class Client implements ClientInterface
                 'SELECT oauth_clients.id, oauth_clients.secret, oauth_client_endpoints.redirect_uri, oauth_clients.name,' .
                 'oauth_clients.auto_approve FROM oauth_clients LEFT JOIN oauth_client_endpoints ON ' .
                 'oauth_client_endpoints.client_id = oauth_clients.id ' .
-                'WHERE oauth_clients.id = :clientId AND oauth_clients.secret = :clientSecret AND ' .
+                'WHERE oauth_clients.name = :clientId AND oauth_clients.secret = :clientSecret AND ' .
                 'oauth_client_endpoints.redirect_uri = :redirectUri',
                 Db::FETCH_ASSOC,
                 ['clientId' => $clientId, 'clientSecret' => $clientSecret, 'redirectUri' => $redirectUri]
@@ -86,7 +86,7 @@ class Client implements ClientInterface
         } else if ($clientSecret) {
             $row = $this->db->fetchOne(
                 'SELECT oauth_clients.id, oauth_clients.secret, oauth_clients.name, oauth_clients.auto_approve ' .
-                'FROM oauth_clients WHERE oauth_clients.id = :clientId AND oauth_clients.secret = :clientSecret',
+                'FROM oauth_clients WHERE oauth_clients.name = :clientId AND oauth_clients.secret = :clientSecret',
                 Db::FETCH_ASSOC,
                 ['clientId' => $clientId, 'clientSecret' => $clientSecret]
             );
@@ -97,13 +97,13 @@ class Client implements ClientInterface
                 'FROM oauth_clients c ' .
                 'LEFT JOIN oauth_client_endpoints e ' .
                 'ON e.client_id = c.id ' .
-                'WHERE c.id = :clientId AND e.redirect_uri = :redirectUri',
+                'WHERE c.name = :clientId AND e.redirect_uri = :redirectUri',
                 Db::FETCH_ASSOC,
                 ['clientId' => $clientId, 'redirectUri' => $redirectUri]
             );
         } else {
             $row = $this->db->fetchOne(
-                'SELECT * FROM oauth_clients WHERE id = :clientId',
+                'SELECT * FROM oauth_clients WHERE name = :clientId',
                 DB::FETCH_ASSOC,
                 ['clientId' => $clientId]
             );
