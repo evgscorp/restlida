@@ -4,7 +4,7 @@
  * Capture PHP related warnings/errors
  *
  * @package Utilities
- * @author Jete O'Keeffe 
+ * @author Jete O'Keeffe
  * @version 1.0
  * @link
  */
@@ -52,7 +52,7 @@ class PhpError {
      */
     public static function logToSyslog($errNo, $errStr, $errFile, $errLine) {
         $msg = sprintf("%s (errno: %d) in %s:%d", $errStr, $errNo, $errFile, $errLine);
-
+				define("LOG_LOCAL7", LOG_USER);
         if (openlog("php-errors", LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
             syslog(LOG_ERR, $msg);
             return closelog();
@@ -72,7 +72,7 @@ class PhpError {
     public static function logToDb($errNo, $errStr, $errFile, $errLine) {
 
         // Get Remote Ip or CLI script?
-        if (PHP_SAPI == 'cli') {  
+        if (PHP_SAPI == 'cli') {
             $script = $_SERVER['PHP_SELF'];
             $ip = 'CLI';
         } else {
@@ -81,7 +81,7 @@ class PhpError {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
 
-        $rt = new \Models\RuntimeError();	
+        $rt = new \Models\RuntimeError();
         $rt->title = $errStr;
         $rt->file = $errFile;
         $rt->line = $errLine;
