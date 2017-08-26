@@ -94,14 +94,13 @@ try {
         }
     });
 
-	 $app->get('/api/test', function() { echo "Hi"; });
+	 $app->get('/api/test', function() {  json_encode(['test','test1','test2']); });
 
     $app->finish(function () use ($app) {
 
 				if(!preg_match("/access/", $app->request->getURI())){
             // check format
-						 echo "Finished";
-            $format = $app->request->getQuery('format', 'string', 'json');
+						$format = $app->request->getQuery('format', 'string', 'json');
 						echo 'format: '.$format;
             switch ($format) {
                 case 'json':
