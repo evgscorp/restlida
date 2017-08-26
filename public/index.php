@@ -94,13 +94,13 @@ try {
         }
     });
 
-
+	 $app->get('/api/test', function() { echo "Hi"; });
 
     $app->finish(function () use ($app) {
 
-
-        if(!preg_match("/access/", $app->request->getURI())){
+				if(!preg_match("/access/", $app->request->getURI())){
             // check format
+						 echo "Finished";
             $format = $app->request->getQuery('format', 'string', 'json');
 						echo 'format: '.$format;
             switch ($format) {
@@ -113,6 +113,7 @@ try {
             }
         }
     });
+
 
     // Boom, Run
 	$app->run();
