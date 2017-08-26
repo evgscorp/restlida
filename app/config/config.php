@@ -13,7 +13,8 @@ $settings = array(
 		'charset'   =>'utf8',
 		'port' => 3306,
 		"options" => array(
-					PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+					PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
+					PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'",
 					PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION collation_connection = 'utf8_general_ci'"
         )
 	),
@@ -27,8 +28,9 @@ $settings = array(
         'dbname'   => 'oauth2',
 				'charset'   =>'utf8',
 				"options" => array(
-		            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-								PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION collation_connection = 'utf8_general_ci'"
+					PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
+					PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'",
+					PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION collation_connection = 'utf8_general_ci'"
 		        )
     )
 );
