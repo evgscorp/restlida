@@ -104,6 +104,7 @@ try {
 						$format = $app->request->getQuery('format', 'string', 'json');
 					  switch ($format) {
                 case 'json':
+										$app->response->setContentType('application/json', 'UTF-8');
                     echo json_encode($app->getReturnedValue());
                     break;
                 case 'xml':
