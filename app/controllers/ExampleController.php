@@ -5,7 +5,7 @@ namespace Controllers;
 class ExampleController extends \Phalcon\Mvc\Controller {
 
 	public static function testPingAction() {
-	 return  $this->response->setJsonContent(['sdf','sdf','sdf']);
+	 return  ['sdf','sdf','sdf'];
 	}
 
 	public static function pingAction() {
