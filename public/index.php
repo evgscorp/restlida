@@ -97,20 +97,19 @@ try {
 	 $app->get('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
 
     $app->after(function () use ($app) {
-
 				if(!preg_match("/access/", $app->request->getURI())){
-
-            // check format
+						echo $app->getReturnedValue();
+						/*
+						// check format
 						$format = $app->request->getQuery('format', 'string', 'json');
 					  switch ($format) {
                 case 'json':
-										$app->response->setContentType('application/json', 'UTF-8');
-                    echo json_encode($app->getReturnedValue());
+										echo json_encode($app->getReturnedValue());
                     break;
                 case 'xml':
                     print \Utilities\Outputformats\ArrayToXML::toXml($app->getReturnedValue());
                     break;
-            }
+            }*/
         }
     });
 
