@@ -18,7 +18,6 @@ $routes[] = [
 	'method' => 'get',
 	'route' => '/ping',
 	'handler' => ['Controllers\ExampleController::pingAction'],
-	'authentication' => FALSE
 ];
 
 /*$routes[] = [
@@ -27,7 +26,7 @@ $routes[] = [
 	'handler' => ['Controllers\ExampleController', 'testPingAction'],
 	'authentication' => TRUE
 ];
-*/
+
 
 
 $routes[] = [
@@ -42,5 +41,5 @@ $routes[] = [
 	'handler' => ['Controllers\ExampleController', 'skipAction'],
     'authentication' => FALSE
 ];
-
+*/
 return $routes;

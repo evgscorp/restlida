@@ -9,8 +9,9 @@ class ExampleController extends \Phalcon\Mvc\Controller {
 	}
 
 	public static function pingAction() {
+		 return  ['ppppsdf','sdfsdfsdf','111111sdf'];
         //new Jete();
-		return array(
+		/*return array(
 
             'book' => array(
                 array(
@@ -39,7 +40,7 @@ class ExampleController extends \Phalcon\Mvc\Controller {
                     )
                 )
             )
-        );
+        );*/
 	}
 
 }

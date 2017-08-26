@@ -153,6 +153,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				switch($obj['method']) {
 					case 'get':
 						//$this->get($obj['route'], $obj['handler']);
+            print_r($obj);
             $this->get($obj['route'], $obj['handler']);
 						break;
 					case 'post':
@@ -174,7 +175,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 						break;
 				}
 			}
-      $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
+   //   $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
       $this->get('/test-ping', 'Controllers\ExampleController::testPingAction');
 		 }
  	}
