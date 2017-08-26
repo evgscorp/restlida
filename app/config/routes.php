@@ -17,7 +17,7 @@ $routes[] = [
 $routes[] = [
 	'method' => 'get',
 	'route' => '/user-data',
-	'handler' => 'Controllers\CommonDataController::getCurrentUserInformation',
+	'handler' => 'Controllers\CommonDataController:getCurrentUserInformation',
 ];
 
 /*$routes[] = [
