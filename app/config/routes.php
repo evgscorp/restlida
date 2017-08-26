@@ -16,8 +16,8 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/ping',
-	'handler' => 'Controllers\ExampleController::pingAction',
+	'route' => '/user-data',
+	'handler' => 'Controllers\CommonDataController::getCurrentUserInformation',
 ];
 
 /*$routes[] = [

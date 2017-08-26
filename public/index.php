@@ -99,18 +99,7 @@ try {
     $app->after(function () use ($app) {
 				if(!preg_match("/access/", $app->request->getURI())){
 						echo $app->getReturnedValue();
-						/*
-						// check format
-						$format = $app->request->getQuery('format', 'string', 'json');
-					  switch ($format) {
-                case 'json':
-										echo json_encode($app->getReturnedValue());
-                    break;
-                case 'xml':
-                    print \Utilities\Outputformats\ArrayToXML::toXml($app->getReturnedValue());
-                    break;
-            }*/
-        }
+	      }
     });
 
 
