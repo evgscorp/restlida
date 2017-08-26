@@ -7,8 +7,8 @@
  * @eg.
 
 $routes[] = [
- 	'method' => 'post', 
-	'route' => '/api/update', 
+ 	'method' => 'post',
+	'route' => '/api/update',
 	'handler' => 'myFunction'
 ];
 
@@ -16,20 +16,21 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/ping', 
-	'handler' => ['Controllers\ExampleController', 'pingAction']
+	'route' => '/ping',
+	'handler' => ['Controllers\ExampleController', 'pingAction'],
+	'authentication' => FALSE
 ];
 
 
 $routes[] = [
-	'method' => 'post', 
-	'route' => '/test/{id}', 
+	'method' => 'post',
+	'route' => '/test/{id}',
 	'handler' => ['Controllers\ExampleController', 'testAction']
 ];
 
 $routes[] = [
-	'method' => 'post', 
-	'route' => '/skip/{name}', 
+	'method' => 'post',
+	'route' => '/skip/{name}',
 	'handler' => ['Controllers\ExampleController', 'skipAction'],
     'authentication' => FALSE
 ];
