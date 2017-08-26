@@ -101,7 +101,7 @@ try {
         if(!preg_match("/access/", $app->request->getURI())){
             // check format
             $format = $app->request->getQuery('format', 'string', 'json');
-
+						echo 'format: '.$format
             switch ($format) {
                 case 'json':
                     echo (json_encode($app->getReturnedValue()));
