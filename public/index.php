@@ -95,7 +95,7 @@ try {
     });
 
 	 $app->get('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
-	 
+
     $app->finish(function () use ($app) {
 
 				if(!preg_match("/access/", $app->request->getURI())){
@@ -104,7 +104,7 @@ try {
 						$format = $app->request->getQuery('format', 'string', 'json');
 					  switch ($format) {
                 case 'json':
-                    echo (json_encode([$format,$app->getReturnedValue()]));
+                    echo (json_encode(['format'=>$format,'result'=>$app->getReturnedValue()]));
                     break;
                 case 'xml':
                     print \Utilities\Outputformats\ArrayToXML::toXml($app->getReturnedValue());
