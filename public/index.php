@@ -94,7 +94,7 @@ try {
         }
     });
 
-	 $app->get('/api/test', function() {  json_encode(['test','test1','test2']); });
+	 $app->get('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
 
     $app->finish(function () use ($app) {
 
