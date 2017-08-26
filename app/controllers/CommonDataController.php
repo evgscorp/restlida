@@ -1,6 +1,6 @@
 <?php
 use Phalcon\Http\Response;
-use Models\MiLidaCommon;
+//use Models\MiLidaCommon;
 namespace Controllers;
 
 class CommonDataController extends \Phalcon\Mvc\Controller {
