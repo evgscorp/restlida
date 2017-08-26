@@ -6,13 +6,12 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	public function getCurrentUserInformation() {
 			 $MiLidaCommonModel = new \Models\MiLidaCommon();
-			 $UserInfo = $MiLidaCommonModel->getUserInfo(2);
+			 $UserInfo = $MiLidaCommonModel->getUserInfo($this->request->get("token"));
 			 //$Response = new \Phalcon\Http\Response();
 			 $Response=$this->response;
-			 $Response->setJsonContent(['ppppsdf','sdfsdfsdf','111111sdf']);
-			 //$Response->setJsonContent($UserInfo);
-			 $Response->setJsonContent($this->request->get("token"));
-			 return $Response;
+			 //$Response->setJsonContent(['ppppsdf','sdfsdfsdf','111111sdf']);
+			 // $Response->setJsonContent($this->request->get("token"));
+			 return $Response->setJsonContent($UserInfo);
 
 	}
 
