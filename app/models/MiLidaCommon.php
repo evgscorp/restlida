@@ -11,7 +11,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	public function getUserInfo($token)
    {
       //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
-      $result=$this->db->query("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
-      return $result->fetchAll();
+      $result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
+      return $result;
    }
 }
