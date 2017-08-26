@@ -7,8 +7,8 @@ class ExampleController extends \Phalcon\Mvc\Controller {
 
 	public function pingAction() {
         //new Jete();
-		print_r('pingAction works!');		
-		return array(
+		echo json_encode(
+			array(
 
             'book' => array(
                 array(
@@ -37,6 +37,7 @@ class ExampleController extends \Phalcon\Mvc\Controller {
                     )
                 )
             )
+					)	
         );
 	}
 
