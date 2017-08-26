@@ -53,7 +53,7 @@ try {
 	$app->setEvents(new \Events\Api\HmacAuthenticate($oauthConfig));
 
 	// Setup RESTful Routes
-	//$app->setRoutes($routes);
+	$app->setRoutes($routes);
 
     $app->setService('oauth2', function() use ($oauthConfig) {
 
@@ -95,8 +95,7 @@ try {
     });
 
 	 $app->get('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
-	 $app->setRoutes($routes);
-
+	 
     $app->finish(function () use ($app) {
 
 				if(!preg_match("/access/", $app->request->getURI())){
