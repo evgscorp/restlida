@@ -153,7 +153,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				switch($obj['method']) {
 					case 'get':
 						//$this->get($obj['route'], $obj['handler']);
-            print_r($obj);
+           // print_r($obj);
             $this->get($obj['route'], $obj['handler']);
 						break;
 					case 'post':
