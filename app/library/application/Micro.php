@@ -154,7 +154,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				switch($obj['method']) {
 					case 'get':
 						//$this->get($obj['route'], $obj['handler']);
-            $router->addGet($obj['route'],$obj['handler']);
+            $router->addGet($obj['route'], $obj['handler']);
 						break;
 					case 'post':
 						$this->post($obj['route'], $obj['handler']);
@@ -177,8 +177,8 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 			}
       $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
 		 }
+     $this->setService('router', $router, true);
 		}
-	}
 
 	/**
 	 * Set events to be triggered before/after certain stages in Micro App
