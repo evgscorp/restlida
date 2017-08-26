@@ -9,7 +9,12 @@ class ExampleController extends \Phalcon\Mvc\Controller {
 	}
 
 	public static function pingAction() {
-		 return  ['ppppsdf','sdfsdfsdf','111111sdf'];
+			 $response = new \Phalcon\Http\Response();
+			 $response->setJsonContent(['ppppsdf','sdfsdfsdf','111111sdf']);
+			 return $response;
+
+
+//		 return  ['ppppsdf','sdfsdfsdf','111111sdf'];
         //new Jete();
 		/*return array(
 
