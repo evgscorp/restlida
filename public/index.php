@@ -94,7 +94,7 @@ try {
         }
     });
 
-	 $app->get('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
+	 $app->post('/api/test', function() {  echo(json_encode(['test','test1','test2'])); });
 
     $app->after(function () use ($app) {
 				if(!preg_match("/access/", $app->request->getURI())){

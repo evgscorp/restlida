@@ -12,6 +12,27 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	}
 
+  /*
+	URL: http://172.16.130.180/restlida/add-group?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
+	Header:
+	Content-type: application/json
+	Authorization: Bearer 20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
+	JSON body example:
+	{ "token":"20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD",
+	  "group_number": "123459999123",
+	  "first_name": "Павел",
+	  "surname": "Павлов",
+	  "foreman_name": "Александр",
+	  "foreman_surname": "Александров",
+	  "labman_name": "Иван",
+	  "labman_surname": "Васильев",
+	  "workshop": "1й цех",
+	  "product_type": "4",
+	  "weight": "25",
+	  "pallet_capacity":"60",
+	  "series_capcity": 1200
+	}
+*/
 	public function createGroup() {
 			 $res='error';
 			 try {
