@@ -95,7 +95,7 @@ try {
         }
     });
 
-    $app->after(function () use ($app) {
+   /* $app->after(function () use ($app) {
 
 
         if(!preg_match("/access/", $app->request->getURI())){
@@ -111,7 +111,7 @@ try {
                     break;
             }
         }
-    });
+    });*/
 
     // Boom, Run
 	$app->run();
