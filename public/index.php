@@ -76,8 +76,7 @@ try {
         $server->addGrantType(new League\OAuth2\Server\Grant\ClientCredentials());
         return $server;
     });
-		print_r($app);
-    $app->get('/access', function () use ($app) {
+		 $app->get('/access', function () use ($app) {
 
         try {
             $params = $app->oauth2->getParam(array('client_id', 'client_secret'));
@@ -94,6 +93,8 @@ try {
             echo $e->getTraceAsString();
         }
     });
+
+
 
     $app->finish(function () use ($app) {
 
