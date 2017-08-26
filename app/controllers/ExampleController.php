@@ -4,12 +4,11 @@ namespace Controllers;
 
 class ExampleController extends \Phalcon\Mvc\Controller {
 
-	public function testPingAction() {
-		$response->setJsonContent(['sdf','sdf','sdf']);
-		return $response;
+	public static function testPingAction() {
+	 return  $this->response->setJsonContent(['sdf','sdf','sdf']);
 	}
 
-	public function pingAction() {
+	public static function pingAction() {
         //new Jete();
 		return array(
 

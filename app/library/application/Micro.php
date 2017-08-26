@@ -19,7 +19,7 @@
 namespace Application;
 
 use Interfaces\IRun as IRun;
-use Phalcon\Mvc\Router;
+//use Phalcon\Mvc\Router;
 
 class Micro extends \Phalcon\Mvc\Micro implements IRun {
 
@@ -145,8 +145,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 		if (!file_exists($file)) {
 			throw new \Exception('Unable to load routes file');
 		}
-    $router = new Router();
-		$routes = include($file);
+  	$routes = include($file);
 
 		if (!empty($routes)) {
    	foreach($routes as $obj) {
@@ -154,7 +153,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				switch($obj['method']) {
 					case 'get':
 						//$this->get($obj['route'], $obj['handler']);
-            $router->addGet($obj['route'], $obj['handler']);
+            $this->get($obj['route'], $obj['handler']);
 						break;
 					case 'post':
 						$this->post($obj['route'], $obj['handler']);
@@ -176,9 +175,9 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				}
 			}
       $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
+      $this->get('test-ping', 'Controllers\ExampleController::testPingAction');
 		 }
-     $this->setService('router', $router, true);
-		}
+ 	}
 
 	/**
 	 * Set events to be triggered before/after certain stages in Micro App
