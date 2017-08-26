@@ -1,13 +1,17 @@
 <?php
-
+use Phalcon\Http\Response;
 namespace Controllers;
 
 class ExampleController extends \Phalcon\Mvc\Controller {
 
+	public function testPingAction() {
+		$response->setJsonContent(['sdf','sdf','sdf']);
+		return $response;
+	}
 
 	public function pingAction() {
-  	echo json_encode(
-			array(
+        //new Jete();
+		return array(
 
             'book' => array(
                 array(
@@ -36,7 +40,6 @@ class ExampleController extends \Phalcon\Mvc\Controller {
                     )
                 )
             )
-					)
         );
 	}
 

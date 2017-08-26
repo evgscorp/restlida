@@ -21,6 +21,14 @@ $routes[] = [
 	'authentication' => FALSE
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/tes-ping',
+	'handler' => ['Controllers\ExampleController', 'testPingAction'],
+	'authentication' => TRUE
+];
+
+
 
 $routes[] = [
 	'method' => 'post',
