@@ -9,7 +9,7 @@ $settings = array(
 		'host' => '172.16.130.180',
 		'username' => 'misql',
         	'password' => 'miliCante',
-		'name' => 'millida',
+		'name' => 'milida',
 		'port' => 3306
 	),
 
