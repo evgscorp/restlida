@@ -19,6 +19,7 @@
 namespace Application;
 
 use Interfaces\IRun as IRun;
+use Phalcon\Mvc\Router;
 
 class Micro extends \Phalcon\Mvc\Micro implements IRun {
 
@@ -144,15 +145,16 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 		if (!file_exists($file)) {
 			throw new \Exception('Unable to load routes file');
 		}
-
+    $router = new Router();
 		$routes = include($file);
 
 		if (!empty($routes)) {
-			foreach($routes as $obj) {
+   	foreach($routes as $obj) {
 
 				switch($obj['method']) {
 					case 'get':
-						$this->get($obj['route'], $obj['handler']);
+						//$this->get($obj['route'], $obj['handler']);
+            $router->addGet($obj['route'],$obj['handler']);
 						break;
 					case 'post':
 						$this->post($obj['route'], $obj['handler']);
@@ -174,6 +176,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 				}
 			}
       $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
+		 }
 		}
 	}
 

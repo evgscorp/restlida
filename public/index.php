@@ -54,7 +54,7 @@ try {
 
 	// Setup RESTful Routes
 	$app->setRoutes($routes);
-
+	
     $app->setService('oauth2', function() use ($oauthConfig) {
 
 

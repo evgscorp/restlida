@@ -17,17 +17,17 @@ $routes[] = [
 $routes[] = [
 	'method' => 'get',
 	'route' => '/ping',
-	'handler' => ['Controllers\ExampleController', 'pingAction'],
+	'handler' => ['Controllers\ExampleController:pingAction'],
 	'authentication' => FALSE
 ];
 
-$routes[] = [
+/*$routes[] = [
 	'method' => 'get',
-	'route' => '/tes-ping',
+	'route' => '/test-ping',
 	'handler' => ['Controllers\ExampleController', 'testPingAction'],
 	'authentication' => TRUE
 ];
-
+*/
 
 
 $routes[] = [
