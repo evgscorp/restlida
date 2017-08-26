@@ -76,7 +76,7 @@ try {
         $server->addGrantType(new League\OAuth2\Server\Grant\ClientCredentials());
         return $server;
     });
-
+		print_r($app);
     $app->get('/access', function () use ($app) {
 
         try {
@@ -95,7 +95,7 @@ try {
         }
     });
 
-   /* $app->after(function () use ($app) {
+    $app->finish(function () use ($app) {
 
 
         if(!preg_match("/access/", $app->request->getURI())){
@@ -111,7 +111,7 @@ try {
                     break;
             }
         }
-    });*/
+    });
 
     // Boom, Run
 	$app->run();
