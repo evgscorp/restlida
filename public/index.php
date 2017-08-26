@@ -2,9 +2,9 @@
 
 /**
  * Driver for PHP HMAC Restful API using PhalconPHP's Micro framework
- * 
+ *
  * @package None
- * @author  Jete O'Keeffe 
+ * @author  Jete O'Keeffe
  * @license none
  */
 
@@ -95,7 +95,7 @@ try {
         }
     });
 
-    $app->finish(function () use ($app) {
+    $app->after(function () use ($app) {
 
 
         if(!preg_match("/access/", $app->request->getURI())){
