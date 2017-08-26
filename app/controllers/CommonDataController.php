@@ -10,7 +10,8 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 $UserInfo = $MiLidaCommonModel->getUserInfo(2);
 			 $Response = new \Phalcon\Http\Response();
 			// $Response->setJsonContent(['ppppsdf','sdfsdfsdf','111111sdf']);
-			 $Response->setJsonContent($UserInfo);
+			 //$Response->setJsonContent($UserInfo);
+			 $Response->setJsonContent($this->request->get("token"));
 			 return $Response;
 
 	}
