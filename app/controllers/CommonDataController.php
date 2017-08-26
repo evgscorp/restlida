@@ -9,7 +9,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 				$this->token = $this->request->get("token");
     }
 
-	public static function getCurrentUserInformation() {
+	public function getCurrentUserInformation() {
 			 $MiLidaCommonModel = new \Models\MiLidaCommon();
 			 $UserInfo = $MiLidaCommonModel->getUserInfo(2);
 			 $Response = new \Phalcon\Http\Response();
