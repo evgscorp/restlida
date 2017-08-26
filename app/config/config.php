@@ -11,7 +11,10 @@ $settings = array(
     'password' => 'miliCante',
 		'name' => 'milida',
 		'charset'   =>'utf8',
-		'port' => 3306
+		'port' => 3306,
+		"options" => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        )
 	),
 
     'oauth2' => array(
