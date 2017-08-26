@@ -175,8 +175,7 @@ class Micro extends \Phalcon\Mvc\Micro implements IRun {
 						break;
 				}
 			}
-   //   $this->get('/api/test2', function() {  echo(json_encode(['routes'=>$routes])); });
-      $this->get('/test-ping', 'Controllers\ExampleController::testPingAction');
+   
 		 }
  	}
 
