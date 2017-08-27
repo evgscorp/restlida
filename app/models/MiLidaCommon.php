@@ -18,7 +18,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		 //$result['packages_passed']=$this->db->fetchColumn($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid]);
 		 //$result['pallets_produced']=$this->db->fetchColumn($sql_pallets,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
      //$result['pallets_passed']=$this->db->fetchColumn($sql_pallets,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid]);
-		 $result['first_package']=$this->db->fetchOne($sql_first_package,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
+		 $result['first_package']=$this->db->fetchOne($sql_first_package,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>'17','group_id'=>$gid]);
      return $result;
    }
 
