@@ -74,7 +74,7 @@ class Request implements RequestInterface
         return $this->getPropertyValue('headers', $index, $default);
     }
 
-    protected function readHeaders()
+    public function readHeaders()
     {
         if (function_exists('getallheaders')) {
             // @codeCoverageIgnoreStart
