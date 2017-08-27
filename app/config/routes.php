@@ -26,5 +26,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'createGroup']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/last-group',
+	'handler' => [new \Controllers\CommonDataController(), 'getlastGroup']
+];
+
 
 return $routes;
