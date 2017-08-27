@@ -382,10 +382,10 @@ class Resource
             }
             $accessToken = ($accessToken === 'Bearer') ? '' : $accessToken;
         } elseif ($headersOnly === false) {
-            $method = $this->getRequest()->readHeaders();
+            $method = $this->getRequest()->server('REQUEST_METHOD');
             $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
-        print_r($this->getRequest()->getHeader('Authorization'));
+        print_r($this->getRequest()->readHeaders());
         print_r('token='.$accessToken); exit();
         if (empty($accessToken)) {
             throw new Exception\MissingAccessTokenException(self::$exceptionMessages['invalid_request'], 0);
