@@ -24,7 +24,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
  			$this->db->query("SET NAMES 'utf8'");
  			$this->db->query("SET CHARACTER SET 'utf8'");
  			$this->db->query("SET SESSION collation_connection = 'utf8_general_ci'");
-			$db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+			$this->$db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
 			 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid));
 			 return $result;
     }
