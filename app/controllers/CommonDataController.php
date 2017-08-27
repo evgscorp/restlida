@@ -34,6 +34,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 */
 	public function createGroup() {
 			 $res='error';
+			 print_r($this->resource->getTokenKey()); exit();
 			 try {
 				 $MiLidaCommonModel = new \Models\MiLidaCommon();
 				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getTokenKey());
