@@ -47,6 +47,7 @@ class HmacAuthenticate extends \Phalcon\Events\Manager implements IEvent {
 
                     $app->resource->setTokenKey('token');
                     $app->resource->isValid();
+                    
 
                 }
 
