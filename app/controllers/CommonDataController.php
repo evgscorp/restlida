@@ -18,8 +18,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 	Content-type: application/json
 	Authorization: Bearer 20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
 	JSON body example:
-	{ "token":"20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD",
-	  "group_number": "123459999123",
+	{ "group_number": "123459999123",
 	  "first_name": "Павел",
 	  "surname": "Павлов",
 	  "foreman_name": "Александр",

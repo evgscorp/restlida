@@ -386,7 +386,7 @@ class Resource
             $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
       //  print_r($this->getRequest()->allheaders());
-      //  print_r('token='.$accessToken); exit();
+        print_r('token='.$accessToken); exit();
         if (empty($accessToken)) {
             throw new Exception\MissingAccessTokenException(self::$exceptionMessages['invalid_request'], 0);
         }
