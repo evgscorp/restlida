@@ -16,11 +16,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
       return $result;
    }
 
-	 public function getlastGroup($token)
+	 public function getlastGroup()
 		 {
-				//print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
 			 $this->utf8init();
-			 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ");
+			 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 			 return $result;
 		 }
 

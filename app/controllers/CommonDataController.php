@@ -12,6 +12,12 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	}
 
+	public function getlastGroup() {
+			 $MiLidaCommonModel = new \Models\MiLidaCommon();
+			 return $this->response->setJsonContent($MiLidaCommonModel->getlastGroup());
+}
+
+
   /*
 	URL: http://172.16.130.180/restlida/add-group?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
 	Header:
