@@ -19,6 +19,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 return $this->response->setJsonContent($MiLidaCommonModel->getlastGroup());
 }
 
+// http://172.16.130.180/restlida/shift-production/1?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
 public function getShiftProduction($gid){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	return $this->response->setJsonContent($MiLidaCommonModel->getShiftProductionInfo($gid));
