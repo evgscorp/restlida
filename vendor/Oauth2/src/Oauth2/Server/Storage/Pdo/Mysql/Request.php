@@ -47,4 +47,8 @@ class Request implements RequestInterface
     {
         return $this->request->getHeader($index);
     }
+
+    public function allheaders(){
+      return $this->request->getHeaders();
+    }
 }
