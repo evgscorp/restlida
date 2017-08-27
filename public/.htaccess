@@ -4,4 +4,6 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^([^.]+)$ index.php?_url=/$1&format=json [QSA,L]
     RewriteRule ^([^.]+)\.(\w+)$ index.php?_url=/$1&format=$2 [QSA,L]
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 </ifmodule>
