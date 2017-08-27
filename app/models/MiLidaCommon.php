@@ -10,12 +10,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 	public function getShiftProductionInfo($gid)
    {
-		 $sql_packages="SELECT count(*) FROM packages_info where operation_id = :operation_id and group_id =:group_id";
-		 $sql_pallets="SELECT count(d.pallet_id) FROM (SELECT pallet_id FROM packages_info where operation_id = :operation_id and group_id =:group_id and pallet_id >0 group by pallet_id ) d";
+		 $sql_packages="SELECT count(*) cnt FROM packages_info where operation_id = :operation_id and group_id =:group_id";
+		 $sql_pallets="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where operation_id = :operation_id and group_id =:group_id and pallet_id >0 group by pallet_id ) d";
 		 $sql_first_package="SELECT * FROM packages_info where operation_id = :operation_id and group_id =:group_id  order by timestmp desc limit 1";
 		 $this->utf8init();
-		 $result['packages_produced']=$this->db->fetchOne($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
-		 $result['packages_passed']=$this->db->fetchOne($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid]);
+		 $result['packages_produced']=$this->db->fetchColumn($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid],'cnt');
+		 $result['packages_passed']=$this->db->fetchColumn($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid],'cnt');
 		 //$result['pallets_produced']=$this->db->fetchColumn($sql_pallets,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
      //$result['pallets_passed']=$this->db->fetchColumn($sql_pallets,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid]);
 		 $result['first_package']=$this->db->fetchOne($sql_first_package,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
