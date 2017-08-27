@@ -32,5 +32,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getlastGroup']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/shift-production/{gid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'getShiftProduction']
+];
+
 
 return $routes;
