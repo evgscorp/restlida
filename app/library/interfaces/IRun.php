@@ -1,13 +1,10 @@
 <?php
 
 /**
- * Interface for Running 
+ * Interface for Running
  *
  * @category Interfaces
  * @package Interfaces
- * @author  Jete O'Keeffe <jete.okeeffe@gmail.com>
- * @link
- * @license
  */
 
 namespace Interfaces;
