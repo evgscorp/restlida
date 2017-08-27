@@ -12,7 +12,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
    {
 		 $sql_packages="SELECT count(*) FROM packages_info where operation_id = :operation_id and group_id =:group_id";
 		 $sql_pallets="SELECT count(d.pallet_id) FROM (SELECT pallet_id FROM packages_info where operation_id = :operation_id and group_id =:group_id and pallet_id >0 group by pallet_id ) d";
-		// $sql_first_package="SELECT * FROM packages_info where where operation_id = :operation_id and group_id =:group_id  order by timestmp desc limit 1";
+		 $sql_first_package="SELECT * FROM packages_info where where operation_id = :operation_id and group_id =:group_id  order by timestmp desc limit 1";
 		 $this->utf8init();
 		 //$result['packages_produced']=$this->db->fetchColumn($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>17,'group_id'=>$gid]);
 		 //$result['packages_passed']=$this->db->fetchColumn($sql_packages,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>2,'group_id'=>$gid]);
