@@ -36,7 +36,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 $res='error';
 			 try {
 				 $MiLidaCommonModel = new \Models\MiLidaCommon();
-				 $UserInfo = $MiLidaCommonModel->getUserInfo($app->resource->getTokenKey());
+				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getTokenKey());
 				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
 					$data=$this->request->getJsonRawBody();
 				 	$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
