@@ -10,7 +10,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 	public function getShiftProductionInfo($gid)
    {
-	   $sql_packages="SELECT count(*) FROM packages_info where operation_id = :operation_id and group_id =:group_id";
+		 print_r($gid); exit();
+		 $sql_packages="SELECT count(*) FROM packages_info where operation_id = :operation_id and group_id =:group_id";
 		 $sql_pallets="SELECT count(d.pallet_id) FROM (SELECT pallet_id FROM packages_info where operation_id = :operation_id and group_id =:group_id and pallet_id >0 group by pallet_id ) d";
 		 $sql_first_package="SELECT * FROM packages_info where where operation_id = :operation_id and group_id =:group_id  order by timestmp desc limit 1";
 		 $this->utf8init();
@@ -38,7 +39,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 			 return $result;
 		 }
-		 
+
 
 	 public function createGropup($data, $uid)
     {
