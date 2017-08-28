@@ -79,6 +79,10 @@ try {
 		 $app->get('/access', function () use ($app) {
 
         try {
+					$response = $app->response;                      
+					$response->setHeader('Access-Control-Allow-Origin', '*');
+					$response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+					$response->sendHeaders();
             $params = $app->oauth2->getParam(array('client_id', 'client_secret'));
             echo json_encode(
                 $app->oauth2
