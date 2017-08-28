@@ -8,6 +8,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 $MiLidaCommonModel = new \Models\MiLidaCommon();
 			 $UserInfo = $MiLidaCommonModel->getUserInfo($this->request->get("token"));
 			 $Response=$this->response;
+			 $this->allowCORS($Response);
 			 return $Response->setJsonContent($UserInfo);
 
 	}
@@ -16,12 +17,14 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	public function getlastGroup() {
 			 $MiLidaCommonModel = new \Models\MiLidaCommon();
+			 $this->allowCORS($this->response);
 			 return $this->response->setJsonContent($MiLidaCommonModel->getlastGroup());
 }
 
 // http://172.16.130.180/restlida/shift-production/1?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
 public function getShiftProduction($gid){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$this->allowCORS($this->response);
 	return $this->response->setJsonContent($MiLidaCommonModel->getShiftProductionInfo($gid));
 }
 
@@ -61,9 +64,15 @@ public function getShiftProduction($gid){
 				 $res='Error: '.get_class($e).": ".$e->getMessage();
 			 }
 			 $Response=$this->response;
+			 $this->allowCORS($Response);
 			 return $Response->setJsonContent(['status'=>$res]);
 
 	}
 
+ public function allowCORS($response){
+	 $response->setHeader('Access-Control-Allow-Origin', '*');
+	 $response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+	 $response->sendHeaders();
+ }
 
 }
