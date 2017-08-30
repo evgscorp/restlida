@@ -71,10 +71,13 @@ public function getShiftProduction($gid){
 
  public function allowCORS(){
 	 $this->response->setHeader('Access-Control-Allow-Origin', '*');
-	 $this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
-	 	 $this->response->setHeader('Access-Control-Allow-Headers', '*');
+	 //$this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+	 $this->response->setHeader('Access-Control-Allow-Headers', 'x-requested-with, Content-Type, origin, authorization, accept, client-security-token');
 	 $this->response->setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS, PUT, PATCH, DELETE');
 	 $this->response->setHeader('Access-Control-Max-Age','1000');
+
+
+
 
 		/* if (array_key_exists('HTTP_ACCESS_CONTROL_REQUEST_HEADERS', $_SERVER)) {
 				 header('Access-Control-Allow-Headers: '.$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
