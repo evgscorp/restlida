@@ -6,7 +6,11 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 //http://172.16.130.180/restlida/user-data?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
 	public function getCurrentUserInformation() {
 			 $MiLidaCommonModel = new \Models\MiLidaCommon();
-			 $UserInfo = $MiLidaCommonModel->getUserInfo($this->request->get("token"));
+			 if (!isset($this->request)){
+				 $request = new \Phalcon\Http\Request();
+			 } else {$request=$this->request; };
+			 
+			 $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 			 $Response=$this->allowCORS();
 			 return $Response->setJsonContent($UserInfo);
 
@@ -27,6 +31,14 @@ public function getShiftProduction($gid){
 	$Response=$this->allowCORS();
 	return $Response->setJsonContent($MiLidaCommonModel->getShiftProductionInfo($gid));
 }
+
+// http://172.16.130.180/restlida/shift-suggestion?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
+public function getShiftSuggestions(){
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($MiLidaCommonModel->getShiftSuggestionsInfo());
+}
+
 
 
   /*
@@ -72,7 +84,7 @@ public function getShiftProduction($gid){
  public function allowCORS(){
 	 $this->response->setHeader('Access-Control-Allow-Origin', '*');
 	 //$this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
-	 $this->response->setHeader('Access-Control-Allow-Headers', 'x-requested-with, Content-Type, origin, authorization, accept, client-security-token');
+	 $this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, origin, authorization, accept, client-security-token');
 	 $this->response->setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS, PUT, PATCH, DELETE');
 	 $this->response->setHeader('Access-Control-Max-Age','1000');
 

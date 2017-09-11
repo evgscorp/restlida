@@ -8,6 +8,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
      $this->db=$this->getDi()->getShared('db');
   }
 
+ public function getShiftSuggestionsInfo(){
+	 $sql_min_serises_num="SELECT max(series_num)+1 cnt FROM milida.series";
+	 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
+	 $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num,'cnt');
+	return $result;
+ }
+
 	public function getShiftProductionInfo($gid)
    {
 		 $sql_packages="SELECT count(*) cnt FROM packages_info where group_id =:group_id";
@@ -31,7 +38,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
    {
       //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
 			$this->utf8init();
-			$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
+			//$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
 			$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
 
 
@@ -50,10 +57,21 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
     {
        //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
  			$this->utf8init();
-			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+			$shid=$this->get_shift_id($data,$uid);
+			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
 			 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid));
+
 			 return $result;
     }
+
+		private function get_shift_id($data,$uid) {
+			if (isset($data->new_shift)&&$data->new_shift==1){
+				//INSERT INTO `milida`.`shifts` (`shift_id`, `startstmp`, `shift_number`, `uid`) VALUES ('2', '', '1', '2');
+				$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array('1', $uid));
+			}
+			 $result=$this->db->fetchOne("SELECT * FROM shifts order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
+			return  $result['shift_id'];
+		}
 
 		private function utf8init(){
 			$this->db->query("SET NAMES 'utf8'");

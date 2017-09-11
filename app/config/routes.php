@@ -34,6 +34,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/shift-suggestion',
+	'handler' => [new \Controllers\CommonDataController(), 'getShiftSuggestions']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/shift-production/{gid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftProduction']
 ];
