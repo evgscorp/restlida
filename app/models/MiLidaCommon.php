@@ -69,7 +69,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 				//INSERT INTO `milida`.`shifts` (`shift_id`, `startstmp`, `shift_number`, `uid`) VALUES ('2', '', '1', '2');
 				$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array('1', $uid));
 			}
-			 $result=$this->db->fetchOne("SELECT * FROM shifts order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
+			 $result=$this->db->fetchOne("SELECT * FROM shifts order by startstmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 			return  $result['shift_id'];
 		}
 
