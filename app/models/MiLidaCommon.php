@@ -17,22 +17,34 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 	public function getShiftProductionInfo($gid)
    {
-		 $sql_packages="SELECT count(*) cnt FROM packages_info where group_id =:group_id";
-		 $sql_packages_passed="SELECT count(*) cnt FROM packages_info where group_id =:group_id and operation_id =:operation_id";
-		 $sql_pallets="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where  group_id =:group_id and pallet_id >0 group by pallet_id ) d";
-		 $sql_pallets_passed="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where  group_id =:group_id and operation_id =:operation_id and pallet_id >0 group by pallet_id ) d";
+		 $sql_packages="SELECT count(*) cnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)";
+		 $sql_packages_passed="SELECT count(*) cnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and operation_id =:operation_id";
+		 $sql_pallets="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and pallet_id >0 group by pallet_id ) d";
+		 $sql_pallets_passed="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and operation_id =:operation_id and pallet_id >0 group by pallet_id ) d";
+		 $sql_first_package="SELECT timestmp FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)  order by timestmp desc limit 1";
+		 $sql_last_package="SELECT * FROM packages where group_id in (select group_id from shifts where shift_id=:shift_id) order by idpackage desc limit 1";
+		 $sql_all_series="SELECT GROUP_CONCAT(s.series SEPARATOR ', ') allseries from (SELECT IFNULL(ss.series_num,0) series FROM packages p left outer join series ss on ss.series_id = p.series_id 	where group_id in (select group_id from shifts where shift_id=:shift_id) group by ss.series_num) s";
 
-		 $sql_first_package="SELECT timestmp FROM packages_info where  group_id =:group_id  order by timestmp desc limit 1";
 		 $this->utf8init();
-		 $result['packages_produced']=$this->db->fetchColumn($sql_packages,['group_id'=>$gid],'cnt');
-		 $result['packages_passed']=$this->db->fetchColumn($sql_packages_passed,['operation_id'=>4,'group_id'=>$gid],'cnt');
-		 $result['pallets_produced']=$this->db->fetchColumn($sql_pallets,['group_id'=>$gid],'cnt');
-     $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'group_id'=>$gid],'cnt');
-		 $result['first_package']=$this->db->fetchColumn($sql_first_package,['group_id'=>$gid],'timestmp');
+		 $result['shift_info']=$this->getShiftInfo($gid);
+		 $shid=$result['shift_info']['shift_id'];
+		 $result['packages_produced']=$this->db->fetchColumn($sql_packages,['shift_id'=>$shid],'cnt');
+		 $result['packages_passed']=$this->db->fetchColumn($sql_packages_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+	   $result['pallets_produced']=$this->db->fetchColumn($sql_pallets,['shift_id'=>$shid],'cnt');
+     $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 $result['first_package']=$this->db->fetchColumn($sql_first_package,['shift_id'=>$shid],'timestmp');
+		 $result['last_package']=$this->db->fetchOne($sql_last_package,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
+		 $result['all_series']=$this->db->fetchColumn($sql_last_package,['shift_id'=>$shid],'allseries');
+
+
      return $result;
    }
 
-
+	 private function getShiftInfo($gid){
+  		 $shid=$this->db->fetchOne("SELECT * FROM groups  where group_id =:group_id",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
+			 $result=$this->db->fetchOne("SELECT s.*, u.firstname, u.lastname FROM shifts s left outer join users u on u.uid=s.uid  where shift_id =:shift_id ",\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid['shift_id']]);
+		return $result;
+	 }
 
 	public function getUserInfo($token)
    {
@@ -59,15 +71,15 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
  			$this->utf8init();
 			$shid=$this->get_shift_id($data,$uid);
 			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-			 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid));
+			 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid));
 
-			 return $result;
+			 return $shid;
     }
 
 		private function get_shift_id($data,$uid) {
 			if (isset($data->new_shift)&&$data->new_shift==1){
 				//INSERT INTO `milida`.`shifts` (`shift_id`, `startstmp`, `shift_number`, `uid`) VALUES ('2', '', '1', '2');
-				$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array('1', $uid));
+				$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(1, $uid));
 			}
 			 $result=$this->db->fetchOne("SELECT * FROM shifts order by startstmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 			return  $result['shift_id'];
