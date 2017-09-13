@@ -18,20 +18,29 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	public function getShiftProductionInfo($gid)
    {
 		 $sql_packages="SELECT count(*) cnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)";
+		 $sql_packages_by_product="SELECT count(pi.idpackage), g.product_type FROM packages_info pi left outer join groups g on g.group_id=pi.group_id where pi.group_id in (select group_id from groups  where shift_id=:shift_id)   group by product_type";
 		 $sql_packages_passed="SELECT count(*) cnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and operation_id =:operation_id";
+		 $sql_packages_passed_by_product="SELECT count(pi.idpackage), g.product_type FROM packages_info pi left outer join groups g on g.group_id=pi.group_id where pi.group_id in (select group_id from groups  where shift_id=:shift_id) and operation_id=:operation_id  group by product_type";
 		 $sql_pallets="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and pallet_id >0 group by pallet_id ) d";
+		 $sql_pallets_by_product="SELECT count(t.pallet_id) cnt, t.product_type from (SELECT pi.pallet_id, g.product_type FROM packages_info pi left outer join groups g on g.group_id=pi.group_id where pi.group_id in (select group_id from groups  where shift_id=:shift_id) and  pallet_id>0 group by product_type, pallet_id ) t group by product_type";
 		 $sql_pallets_passed="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and operation_id =:operation_id and pallet_id >0 group by pallet_id ) d";
+		 $sql_pallets_passed_by_product="SELECT count(t.pallet_id) cnt, t.product_type from (SELECT pi.pallet_id, g.product_type FROM packages_info pi left outer join groups g on g.group_id=pi.group_id where pi.group_id in (select group_id from groups  where shift_id=:shift_id) and operation_id=:operation_id and pallet_id>0 group by product_type, pallet_id ) t group by product_type";
 		 $sql_first_package="SELECT timestmp FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)  order by timestmp desc limit 1";
 		 $sql_last_package="SELECT p.*, IFNULL(ss.series_num,0) series, pl.UUID FROM packages p left outer join preloaded_labels pl on pl.label_id = p.label_id left outer join series ss on ss.series_id = p.series_id where group_id in (select group_id from shifts where shift_id=:shift_id)  order by idpackage desc limit 1";
 		 $sql_all_series="SELECT GROUP_CONCAT(s.series SEPARATOR ', ') allseries from (SELECT IFNULL(ss.series_num,0) series FROM packages p left outer join series ss on ss.series_id = p.series_id 	where group_id in (select group_id from shifts where shift_id=:shift_id) group by ss.series_num) s";
 
+
 		 $this->utf8init();
 		 $result['shift_info']=$this->getShiftInfo($gid);
 		 $shid=$result['shift_info']['shift_id'];
+		 $result['packages_produced_by_product']=$this->db->fetchColumn( $sql_packages_by_product,['shift_id'=>$shid],'cnt');
 		 $result['packages_produced']=$this->db->fetchColumn($sql_packages,['shift_id'=>$shid],'cnt');
 		 $result['packages_passed']=$this->db->fetchColumn($sql_packages_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
-	   $result['pallets_produced']=$this->db->fetchColumn($sql_pallets,['shift_id'=>$shid],'cnt');
-     $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 $result['packages_passed_by_product']=$this->db->fetchColumn( $sql_packages_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 $result['pallets_produced']=$this->db->fetchColumn($sql_pallets,['shift_id'=>$shid],'cnt');
+		 $result['pallets_produced_by_product']=$this->db->fetchColumn($sql_pallets_by_product,['shift_id'=>$shid],'cnt');
+	   $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 $result['pallets_passed_by_product']=$this->db->fetchColumn($sql_pallets_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
 		 $result['first_package']=$this->db->fetchColumn($sql_first_package,['shift_id'=>$shid],'timestmp');
 		 $result['last_package']=$this->db->fetchOne($sql_last_package,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
 		 $result['all_series']=$this->db->fetchColumn($sql_all_series,['shift_id'=>$shid],'allseries');
