@@ -50,7 +50,6 @@ public function getShiftProduction($gid){
 	}
 */
 	public function createGroup() {
-			$Response=$this->allowCORS();
 			 $res='error';
 			 try {
 				 $MiLidaCommonModel = new \Models\MiLidaCommon();
@@ -64,7 +63,7 @@ public function getShiftProduction($gid){
 			 catch (\Exception $e) {
 				 $res='Error: '.get_class($e).": ".$e->getMessage();
 			 }
-			// $Response=$this->allowCORS();
+			 $Response=$this->allowCORS();
 			 return $Response->setJsonContent(['status'=>$res]);
 
 	}
