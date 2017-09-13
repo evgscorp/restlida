@@ -33,14 +33,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		 $this->utf8init();
 		 $result['shift_info']=$this->getShiftInfo($gid);
 		 $shid=$result['shift_info']['shift_id'];
-		 $result['packages_produced_by_product']=$this->db->fetchColumn( $sql_packages_by_product,['shift_id'=>$shid],'cnt');
+		 $result['packages_produced_by_product']=$this->db->fetchAll($sql_packages_by_product,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
 		 $result['packages_produced']=$this->db->fetchColumn($sql_packages,['shift_id'=>$shid],'cnt');
 		 $result['packages_passed']=$this->db->fetchColumn($sql_packages_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
-		 $result['packages_passed_by_product']=$this->db->fetchColumn( $sql_packages_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 //$result['packages_passed_by_product']=$this->db->fetchOne( $sql_packages_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
 		 $result['pallets_produced']=$this->db->fetchColumn($sql_pallets,['shift_id'=>$shid],'cnt');
-		 $result['pallets_produced_by_product']=$this->db->fetchColumn($sql_pallets_by_product,['shift_id'=>$shid],'cnt');
+		 //$result['pallets_produced_by_product']=$this->db->fetchOne($sql_pallets_by_product,['shift_id'=>$shid],'cnt');
 	   $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
-		 $result['pallets_passed_by_product']=$this->db->fetchColumn($sql_pallets_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
+		 //$result['pallets_passed_by_product']=$this->db->fetchColumn($sql_pallets_passed_by_product,['operation_id'=>4,'shift_id'=>$shid],'cnt');
 		 $result['first_package']=$this->db->fetchColumn($sql_first_package,['shift_id'=>$shid],'timestmp');
 		 $result['last_package']=$this->db->fetchOne($sql_last_package,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
 		 $result['all_series']=$this->db->fetchColumn($sql_all_series,['shift_id'=>$shid],'allseries');
