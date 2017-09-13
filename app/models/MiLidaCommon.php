@@ -22,7 +22,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		 $sql_pallets="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and pallet_id >0 group by pallet_id ) d";
 		 $sql_pallets_passed="SELECT count(d.pallet_id) cnt FROM (SELECT pallet_id FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) and operation_id =:operation_id and pallet_id >0 group by pallet_id ) d";
 		 $sql_first_package="SELECT timestmp FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)  order by timestmp desc limit 1";
-		 $sql_last_package="SELECT * FROM packages where group_id in (select group_id from shifts where shift_id=:shift_id) order by idpackage desc limit 1";
+		 $sql_last_package="SELECT p.*, IFNULL(ss.series_num,0) series FROM packages p left outer join series ss on ss.series_id = p.series_id where group_id in (select group_id from shifts where shift_id=:shift_id)  order by idpackage desc limit 1";
 		 $sql_all_series="SELECT GROUP_CONCAT(s.series SEPARATOR ', ') allseries from (SELECT IFNULL(ss.series_num,0) series FROM packages p left outer join series ss on ss.series_id = p.series_id 	where group_id in (select group_id from shifts where shift_id=:shift_id) group by ss.series_num) s";
 
 		 $this->utf8init();
