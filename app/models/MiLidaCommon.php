@@ -34,7 +34,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
      $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed,['operation_id'=>4,'shift_id'=>$shid],'cnt');
 		 $result['first_package']=$this->db->fetchColumn($sql_first_package,['shift_id'=>$shid],'timestmp');
 		 $result['last_package']=$this->db->fetchOne($sql_last_package,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
-		 $result['all_series']=$this->db->fetchColumn($sql_last_package,['shift_id'=>$shid],'allseries');
+		 $result['all_series']=$this->db->fetchColumn($sql_all_series,['shift_id'=>$shid],'allseries');
 
 
      return $result;
