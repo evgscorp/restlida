@@ -77,7 +77,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
   		 {
   			 $this->utf8init();
 				 $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
-  			 $result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['snum'=>1048]);
+  			 $result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['snum'=>intval($serach)]);
   			 return $result;
   		 }
 
