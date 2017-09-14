@@ -76,7 +76,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	 public function getProbeData($serach)
   		 {
   			 $this->utf8init();
-				 $sql="SELECT p.*, s.series_num FROM milida.probes p left outer join series s on s.series_id=p.seriesId where s.series_num=:snum LIMIT 1";
+				 $sql="SELECT p.*, s.series_num FROM milida.probes p left outer join series s on s.series_id=p.seriesId where s.series_num=1048 LIMIT 1";
   			 $result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['snum'=>$search]);
   			 return $serach;
   		 }
