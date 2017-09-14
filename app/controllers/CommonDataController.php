@@ -9,12 +9,17 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 if (!isset($this->request)){
 				 $request = new \Phalcon\Http\Request();
 			 } else {$request=$this->request; };
-			 
+
 			 $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 			 $Response=$this->allowCORS();
 			 return $Response->setJsonContent($UserInfo);
 
 	}
+
+public function getProbe(){
+	$result=$MiLidaCommonModel->getProbeData($request->get("search"));
+	return $Response->setJsonContent($result);
+}
 
 //http://172.16.130.180/restlida/last-group?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
 

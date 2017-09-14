@@ -38,6 +38,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftSuggestions']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/series-probes',
+	'handler' => [new \Controllers\CommonDataController(), 'getProbe']
+];
 
 $routes[] = [
 	'method' => 'get',
