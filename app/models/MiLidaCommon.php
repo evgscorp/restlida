@@ -132,7 +132,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
  			if ($seriesId>0){
 	 		$result=$this->db->query("INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`)
 			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-			array(	$data->seriesId,
+			array($seriesId,
 				$data->fat,
 				$data->moisture,
 				$data->como,
