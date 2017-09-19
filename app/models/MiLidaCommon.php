@@ -100,29 +100,28 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	 		$this->utf8init();
 			if (isset($data->seriesId)&&($data->seriesId>0)){
 
-				$query =$this->db->createQuery(
-						"UPDATE probes SET fat=:fat:, moisture=:moisture:, como=:como:', protein=:protein:, acidity=:acidity:, milkAcidity=:milkAcidity:,
-						 purityLevel=:purityLevel:, solubility=:solubility:, enterobacteria=:enterobacteria:, enterococci=:enterococci:, koe=:koe:, yeast=:yeast:, bgkp=:bgkp:,
-						 expirationTime=:expirationTime:, storingRequirement=:storingRequirement:, timestmp='', uid=:uid, labman=:labman: WHERE seriesId = :seriesId:");
+				$query ="UPDATE probes SET fat=?, moisture=?, como=?, protein=?, acidity=?, milkAcidity=?,
+						 purityLevel=?, solubility=?, enterobacteria=?, enterococci=?, koe=?, yeast=?, bgkp=?,
+						 expirationTime=?, storingRequirement=?, timestmp='', uid=?, labman=? WHERE seriesId = ?";
 
-				$result = $query->execute(array(
-						'fat' => $data->fat,
-						'moisture' => $data->moisture,
-						'como' => $data->como,
-						'protein' => $data->protein,
-						'acidity' => $data->acidity,
-						'milkAcidity' => $data->milkAcidity,
-						'purityLevel' => $data->purityLevel,
-						'solubility' => $data->solubility,
-						'enterobacteria' => $data->enterobacteria,
-						'enterococci' => $data->enterococci,
-						'koe' => $data->koe,
-						'yeast' => $data->yeast,
-						'expirationTime' => $data->expirationTime,
-						'storingRequirement' => $data->storingRequirement,
-						'bgkp' => $data->bgkp,
-						'uid' => $data->uid,
-						'labman' => $data->labman,
+				$result = $this->db->query($query,array(
+					$data->fat,
+					$data->moisture,
+					$data->como,
+					$data->protein,
+					$data->acidity,
+					$data->milkAcidity,
+					$data->purityLevel,
+					$data->solubility,
+					$data->enterobacteria,
+					$data->enterococci,
+					$data->koe,
+					$data->yeast,
+					$data->expirationTime,
+					$data->storingRequirement,
+					$data->bgkp,
+					$data->uid,
+					$data->labman,
 				));
 
 
