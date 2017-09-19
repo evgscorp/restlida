@@ -127,15 +127,34 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 
 			} else {
-
-	 		//$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-	 		// array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid));
-
+			$sql="SELECT s.series_id FROM series s where s.series_num = :snum LIMIT 1";
+ 			$seriesId=0+$this->db->fetchColumn($sql,['snum'=>$data->series_num],'series_id');
+ 			if ($seriesId>0){
+	 		$result=$this->db->query("INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`)
+			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+			array(	$data->seriesId,
+				$data->fat,
+				$data->moisture,
+				$data->como,
+				$data->protein,
+				$data->acidity,
+				$data->milkAcidity,
+				$data->purityLevel,
+				$data->solubility,
+				$data->enterobacteria,
+				$data->enterococci,
+				$data->koe,
+				$data->yeast,
+				$data->bgkp,
+				$data->expirationTime,
+				$data->storingRequirement,
+				$uid,
+				$data->labman,
+			));
 		}
+	}
 
-	 		 return $shid;
 	 	}
-
 
 
 		private function get_shift_id($data,$uid) {
