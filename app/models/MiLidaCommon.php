@@ -94,6 +94,50 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			 return $shid;
     }
 
+		public function createProbe($data, $uid)
+	 	{
+	 		 //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
+	 		$this->utf8init();
+			if (isset($data->seriesId)&&($data->seriesId>0)){
+
+				$query =$this->db->createQuery(
+						"UPDATE probes SET fat=:fat:, moisture=:moisture:, como=:como:', protein=:protein:, acidity=:acidity:, milkAcidity=:milkAcidity:,
+						 purityLevel=:purityLevel:, solubility=:solubility:, enterobacteria=:enterobacteria:, enterococci=:enterococci:, koe=:koe:, yeast=:yeast:, bgkp=:bgkp:,
+						 expirationTime=:expirationTime:, storingRequirement=:storingRequirement:, timestmp='', uid=:uid, labman=:labman: WHERE seriesId = :seriesId:");
+
+				$result = $query->execute(array(
+						'fat' => $data->fat,
+						'moisture' => $data->moisture,
+						'como' => $data->como,
+						'protein' => $data->protein,
+						'acidity' => $data->acidity,
+						'milkAcidity' => $data->milkAcidity,
+						'purityLevel' => $data->purityLevel,
+						'solubility' => $data->solubility,
+						'enterobacteria' => $data->enterobacteria,
+						'enterococci' => $data->enterococci,
+						'koe' => $data->koe,
+						'yeast' => $data->yeast,
+						'expirationTime' => $data->expirationTime,
+						'storingRequirement' => $data->storingRequirement,
+						'bgkp' => $data->bgkp,
+						'uid' => $data->uid,
+						'labman' => $data->labman,
+				));
+
+
+			} else {
+
+	 		//$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+	 		// array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid));
+
+		}
+
+	 		 return $shid;
+	 	}
+
+
+
 		private function get_shift_id($data,$uid) {
 			if (isset($data->new_shift)&&$data->new_shift==1){
 				//INSERT INTO `milida`.`shifts` (`shift_id`, `startstmp`, `shift_number`, `uid`) VALUES ('2', '', '1', '2');

@@ -27,6 +27,13 @@ $routes[] = [
 ];
 
 $routes[] = [
+	'method' => 'post',
+	'route' => '/add-probe',
+	'handler' => [new \Controllers\CommonDataController(), 'createProbe']
+];
+
+
+$routes[] = [
 	'method' => 'get',
 	'route' => '/last-group',
 	'handler' => [new \Controllers\CommonDataController(), 'getlastGroup']
