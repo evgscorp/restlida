@@ -117,11 +117,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 					$data->enterococci,
 					$data->koe,
 					$data->yeast,
+					$data->bgkp,
 					$data->expirationTime,
 					$data->storingRequirement,
-					$data->bgkp,
-					$data->uid,
+					$uid,
 					$data->labman,
+					$data->seriesId,
 				));
 
 
