@@ -22,6 +22,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'post',
+	'route' => '/add-shift',
+	'handler' => [new \Controllers\CommonDataController(), 'createShift']
+];
+
+
+$routes[] = [
+	'method' => 'post',
 	'route' => '/add-group',
 	'handler' => [new \Controllers\CommonDataController(), 'createGroup']
 ];

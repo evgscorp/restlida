@@ -94,6 +94,21 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			 return $shid;
     }
 
+		public function createShift($pdata, $uid)
+     {
+			$shiftNum=1;
+			$hh=intval(date("H"));
+			if ($hh>20||$hh<8) $shiftNum=2;
+		 	$this->utf8init();
+			$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array($shiftNum, $uid));
+			$data=$this.getlastGroup();
+			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 			 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid));
+
+ 			 return $result;
+     }
+
+
 		public function createProbe($data, $uid)
 	 	{
 	 		 //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.

@@ -90,6 +90,25 @@ public function getShiftSuggestions(){
 	}
 
 
+	public function createShift() {
+			 $res='error';
+			 try {
+				 $MiLidaCommonModel = new \Models\MiLidaCommon();
+				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+					$data=$this->request->getJsonRawBody();
+				 	$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
+				 	$res='ok';
+			   }
+			 }
+			 catch (\Exception $e) {
+				 $res='Error: '.get_class($e).": ".$e->getMessage();
+			 }
+			 $Response=$this->allowCORS();
+			 return $Response->setJsonContent(['status'=>$res]);
+
+	}
+
 	  /*
 		URL: http://172.16.130.180/restlida/add-group?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
 		Header:
