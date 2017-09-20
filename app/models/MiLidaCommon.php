@@ -100,7 +100,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			$hh=intval(date("H"));
 			if ($hh>20||$hh<8) $shiftNum=2;
 		 	$this->utf8init();
-			$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(1, $uid));
+			$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(2, $uid));
 			$shid=$this->get_shift_id(null,$uid);
 			$data=(object)$this->getlastGroup();
 			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
@@ -176,7 +176,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		private function get_shift_id($data,$uid) {
 			if (isset($data->new_shift)&&$data->new_shift==1){
 				//INSERT INTO `milida`.`shifts` (`shift_id`, `startstmp`, `shift_number`, `uid`) VALUES ('2', '', '1', '2');
-				$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(1, $uid));
+				//$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(1, $uid));
 			}
 			 $result=$this->db->fetchOne("SELECT * FROM shifts order by startstmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 			return  $result['shift_id'];
