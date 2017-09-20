@@ -97,7 +97,7 @@ public function getShiftSuggestions(){
 				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
 					$data=$this->request->getJsonRawBody();
-				 	$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
+				 	$MiLidaCommonModel->createShift($data,$UserInfo['uid']);
 				 	$res='ok';
 			   }
 			 }
