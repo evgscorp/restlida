@@ -100,7 +100,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			$hh=intval(date("H"));
 			if ($hh>20||$hh<8) $shiftNum=2;
 		 	$this->utf8init();
-			$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array($shiftNum, $uid));
+			$this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array(1, $uid));
 			$shid=$this->get_shift_id(null,$uid);
 			$data=(object)$this->getlastGroup();
 			$result=$this->db->query("INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
