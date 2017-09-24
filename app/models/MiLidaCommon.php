@@ -86,6 +86,18 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
   		 }
 
 
+	public function getShiftbyDate($date,$action, $shid){
+		$timestmp= strtotime(str_replace('/', '.', $date));
+		$sql="SELECT * FROM milida.shifts where startstmp > :timestmp order by startstmp limit 1";
+		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['timestmp'=>intval($timestmp)]);
+		if (isset($result['shift_id'])&&$shift_id>0){
+
+		}
+
+
+
+	 }
+
 
 	 public function createGropup($data, $uid)
     {

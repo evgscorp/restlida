@@ -60,6 +60,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/search-shift-production',
+	'handler' => [new \Controllers\CommonDataController(), 'getShiftbyDate']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/shift-production/{gid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftProduction']
 ];
