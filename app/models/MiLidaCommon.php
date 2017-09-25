@@ -88,14 +88,20 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 	public function getShiftbyDate($date,$action, $shid){
 		$timestmp= strtotime(str_replace('/', '.', $date));
-		$sql="SELECT * FROM milida.shifts where startstmp > :timestmp order by startstmp limit 1";
+		$res['status']=0;
+		$res['reportData']=[];
+		$res['shiftProductionInfo']=[];
+		$sql="SELECT * FROM shifts where startstmp > :timestmp order by startstmp limit 1";
 		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['timestmp'=>intval($timestmp)]);
-		if (isset($result['shift_id'])&&$shift_id>0){
-
+		if (isset($result['shift_id'])&&$result['shift_id']>0){
+			$gid=$this->db->fetchColumn("SELECT min(group_id) gid FROM groups where shift_id=:shift_id",['shift_id'=>$result['shift_id']],'gid');
+			if ($gid>0){
+				$res['status']=1;
+				$res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
+				$res['shiftProductionInfo']= getShiftProductionInfo($gid);
+			}
 		}
-
-
-
+		return $res;
 	 }
 
 
