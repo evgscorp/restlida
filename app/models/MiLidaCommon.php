@@ -99,7 +99,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 			if ($gid>0){
 				$res['status']=1;
 				$res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
-				$res['shiftProductionInfo']= $this.getShiftProductionInfo($gid);
+				$res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
 			}
 		}
 		return $res;
