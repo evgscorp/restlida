@@ -87,7 +87,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
 
 	public function getShiftbyDate($date,$action, $shid){
-		$timestmp= strtotime(str_replace('/', '.', $date));
+		//$timestmp= strtotime(str_replace('/', '.', $date));
+		$timestmp=$date;
 		$res['status']=0;
 		$res['reportData']=[];
 		$res['shiftProductionInfo']=[];
