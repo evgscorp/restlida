@@ -95,10 +95,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		$sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
 		$qoptions=['timestmp'=>intval($timestmp)];
 		if ($action=="prev"){
-		 $sql="SELECT * FROM shifts where shift_id < :shid order by shift_id desc limit 1";
+		 $sql="SELECT * FROM shifts where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
 		 $qoptions=['shid'=>intval($shid)];
 	 } else if ($action=="next"){
-		$sql="SELECT * FROM shifts where shift_id > :shid order by shift_id limit 1 ";
+		$sql="SELECT * FROM shifts where shift_id > :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id limit 1";
 		$qoptions=['shid'=>intval($shid)];
 	 }
 
