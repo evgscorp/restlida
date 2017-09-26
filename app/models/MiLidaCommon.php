@@ -92,7 +92,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		$res['status']=0;
 		$res['reportData']=[];
 		$res['shiftProductionInfo']=[];
-		$sql="SELECT * FROM shifts where startstmp > :timestmp order by startstmp limit 1";
+		$sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
 		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['timestmp'=>intval($timestmp)]);
 		if (isset($result['shift_id'])&&$result['shift_id']>0){
 			$gid=$this->db->fetchColumn("SELECT min(group_id) gid FROM groups where shift_id=:shift_id",['shift_id'=>$result['shift_id']],'gid');
