@@ -93,13 +93,26 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		$res['reportData']=[];
 		$res['shiftProductionInfo']=[];
 		$sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
-		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['timestmp'=>intval($timestmp)]);
+		$qoptions=['timestmp'=>intval($timestmp)];
+		if ($action=="prev"){
+		 $sql="SELECT * FROM shifts where shift_id < :shid order by shift_id desc limit 1";
+		 $qoptions=['shid'=>intval($shid)];
+	 } else if ($action=="next"){
+		$sql="SELECT * FROM shifts where shift_id > :shid order by shift_id limit 1 ";
+		$qoptions=['shid'=>intval($shid)];
+	 }
+
+		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,$qoptions);
 		if (isset($result['shift_id'])&&$result['shift_id']>0){
 			$gid=$this->db->fetchColumn("SELECT min(group_id) gid FROM groups where shift_id=:shift_id",['shift_id'=>$result['shift_id']],'gid');
 			if ($gid>0){
 				$res['status']=1;
 				$res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
 				$res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
+				$res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
+				$res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid",['shid'=>$result['shift_id']],'next');
+				$res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid",['shid'=>$result['shift_id']],'next');
+
 			}
 		}
 		return $res;
