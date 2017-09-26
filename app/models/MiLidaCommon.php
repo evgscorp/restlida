@@ -103,6 +103,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	 }
 
 		$result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,$qoptions);
+		$res['shift_search']=$result;
 		if (isset($result['shift_id'])&&$result['shift_id']>0){
 			$gid=$this->db->fetchColumn("SELECT min(group_id) gid FROM groups where shift_id=:shift_id",['shift_id'=>$result['shift_id']],'gid');
 			if ($gid>0){
