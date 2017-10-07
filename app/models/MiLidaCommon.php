@@ -31,6 +31,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		 $sql_all_packers="SELECT GROUP_CONCAT(first_name SEPARATOR ', ') allpackers FROM milida.groups where shift_id=:shift_id";
 		 $sql_current_series="select count(*) produced, (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  packages p where p.series_id = (select max(series_id) from series)";
 		 $sql_last_series="select (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  dual";
+		 $sql_chart_prod_per_hour="SELECT count(h) pkg, h from (SELECT DATE_FORMAT(p.timestmp, '%d.%m  %H ч.' ) h FROM milida.packages p where group_id in (select group_id from groups where shift_id=:shift_id) ) pp group by h";
 		 //SELECT p.series_id, s.series_num FROM milida.packages p left outer join series s on s.series_id=p.series_id  where p.group_id in (select group_id from groups where shift_id=8) group by series_id, series_num
 
 		 $this->utf8init();
@@ -50,6 +51,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 		 $result['all_packers']=$this->db->fetchColumn($sql_all_packers,['shift_id'=>$shid],'allpackers');
 		 $result['current_series']=$this->db->fetchOne($sql_current_series,\Phalcon\Db::FETCH_ASSOC,[]);
 		 $result['last_series']=$this->db->fetchOne($sql_last_series,\Phalcon\Db::FETCH_ASSOC,[]);
+		 $result['chart_prod_per_hour']=$this->db->fetchAll($sql_chart_prod_per_hour,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
+
 
 
      return $result;
