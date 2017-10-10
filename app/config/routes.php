@@ -64,6 +64,13 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftbyDate']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/search-series-packages',
+	'handler' => [new \Controllers\CommonDataController(), 'getSeriesPackages']
+];
+
+
 
 $routes[] = [
 	'method' => 'get',

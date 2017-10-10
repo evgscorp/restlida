@@ -8,6 +8,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
      $this->db=$this->getDi()->getShared('db');
   }
 
+ public function getSeriesPackages($search){
+	 
+ }
+
  public function getShiftSuggestionsInfo(){
 	 $sql_min_serises_num="SELECT max(series_num)+1 cnt FROM milida.series";
 	 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
