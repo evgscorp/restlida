@@ -9,7 +9,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
   }
 
  public function getSeriesPackages($search){
-	 
+	 $sql_search_series="SELECT * FROM milida.series where series_num=:snum";
+	 $sql_info_by_series="SELECT p.timestmp, g.* FROM milida.packages p LEFT OUTER JOIN groups g on g.group_id=p.group_id where p.series_id=43  order by idpackage LIMIT 1";
+
  }
 
  public function getShiftSuggestionsInfo(){
