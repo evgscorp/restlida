@@ -10,7 +10,32 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 
  public function getSeriesPackages($search){
 	 $sql_search_series="SELECT * FROM milida.series where series_num=:snum";
-	 $sql_info_by_series="SELECT p.timestmp, g.* FROM milida.packages p LEFT OUTER JOIN groups g on g.group_id=p.group_id where p.series_id=43  order by idpackage LIMIT 1";
+	 $sql_info_by_series="SELECT l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+												LEFT OUTER JOIN groups g on g.group_id=p.group_id
+												LEFT OUTER JOIN series s on p.series_id = s.series_id
+												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
+												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
+												where p.series_id=37  order by idpackage LIMIT 1";
+	$sql_info_by_package="SELECT l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+												LEFT OUTER JOIN groups g on g.group_id=p.group_id
+												LEFT OUTER JOIN series s on p.series_id = s.series_id
+												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
+												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
+												where l.UUID='NTlBNTQ5NDk=' order by idpackage LIMIT 1";
+ $sql_packages="SELECT l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+												LEFT OUTER JOIN groups g on g.group_id=p.group_id
+												LEFT OUTER JOIN series s on p.series_id = s.series_id
+												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
+												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
+												where p.series_id=37  order by idpackage ";
+
+ $result['series']=$this->db->fetchOne( $sql_info_by_series);
+ if (!isset($result->idpackage)||$result->idpackage<1){
+	 $result['series']=$this->db->fetchOne( $sql_info_by_series);
+	 $result['packages']=$result['series'];
+  } else {
+		 $result['packages']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
+ }
 
  }
 
