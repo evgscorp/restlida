@@ -15,26 +15,26 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
-												where p.series_id=37  order by idpackage LIMIT 1";
+												where p.series_id=:sid  order by idpackage LIMIT 1";
 	$sql_info_by_package="SELECT l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
-												where l.UUID='NTlBNTQ5NDk=' order by idpackage LIMIT 1";
+												where l.UUID=:uuid order by idpackage LIMIT 1";
  $sql_packages="SELECT l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
-												where p.series_id=37  order by idpackage ";
+												where p.series_id=:sid  order by idpackage ";
 
- $result['series']=$this->db->fetchOne( $sql_info_by_series);
+ $result['series']=$this->db->fetchOne($sql_info_by_series,\Phalcon\Db::FETCH_ASSOC,['sid'=>$search]);
  if (!isset($result->idpackage)||$result->idpackage<1){
-	 $result['series']=$this->db->fetchOne( $sql_info_by_series);
+	 $result['series']=$this->db->fetchOne($sql_info_by_package,\Phalcon\Db::FETCH_ASSOC,['uuid'=>$search]);
 	 $result['packages']=$result['series'];
   } else {
-		 $result['packages']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['shift_id'=>$shid]);
+		 $result['packages']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['sid'=>$search]);
  }
 
  }
