@@ -30,12 +30,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 												where s.series_num=:sid  order by idpackage ";
 
  $result['series']=$this->db->fetchOne($sql_info_by_series,\Phalcon\Db::FETCH_ASSOC,['sid'=>$search]);
- /*if (!isset($result->idpackage)||$result->idpackage<1){
+ if (!isset($result['series']->idpackage)||$result['series']->idpackage<1){
 	 $result['series']=$this->db->fetchOne($sql_info_by_package,\Phalcon\Db::FETCH_ASSOC,['uuid'=>$search]);
 	 $result['packages']=$result['series'];
   } else {
 		 $result['packages']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['sid'=>$search]);
- }*/
+ }
  return $result;
  }
 
