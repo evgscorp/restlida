@@ -18,7 +18,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
 												where s.series_num=:sid  order by idpackage LIMIT 1";
-	$sql_info_by_package="SELECT u.firstname, u.lastname, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+	$sql_info_by_package="SELECT u.firstname foremanfirstname , u.lastname foremanlastname, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
