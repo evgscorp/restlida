@@ -46,7 +46,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
  }
 
  public function getShiftSuggestionsInfo(){
-	 $sql_min_serises_num="SELECT max(series_num)+1 cnt FROM milida.series";
+	 $sql_min_serises_num="SELECT max(series_num) cnt FROM milida.series";
 	 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
 	 $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num,'cnt');
 	return $result;
