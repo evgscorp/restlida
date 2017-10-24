@@ -122,7 +122,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
 	 public function getProbeData($serach)
   		 {
   			 $this->utf8init();
-				 $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
+				// $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
+				 $sql="SELECT D.*, gr.product_type from (SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum limit 1 ) D
+				 			left outer join (select * from packages ) pr on pr.series_id=D.seriesId
+							left outer join groups gr on gr.group_id=pr.group_id LIMIT 1";
   			 $result=$this->db->fetchOne($sql,\Phalcon\Db::FETCH_ASSOC,['snum'=>intval($serach)]);
   			 return $result;
   		 }
