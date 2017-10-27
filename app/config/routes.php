@@ -70,8 +70,6 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getSeriesPackages']
 ];
 
-
-
 $routes[] = [
 	'method' => 'get',
 	'route' => '/shift-production/{gid:[0-9]+}',
