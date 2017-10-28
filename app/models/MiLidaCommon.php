@@ -20,7 +20,7 @@ $this->utf8init();
 $result['cnt']=$this->db->fetchOne($sql_cnt_pallets,\Phalcon\Db::FETCH_ASSOC,['sid'=>4]);
 $result['pallets']=[];
 if ($result['cnt']>0)
- $result['pallets']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['sid'=>4]);
+ $result['pallets']=$this->db->fetchAll($sql,\Phalcon\Db::FETCH_ASSOC,['sid'=>4]);
 return $result;
 }
 
