@@ -9,11 +9,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
   }
 
 public function getSentPallets(){
-	$sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time, g.weight  from (
-SELECT count(*) cnt, pallet_id, series_id, group_id  FROM milida.packages where pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=:sid) group by pallet_id, series_id, group_id) p
+	$sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time
+	from (SELECT count(*) cnt, pallet_id, series_id, g.weight   FROM milida.packages mp left outer join groups g on mp.group_id= g.group_id
+	where mp.pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=:sid) 
+	group by pallet_id, series_id, weight) p
 left outer join series s on p.series_id=s.series_id
 left outer join pallets pp on p.pallet_id=pp.pallet_id
-left outer join groups g on p.group_id= g.group_id
 order by creation_time desc";
 $sql_cnt_pallets="SELECT count(*) FROM milida.pallets where pallet_status=:sid";
 $this->utf8init();
