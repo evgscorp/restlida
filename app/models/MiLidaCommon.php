@@ -9,11 +9,19 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
   }
 
 public function getSentPallets(){
-	$sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time  from (
-SELECT count(*) cnt, pallet_id, series_id  FROM milida.packages where pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=4) group by pallet_id, series_id) p
+	$sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time, g.weight  from (
+SELECT count(*) cnt, pallet_id, series_id, group_id  FROM milida.packages where pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=:sid) group by pallet_id, series_id, group_id) p
 left outer join series s on p.series_id=s.series_id
-left outer join pallets pp on p.pallet_id=pp.pallet_id";
-	$sql_cnt="SELECT count(*) FROM milida.pallets where pallet_status=4";
+left outer join pallets pp on p.pallet_id=pp.pallet_id
+left outer join groups g on p.group_id= g.group_id
+order by creation_time desc";
+$sql_cnt_pallets="SELECT count(*) FROM milida.pallets where pallet_status=:sid";
+$this->utf8init();
+$result['cnt']=$this->db->fetchOne($sql_cnt_pallets,\Phalcon\Db::FETCH_ASSOC,['sid'=>4]);
+$result['pallets']=[];
+if ($result['cnt']>0)
+ $result['pallets']=$this->db->fetchAll($sql_packages,\Phalcon\Db::FETCH_ASSOC,['sid'=>4]);
+return $result;
 }
 
  public function getSeriesPackages($search){
