@@ -16,6 +16,13 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	}
 
+public function getSentPallets(){
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$this->allowCORS($this->response);
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($MiLidaCommonModel->getSentPallets());
+}
+
 public function getSeriesPackages(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();

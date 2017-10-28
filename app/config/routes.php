@@ -48,6 +48,12 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/sents-pallets',
+	'handler' => [new \Controllers\CommonDataController(), 'getSentPallets']
+];
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/shift-suggestion',
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftSuggestions']
 ];

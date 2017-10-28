@@ -8,6 +8,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model {
      $this->db=$this->getDi()->getShared('db');
   }
 
+public function getSentPallets(){
+	$sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time  from (
+SELECT count(*) cnt, pallet_id, series_id  FROM milida.packages where pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=4) group by pallet_id, series_id) p
+left outer join series s on p.series_id=s.series_id
+left outer join pallets pp on p.pallet_id=pp.pallet_id";
+	$sql_cnt="SELECT count(*) FROM milida.pallets where pallet_status=4";
+}
+
  public function getSeriesPackages($search){
 	 $sql_search_series="SELECT * FROM milida.series where series_num=:snum";
 	 $sql_info_by_series="SELECT u.firstname foremanfirstname , u.lastname foremanlastname,  sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
