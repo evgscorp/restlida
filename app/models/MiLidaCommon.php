@@ -133,7 +133,12 @@ return $result;
    }
 
 	 private function getUserRoles($uid){
-		 return $this->db->fetchAll("SELECT role_id from user_role where uid=:uid",\Phalcon\Db::FETCH_ASSOC,['uid'=>$uid]);
+		 $result=[];
+		 $res=$this->db->fetchAll("SELECT role_id from user_role where uid=:uid",\Phalcon\Db::FETCH_ASSOC,['uid'=>$uid]);
+		 foreach ($res as $val) {
+		 	$result[]=$val['role_id'];
+		 }
+		 return $result;
 	 }
 
 	 public function getlastGroup()
