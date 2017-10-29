@@ -173,6 +173,26 @@ public function getShiftSuggestions(){
 
 		}
 
+		public function updatePallets() {
+				 $res='error';
+				 try {
+					 $MiLidaCommonModel = new \Models\MiLidaCommon();
+					 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+					 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+						$data=$this->request->getJsonRawBody();
+						//$MiLidaCommonModel->createProbe($data,$UserInfo['uid']);
+						$res=$data;
+					 }
+				 }
+				 catch (\Exception $e) {
+					 $res='Error: '.get_class($e).": ".$e->getMessage();
+				 }
+				 $Response=$this->allowCORS();
+				 return $Response->setJsonContent(['status'=>$res]);
+
+		}
+
+
 
  public function allowCORS(){
 	 $this->response->setHeader('Access-Control-Allow-Origin', '*');

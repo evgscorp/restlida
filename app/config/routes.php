@@ -39,6 +39,12 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'createProbe']
 ];
 
+$routes[] = [
+	'method' => 'post',
+	'route' => '/update-pallets',
+	'handler' => [new \Controllers\CommonDataController(), 'updatePallets']
+];
+
 
 $routes[] = [
 	'method' => 'get',
@@ -51,6 +57,7 @@ $routes[] = [
 	'route' => '/sents-pallets',
 	'handler' => [new \Controllers\CommonDataController(), 'getSentPallets']
 ];
+
 
 $routes[] = [
 	'method' => 'get',
