@@ -126,7 +126,7 @@ return $result;
 			$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
 			$roles=[];
 			if ($result['uid']>0){
-				$roles=$this.getUserRoles($result['uid']);
+				$roles=$this->getUserRoles($result['uid']);
 			}
 			$result['roles']=$roles;
       return $result;
