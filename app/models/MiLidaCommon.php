@@ -124,15 +124,23 @@ return $result;
 			$this->utf8init();
 			//$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
 			$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
-
-
+			$roles=[];
+			if ($result['uid']>0){
+				$roles=$this.getUserRoles($result['uid']);
+			}
+			$result['roles']=$roles;
       return $result;
    }
+
+	 private function getUserRoles($uid){
+		 return $this->db->fetchAll("SELECT role_id from user_role where uid=:uid",\Phalcon\Db::FETCH_ASSOC,['uid'=>$uid]);
+	 }
 
 	 public function getlastGroup()
 		 {
 			 $this->utf8init();
 			 $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ",\Phalcon\Db::FETCH_ASSOC,[]);
+
 			 return $result;
 		 }
 
