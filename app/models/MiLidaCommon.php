@@ -229,10 +229,22 @@ return $result;
 					foreach ($data->pallets as $pallet) {
 						$pids[]=$pallet->pallet_id;
 					}
-					$sql="UPDATE pallets SET pallet_status=?, storage_time=? WHERE pallet_id IN(".implode(',',$pids).")";
-					$result = $this->db->query($sql,array(105,$futuredate));
+					$shid=$this->getStorageShift($uid);
+					$sql="UPDATE pallets SET pallet_status=?, storage_time=?, sshid=? WHERE pallet_id IN(".implode(',',$pids).")";
+					$result = $this->db->query($sql,array(105,$futuredate,$shid));
 				}
 
+		}
+
+		private function getStorageShift($uid){
+			$sql="SELECT shift_id FROM milida.storage_shifts where uid=:uid and shift_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) ORDER BY shift_date DESC LIMIT 1";
+			$shid=$this->db->fetchColumn($sql,['uid'=>$uid],'shift_id');
+			if ($shid<1){
+				$isql="INSERT INTO storage_shifts (`startstmp`, `shift_date`, `uid`) VALUES (NOW(), NOW(), ?)";
+				$result = $this->db->query($sql,array($uid));
+				$shid=$this->db->lastInsertId();
+			}
+			return $shid;
 		}
 
 		public function createProbe($data, $uid)
