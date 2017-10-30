@@ -241,7 +241,7 @@ return $result;
 			$shid=$this->db->fetchColumn($sql,['uid'=>$uid],'shift_id');
 			if ($shid<1){
 				$isql="INSERT INTO storage_shifts (`startstmp`, `shift_date`, `uid`) VALUES (NOW(), NOW(), ?)";
-				$result = $this->db->query($sql,array($uid));
+				$result = $this->db->query($isql,array($uid));
 				$shid=$this->db->lastInsertId();
 			}
 			return $shid;
