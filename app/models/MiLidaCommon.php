@@ -231,7 +231,9 @@ return $result;
 					}
 					$shid=$this->getStorageShift($uid);
 					$sql="UPDATE pallets SET pallet_status=?, storage_time=?, sshid=? WHERE pallet_id IN(".implode(',',$pids).")";
+					$psql= "UPDATE preloaded_labels SET operation_id=?  WHERE label_id IN(SELECT label_id from packages  where  pallet_id IN(".implode(',',$pids)."))";
 					$result = $this->db->query($sql,array(105,$futuredate,$shid));
+					$result = $this->db->query($psql,array(105));
 				}
 
 		}
