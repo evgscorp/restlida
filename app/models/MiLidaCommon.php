@@ -230,7 +230,7 @@ return $result;
 					foreach ($data->pallets as $pallet) {
 						$pids[]=$pallet->pallet_id;
 					}
-					$result = $this->db->query($query,array(105,$futuredate,implode(',',$pids)));
+					$result = $this->db->query($sql,array(105,$futuredate,implode(',',$pids)));
 				}
 
 		}
