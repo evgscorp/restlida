@@ -223,14 +223,14 @@ return $result;
 
 		public function updatePallets($data,$uid){
 				if (isset($data->pallets)&&(count($data->pallets)>0)){
-					$sql="UPDATE pallets SET pallet_status=?, storage_time=? WHERE pallet_id IN(?)";
 					$date = new \DateTime("NOW");
 					$futuredate = $date->format('Y-m-d H:i:s');
 					$pids=[];
 					foreach ($data->pallets as $pallet) {
 						$pids[]=$pallet->pallet_id;
 					}
-					$result = $this->db->query($sql,array(105,$futuredate,implode(',',$pids)));
+					$sql="UPDATE pallets SET pallet_status=?, storage_time=? WHERE pallet_id IN(".implode(',',$pids).")";
+					$result = $this->db->query($sql,array(105,$futuredate));
 				}
 
 		}
