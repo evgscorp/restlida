@@ -133,7 +133,7 @@ return $result;
 	  $shid=$result['shift_info']['shift_id'];
 		$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105],'cnt');
 		$result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>105,'sshid'=>$shid],'cnt');
-		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105,'sshid'=>$shid],'weight');
+		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105],'weight');
 		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'sshid'=>$shid],'weight');
 		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
 		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);
