@@ -65,6 +65,14 @@ public function getShiftbyDate() {
 
 }
 
+public function getStorageShiftReport(){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$result=$MiLidaCommonModel->getStorageShiftReportInfo($request->get("date"),$request->get("action"), $request->get("shid"));
+ 	$Response=$this->allowCORS();
+ 	return $Response->setJsonContent($result);
+}
+
 // http://172.16.130.180/restlida/shift-suggestion?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
 public function getShiftSuggestions(){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();

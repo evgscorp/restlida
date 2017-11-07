@@ -79,6 +79,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/search-shift-storage',
+	'handler' => [new \Controllers\CommonDataController(), 'getStorageShiftReport']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/search-series-packages',
 	'handler' => [new \Controllers\CommonDataController(), 'getSeriesPackages']
 ];
