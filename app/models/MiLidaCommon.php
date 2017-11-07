@@ -108,7 +108,7 @@ return $result;
 															LEFT OUTER JOIN groups g on g.group_id=p.group_id
 															WHERE storage_time is not null AND pl.operation_id=:operation_id) t group by product_type, h";
 
-		$shift_info="SELECT * FROM storage_shifts order by sshid DESC LIMIT 1";
+		$shift_info="SELECT * FROM storage_shifts order by shift_id DESC LIMIT 1";
 		$this->utf8init();
 		if (intval($date)>1&&intval($shid)>1){
 			$timestmp=$date;
