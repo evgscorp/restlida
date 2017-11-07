@@ -131,7 +131,7 @@ return $result;
 
 		$this->utf8init();
 	  $shid=$result['shift_info']['shift_id'];
-		$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105,'sshid'=>$shid],'cnt');
+		/*$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105,'sshid'=>$shid],'cnt');
 		$result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>105,'sshid'=>$shid],'cnt');
 		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105,'sshid'=>$shid],'weight');
 		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'sshid'=>$shid],'weight');
@@ -139,7 +139,7 @@ return $result;
 		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);
 
 		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
-		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);
+		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);*/
 
 		return $result;
  }
