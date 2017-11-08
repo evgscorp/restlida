@@ -108,17 +108,20 @@ return $result;
 															LEFT OUTER JOIN groups g on g.group_id=p.group_id
 															WHERE storage_time is not null AND pl.operation_id=:operation_id) t group by product_type, h";
 
-		$shift_info="SELECT * FROM storage_shifts order by shift_id DESC LIMIT 1";
+		$shift_info="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s LEFT OUTER JOIN users u on u.uid=s.uid order by shift_id DESC LIMIT 1";
 		$this->utf8init();
 		if (intval($date)>1&&intval($shid)>1){
 			$timestmp=$date;
-			$sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM storage_shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
+			$sql="SELECT s.*, u.firstname, u.lastname from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM storage_shifts ) s
+						LEFT OUTER JOIN users u on u.uid=s.uid where s.cd=s.shd order by s.shift_id limit 1";
 			$qoptions=['timestmp'=>intval($timestmp)];
 			if ($action=="prev"){
-			 $sql="SELECT * FROM storage_shifts where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
+			 $sql="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id )
+			 LEFT OUTER JOIN users u on u.uid=s.uid order by shift_id desc limit 1";
 			 $qoptions=['shid'=>intval($shid)];
 		 } else if ($action=="next"){
-			$sql="SELECT * FROM storage_shifts where shift_id > :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id limit 1";
+			$sql="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s  where shift_id > :shid  and shift_id in (select shift_id from groups group by shift_id )
+			 LEFT OUTER JOIN users u on u.uid=s.uid order by shift_id desc limit 1";
 			$qoptions=['shid'=>intval($shid)];
 		 }
 
