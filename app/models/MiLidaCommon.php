@@ -140,8 +140,8 @@ return $result;
 		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid],'weight');
 		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>105]);
 		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
-		/*$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
-		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id'=>10,'sshid'=>$shid]);*/
+		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
+		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
 
 		return $result;
  }
