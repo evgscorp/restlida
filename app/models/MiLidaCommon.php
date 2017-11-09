@@ -73,14 +73,14 @@ return $result;
    $sql_total="SELECT count(*) cnt FROM milida.packages p
 							LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 							LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
-							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id=:operation_id";
+							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id IN (:operation_id,:operation_id2)";
 
 	$sql_shift_total=$sql_total.$shift_suffix;
 
 	$sql_weight_total="SELECT sum(g.weight)/1000 weight FROM milida.packages p
 							LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 							LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
-							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id=:operation_id";
+							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id IN (:operation_id,:operation_id2)";
 
 	$sql_shift_weight_total=$sql_weight_total.$shift_suffix;
 
@@ -90,7 +90,7 @@ return $result;
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
 								LEFT OUTER JOIN series s on p.series_id=s.series_id
-								WHERE s.series_num is not null AND pl.operation_id=:operation_id";
+								WHERE s.series_num is not null AND pl.operation_id IN (:operation_id,:operation_id2)";
 
 	$sql_shift_series=$sql_series.$shift_suffix;
 
@@ -99,7 +99,7 @@ return $result;
 								LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
-								WHERE storage_time is not null AND pl.operation_id=:operation_id AND pa.sshid=:sshid) t group by product_type, h";
+								WHERE storage_time is not null AND pl.operation_id IN (:operation_id,:operation_id2) AND pa.sshid=:sshid) t group by product_type, h";
 
 	 $sql_chart="SELECT count(t.idpackage), t.product_type, t.h from (
 															SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m' ) h  FROM milida.packages p
@@ -134,15 +134,14 @@ return $result;
 
 		$this->utf8init();
 	  $shid=$result['shift_info']['shift_id'];
-		$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105],'cnt');
-		$result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>105,'sshid'=>$shid],'cnt');
-		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105],'weight');
-		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'sshid'=>$shid],'weight');
-		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
-		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);
-
+		$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105,'operation_id2'=>105],'cnt');
+		$result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid],'cnt');
+		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105,'operation_id2'=>105],'weight');
+		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid],'weight');
+		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>105]);
+		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
 		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
-		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'sshid'=>$shid]);
+		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id'=>10,'sshid'=>$shid]);
 
 		return $result;
  }
