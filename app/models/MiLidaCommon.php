@@ -106,7 +106,7 @@ return $result;
 															LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 															LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 															LEFT OUTER JOIN groups g on g.group_id=p.group_id
-															WHERE storage_time is not null AND pl.operation_id=:operation_id) t group by product_type, h";
+															WHERE storage_time is not null AND pl.operation_id=:operation_id) t group by product_type, h LIMIT 60";
 
 		$shift_info="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s LEFT OUTER JOIN users u on u.uid=s.uid order by shift_id DESC LIMIT 1";
 		$this->utf8init();
@@ -136,8 +136,10 @@ return $result;
 	  $shid=$result['shift_info']['shift_id'];
 		$result['total_packages']=$this->db->fetchColumn($sql_total,['operation_id'=>105,'operation_id2'=>105],'cnt');
 		$result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid],'cnt');
+		$result['total_shift_packages_delivered']=$this->db->fetchColumn($sql_shift_total,['operation_id'=>10,'operation_id2'=>10,'sshid'=>$shid],'cnt');
 		$result['total_weight']=$this->db->fetchColumn($sql_weight_total,['operation_id'=>105,'operation_id2'=>105],'weight');
 		$result['total_shift_weight']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid],'weight');
+		$result['total_shift_weight_delivered']=$this->db->fetchColumn($sql_shift_weight_total,['operation_id'=>10,'operation_id2'=>10,'sshid'=>$shid],'weight');
 		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>105]);
 		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
 		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
