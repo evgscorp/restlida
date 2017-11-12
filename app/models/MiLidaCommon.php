@@ -94,14 +94,14 @@ return $result;
 
 	$sql_shift_series=$sql_series.$shift_suffix;
 
-	$sql_shift_chart="SELECT count(t.idpackage), t.product_type, t.h from (
+	$sql_shift_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
 								SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM milida.packages p
 								LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
 								WHERE storage_time is not null AND pl.operation_id IN (:operation_id,:operation_id2) AND pa.sshid=:sshid) t group by product_type, h";
 
-	 $sql_chart="SELECT count(t.idpackage), t.product_type, t.h from (
+	 $sql_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
 															SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m' ) h  FROM milida.packages p
 															LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 															LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
@@ -143,12 +143,26 @@ return $result;
 		$result['series']=$this->db->fetchAll($sql_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>105]);
 		$result['shift_series']=$this->db->fetchAll($sql_shift_series,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
 		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
+		$result['chart']=$this->prepareGroupChart($result['chart'],'h','product_type','cnt');
 		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
 
 		return $result;
  }
 
-
+ private function prepareGroupChart($arr,$gkey,$nkey,$vkey){
+	 $result=[];
+	 $res=[];
+ 	 foreach ($arr as $row) {
+ 	 	$res[$row[$gkey]][]=['name'=>$row[$nkey],'value'=>$row[$vkey]];
+ 	 }
+	 foreach ($res as $key=>$value) {
+	 	$result=[
+			'name'=>$key,
+			'series'=>$value
+		];
+	 }
+	return $result;
+ }
 
 
  public function getShiftSuggestionsInfo(){
@@ -199,6 +213,7 @@ return $result;
 
      return $result;
    }
+
 
 	 private function getShiftInfo($gid){
   		 $shid=$this->db->fetchOne("SELECT * FROM groups  where group_id =:group_id",\Phalcon\Db::FETCH_ASSOC,['group_id'=>$gid]);
