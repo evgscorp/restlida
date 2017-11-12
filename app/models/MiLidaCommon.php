@@ -156,7 +156,7 @@ return $result;
  	 	$res[$row[$gkey]][]=['name'=>$row[$nkey],'value'=>$row[$vkey]];
  	 }
 	 foreach ($res as $key=>$value) {
-	 	$result=[
+	 	$result[]=[
 			'name'=>$key,
 			'series'=>$value
 		];
