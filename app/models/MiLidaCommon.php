@@ -145,6 +145,7 @@ return $result;
 		$result['chart']=$this->db->fetchAll($sql_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105]);
 		$result['chart']=$this->prepareGroupChart($result['chart'],'h','product_type','cnt');
 		$result['shift_chart']=$this->db->fetchAll($sql_shift_chart,\Phalcon\Db::FETCH_ASSOC,['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid]);
+		$result['shift_chart']=$this->prepareGroupChart($result['shift_chart'],'h','product_type','cnt');
 
 		return $result;
  }
