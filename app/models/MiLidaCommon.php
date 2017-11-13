@@ -177,6 +177,12 @@ return $result;
 	return $result;
  }
 
+ private function getProductShortName($key){
+	 $products['1']="СОМ";
+	 $products['10']="ЦСМ";
+	 If (!isset($products[$key])) $key='1';
+	 return  $products[$key];
+}
 
  public function getShiftSuggestionsInfo(){
 	 $sql_min_serises_num="SELECT max(series_num) cnt FROM milida.series";
