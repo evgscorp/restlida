@@ -166,7 +166,7 @@ return $result;
 	 $result=[];
 	 $res=[];
  	 foreach ($arr as $row) {
- 	 	$res[$row[$gkey]][]=['name'=>$this->getProductShortName($row[$nkey]),'value'=>$row[$vkey]];
+ 	 	$res[$row[$gkey]][]=['name'=>$row[$nkey],'value'=>$row[$vkey]];
  	 }
 	 foreach ($res as $key=>$value) {
 	 	$result[]=[
