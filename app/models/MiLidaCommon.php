@@ -170,7 +170,7 @@ return $result;
  	 }
 	 foreach ($res as $key=>$value) {
 	 	$result[]=[
-			'name'=>$key,
+			'name'=>$this.getProductShortName($key),
 			'series'=>$value
 		];
 	 }
