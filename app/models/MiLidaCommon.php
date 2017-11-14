@@ -127,7 +127,12 @@ order by creation_time desc";
         if (intval($date)>1&&intval($shid)>1) {
             $timestmp=$date;
             $sql="SELECT s.*, u.firstname, u.lastname from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM storage_shifts ) s
-						LEFT OUTER JOIN users u on u.uid=s.uid where s.cd=s.shd order by s.shift_id limit 1";
+									LEFT OUTER JOIN users u on u.uid=s.uid where s.cd=s.shd and s.shift_id in (select r.shift_id  from (
+									select sshid shift_id from pallets where sshid is not null
+									union
+									select dsshid shift_id from pallets where dsshid is not null ) r
+									group by r.shift_id
+									)  order by s.shift_id limit 1";
             $qoptions=['timestmp'=>intval($timestmp)];
             if ($action=="prev") {
                 $sql="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s  LEFT OUTER JOIN users u on u.uid=s.uid where shift_id < :shid  and shift_id in (select r.shift_id  from (
