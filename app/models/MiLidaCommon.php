@@ -173,8 +173,8 @@ order by creation_time desc";
         $result['shift_chart']=$this->prepareGroupChart($result['shift_chart'], 'h', 'product_type', 'cnt');
         $result['shift_delivery_chart']=$this->db->fetchAll($sql_shift_delivery_chart, \Phalcon\Db::FETCH_ASSOC, ['operation_id'=>10,'sshid'=>$shid]);
         $result['shift_delivery_chart']=$this->prepareGroupChart($result['shift_delivery_chart'], 'h', 'product_type', 'cnt');
-        $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM storage_shifts where shift_id > :shid", ['shid'=>$result['shift_id']], 'next');
-        $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM storage_shifts where shift_id < :shid", ['shid'=>$result['shift_id']], 'prev');
+        $result['next']=$this->db->fetchColumn("SELECT count(*) next FROM storage_shifts where shift_id > :shid", ['shid'=>$result['shift_id']], 'next');
+        $result['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM storage_shifts where shift_id < :shid", ['shid'=>$result['shift_id']], 'prev');
 
 
 
