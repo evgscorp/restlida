@@ -199,7 +199,13 @@ order by creation_time desc";
             $res[$row[$gkey]][]=['name'=>$this->getProductShortName($row[$nkey]),'value'=>$row[$vkey]];
         }
         foreach ($res as $key=>$value) {
-            $result[]=[
+						if (count($value)==1){
+							if ($value[0]['name']==$this->getProductShortName('1'))
+								$value[1]=['name'=>$this->getProductShortName('10'),'value'=>0];
+							else $value[1]=['name'=>$this->getProductShortName('1'),'value'=>0];
+						}
+
+					  $result[]=[
             'name'=>$key,
             'series'=>$value
         ];
