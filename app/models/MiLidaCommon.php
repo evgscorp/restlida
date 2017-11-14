@@ -151,14 +151,14 @@ order by creation_time desc";
             $result['shift_info']=$db_result;
         } else {
             $result['shift_info']=$this->db->fetchOne($shift_info, \Phalcon\Db::FETCH_ASSOC, []);
-						$sql=$shift_info;
+            $sql=$shift_info;
         }
 
 
         $this->utf8init();
-				$result['shift_sql']=$sql;
-				$result['shift_sql_options']=$qoptions;
-				$shid=$result['shift_info']['shift_id'];
+        $result['shift_sql']=$sql;
+        $result['shift_sql_options']=$qoptions;
+        $shid=$result['shift_info']['shift_id'];
         $result['total_packages']=$this->db->fetchColumn($sql_total, ['operation_id'=>105,'operation_id2'=>105], 'cnt');
         $result['total_shift_packages']=$this->db->fetchColumn($sql_shift_total, ['operation_id'=>105,'operation_id2'=>10,'sshid'=>$shid], 'cnt');
         $result['total_shift_packages_delivered']=$this->db->fetchColumn($sql_shift_total, ['operation_id'=>10,'operation_id2'=>10,'sshid'=>$shid], 'cnt');
@@ -173,8 +173,18 @@ order by creation_time desc";
         $result['shift_chart']=$this->prepareGroupChart($result['shift_chart'], 'h', 'product_type', 'cnt');
         $result['shift_delivery_chart']=$this->db->fetchAll($sql_shift_delivery_chart, \Phalcon\Db::FETCH_ASSOC, ['operation_id'=>10,'sshid'=>$shid]);
         $result['shift_delivery_chart']=$this->prepareGroupChart($result['shift_delivery_chart'], 'h', 'product_type', 'cnt');
-        $result['next']=$this->db->fetchColumn("SELECT count(*) next FROM storage_shifts where shift_id > :shid", ['shid'=>$shid], 'next');
-        $result['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM storage_shifts where shift_id < :shid", ['shid'=>$shid], 'prev');
+        $result['next']=$this->db->fetchColumn("SELECT count(*) next FROM storage_shifts s  LEFT OUTER JOIN users u on u.uid=s.uid where shift_id > :shid  and shift_id in (select r.shift_id  from (
+																								 select sshid shift_id from pallets where sshid is not null
+																								 union
+																								 select dsshid shift_id from pallets where dsshid is not null ) r
+																								 group by r.shift_id
+																								 )", ['shid'=>$shid], 'next');
+        $result['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM storage_shifts s  LEFT OUTER JOIN users u on u.uid=s.uid where shift_id < :shid  and shift_id in (select r.shift_id  from (
+																								select sshid shift_id from pallets where sshid is not null
+																								union
+																								select dsshid shift_id from pallets where dsshid is not null ) r
+																								group by r.shift_id
+																								) ", ['shid'=>$shid], 'prev');
 
 
 
