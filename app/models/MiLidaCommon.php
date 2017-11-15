@@ -104,14 +104,14 @@ order by creation_time desc";
 								LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
-								WHERE storage_time is not null AND pa.pallet_status IN (:operation_id,:operation_id2) AND pa.sshid=:sshid) t group by product_type, h";
+								WHERE storage_time is not null AND pa.pallet_status IN (:operation_id,:operation_id2) AND pa.sshid=:sshid) t group by product_type, h order by h, product_type";
 
         $sql_shift_delivery_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
 									SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM milida.packages p
 									LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 									LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 									LEFT OUTER JOIN groups g on g.group_id=p.group_id
-									WHERE storage_time is not null AND pa.pallet_status = :operation_id AND pa.dsshid=:sshid) t group by product_type, h";
+									WHERE storage_time is not null AND pa.pallet_status = :operation_id AND pa.dsshid=:sshid) t group by product_type, h order by h, product_type";
 
 
 
@@ -120,7 +120,7 @@ order by creation_time desc";
 															LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 															LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 															LEFT OUTER JOIN groups g on g.group_id=p.group_id
-															WHERE storage_time is not null AND pa.pallet_status=:operation_id) t group by product_type, h LIMIT 60";
+															WHERE storage_time is not null AND pa.pallet_status=:operation_id) t group by product_type, h order by h, product_type LIMIT 60";
 
         $shift_info="SELECT s.*, u.firstname, u.lastname FROM storage_shifts s LEFT OUTER JOIN users u on u.uid=s.uid order by shift_id DESC LIMIT 1";
         $this->utf8init();
@@ -206,11 +206,15 @@ order by creation_time desc";
         foreach ($res as $key=>$value) {
 						if (count($value)==1){
 							if ($value[0]['name']==$this->getProductShortName('1'))
-								$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
-							else $value[1]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
+ 								 {$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'0'];}
+								else {
+									$value[1]=$value[0];
+									$value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
+								}
+
 						} elseif(!is_array($value)||count($value)<1){
-								$value[0]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
 								$value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
+								$value[0]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
 						}
 
 					  $result[]=[
