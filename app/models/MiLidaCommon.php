@@ -413,7 +413,7 @@ order by creation_time desc";
         }
     }
 
-    private function getStorageShift($uid)
+    public function getStorageShift($uid)
     {
         $sql="SELECT shift_id FROM milida.storage_shifts where uid=:uid and shift_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) ORDER BY shift_date DESC LIMIT 1";
         $shid=$this->db->fetchColumn($sql, ['uid'=>$uid], 'shift_id');

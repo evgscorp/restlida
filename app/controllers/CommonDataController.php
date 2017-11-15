@@ -68,6 +68,11 @@ public function getShiftbyDate() {
 public function getStorageShiftReport(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+	if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+		  $MiLidaCommonModel->getStorageShift($UserInfo['uid']);
+	 }
+
 	$result=$MiLidaCommonModel->getStorageShiftReportInfo($request->get("date"),$request->get("action"), $request->get("shid"));
  	$Response=$this->allowCORS();
  	return $Response->setJsonContent($result);
