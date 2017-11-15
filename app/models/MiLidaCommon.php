@@ -208,7 +208,7 @@ order by creation_time desc";
 							if ($value[0]['name']==$this->getProductShortName('1'))
 								$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
 							else $value[1]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
-						} elseif(count($value)<1){
+						} elseif(!is_array($value)||count($value)<1){
 								$value[0]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
 								$value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
 						}
