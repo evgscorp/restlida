@@ -204,14 +204,14 @@ order by creation_time desc";
             $res[$row[$gkey]][]=['name'=>$this->getProductShortName($row[$nkey]),'value'=>$row[$vkey]];
         }
         foreach ($res as $key=>$value) {
-						if (count($value)==1){
+					/*	if (count($value)==1){
 							if ($value[0]['name']==$this->getProductShortName('1'))
 								$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'1'];
 							else $value[1]=['name'=>$this->getProductShortName('1'),'value'=>'1'];
 						} elseif(count($value)<1){
 								$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'1'];
 								$value[1]=['name'=>$this->getProductShortName('1'),'value'=>'1'];
-						}
+						}*/
 
 					  $result[]=[
             'name'=>$key,
