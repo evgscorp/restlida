@@ -11,6 +11,9 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 			 } else {$request=$this->request; };
 
 			 $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
+			 if (isset($UserInfo['uid'])&&$UserInfo['uid']>0&&count($UserInfo['roles'])>0&&in_array(3,$UserInfo['roles'])){
+				 $MiLidaCommonModel->getStorageShift($UserInfo['uid']);
+			 }
 			 $Response=$this->allowCORS();
 			 return $Response->setJsonContent($UserInfo);
 
