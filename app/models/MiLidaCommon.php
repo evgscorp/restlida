@@ -59,8 +59,10 @@ order by creation_time desc";
         if ($stype=='all'||$stype=='series')
         $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
         if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
+           if ($stype=='all'||$stype=='packages') {
             $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search]);
             $result['packages']=[$result['series']];
+          }
         } else {
             $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
         }
