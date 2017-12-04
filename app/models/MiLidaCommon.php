@@ -46,7 +46,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where l.UUID=:uuid OR l.h_number=:uuid order by idpackage LIMIT 1";
+												where l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid order by idpackage LIMIT 1";
         $sql_packages="SELECT u.firstname foremanfirstname , u.lastname foremanlastname, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
