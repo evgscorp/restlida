@@ -34,6 +34,14 @@ public function getSeriesPackages(){
 	return $Response->setJsonContent($result);
 }
 
+public function getPackageLog(){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$result=$MiLidaCommonModel->getPackageLog($request->get("search"));
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($result);
+}
+
 public function getProbe(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();

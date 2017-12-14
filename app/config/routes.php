@@ -92,6 +92,12 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/package-log-info',
+	'handler' => [new \Controllers\CommonDataController(), 'getPackageLog']
+];
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/shift-production/{gid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftProduction']
 ];
