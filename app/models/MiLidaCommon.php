@@ -33,6 +33,7 @@ order by creation_time desc";
             FROM milida.operations_log l left join packages p on p.idpackage= l.idpackage
             left join preloaded_labels pl on p.label_id= pl.label_id
             WHERE UUID <> :search";
+      $this->utf8init();        
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
 
