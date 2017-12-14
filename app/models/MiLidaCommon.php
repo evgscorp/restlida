@@ -33,7 +33,7 @@ order by creation_time desc";
             FROM milida.operations_log l left join packages p on p.idpackage= l.idpackage
             left join preloaded_labels pl on p.label_id= pl.label_id
             WHERE UUID <> :search";
-      $this->utf8init();        
+      $this->utf8init();
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
 
@@ -280,6 +280,7 @@ order by creation_time desc";
         $sql_current_series="select count(*) produced, (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  packages p where p.series_id = (select max(series_id) from series)";
         $sql_last_series="select (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  dual";
         $sql_chart_prod_per_hour="SELECT count(h) pkg, h from (SELECT DATE_FORMAT(p.timestmp, '%d.%m  %H ч.' ) h FROM milida.packages p where group_id in (select group_id from groups where shift_id=:shift_id) ) pp group by h";
+        $sql_avalible_labels="SELECT count(*) lcnt FROM milida.preloaded_labels where operation_id>105";
         //SELECT p.series_id, s.series_num FROM milida.packages p left outer join series s on s.series_id=p.series_id  where p.group_id in (select group_id from groups where shift_id=8) group by series_id, series_num
 
         $this->utf8init();
@@ -298,6 +299,7 @@ order by creation_time desc";
         $result['all_series']=$this->db->fetchColumn($sql_all_series, ['shift_id'=>$shid], 'allseries');
         $result['all_packers']=$this->db->fetchColumn($sql_all_packers, ['shift_id'=>$shid], 'allpackers');
         $result['current_series']=$this->db->fetchOne($sql_current_series, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['labels_avalible']=$this->db->fetchOne($sql_avalible_labels, \Phalcon\Db::FETCH_ASSOC, []);
         $result['last_series']=$this->db->fetchOne($sql_last_series, \Phalcon\Db::FETCH_ASSOC, []);
         $result['chart_prod_per_hour']=$this->db->fetchAll($sql_chart_prod_per_hour, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
 
