@@ -32,7 +32,7 @@ order by creation_time desc";
       $sql="SELECT l.comment, l.op_stmp, l.operation_id, p.label_id, pl.UUID
             FROM milida.operations_log l left join packages p on p.idpackage= l.idpackage
             left join preloaded_labels pl on p.label_id= pl.label_id
-            WHERE UUID <> :search";
+            WHERE UUID <> ':search'";
       $result=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
 
