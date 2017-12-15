@@ -80,7 +80,7 @@ public function getStorageShiftReport(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
-	if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+	if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3&&in_array(3,$UserInfo['roles'])){
 		  $MiLidaCommonModel->getStorageShift($UserInfo['uid']);
 	 }
 
