@@ -302,7 +302,7 @@ order by creation_time desc";
         $result['all_series']=$this->db->fetchColumn($sql_all_series, ['shift_id'=>$shid], 'allseries');
         $result['all_packers']=$this->db->fetchColumn($sql_all_packers, ['shift_id'=>$shid], 'allpackers');
         $result['current_series']=$this->db->fetchOne($sql_current_series, \Phalcon\Db::FETCH_ASSOC, []);
-        $result['labels_avalible']=$this->db->fetchOne($sql_nopacked_packages, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
+        //$result['labels_avalible']=$this->db->fetchOne($sql_nopacked_packages, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['last_series']=$this->db->fetchOne($sql_last_series, \Phalcon\Db::FETCH_ASSOC, []);
         $result['chart_prod_per_hour']=$this->db->fetchAll($sql_chart_prod_per_hour, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
 
