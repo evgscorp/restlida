@@ -296,13 +296,13 @@ order by creation_time desc";
         $result['pallets_produced_by_product']=$this->db->fetchAll($sql_pallets_by_product, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed, ['operation_id'=>4,'shift_id'=>$shid], 'cnt');
         $result['pallets_passed_by_product']=$this->db->fetchAll($sql_pallets_passed_by_product, \Phalcon\Db::FETCH_ASSOC, ['operation_id'=>4,'shift_id'=>$shid]);
-        $result['pallets_uncompleted']=$this->db->fetchAll($sql_pallets_uncompleted, \Phalcon\Db::FETCH_ASSOC, ['operation_id'=>4,'shift_id'=>$shid]);
+        $result['pallets_uncompleted']=$this->db->fetchAll($sql_pallets_uncompleted, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid, 'cnt'=>16]);
         $result['first_package']=$this->db->fetchColumn($sql_first_package, ['shift_id'=>$shid], 'timestmp');
         $result['last_package']=$this->db->fetchOne($sql_last_package, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['all_series']=$this->db->fetchColumn($sql_all_series, ['shift_id'=>$shid], 'allseries');
         $result['all_packers']=$this->db->fetchColumn($sql_all_packers, ['shift_id'=>$shid], 'allpackers');
         $result['current_series']=$this->db->fetchOne($sql_current_series, \Phalcon\Db::FETCH_ASSOC, []);
-        $result['labels_avalible']=$this->db->fetchOne($sql_nopacked_packages, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid, 'cnt'=>16]);
+        $result['labels_avalible']=$this->db->fetchOne($sql_nopacked_packages, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['last_series']=$this->db->fetchOne($sql_last_series, \Phalcon\Db::FETCH_ASSOC, []);
         $result['chart_prod_per_hour']=$this->db->fetchAll($sql_chart_prod_per_hour, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
 
