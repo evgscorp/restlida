@@ -63,7 +63,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid  order by idpackage ";
+												where s.series_num=:sid  order by p.timestmp ";
         $this->utf8init();
         if ($stype=='all'||$stype=='series')
         $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
