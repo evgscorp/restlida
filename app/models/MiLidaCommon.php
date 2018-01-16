@@ -282,7 +282,7 @@ order by creation_time desc";
         $sql_chart_prod_per_hour="SELECT count(h) pkg, h from (SELECT DATE_FORMAT(p.timestmp, '%d.%m  %H ч.' ) h FROM milida.packages p where group_id in (select group_id from groups where shift_id=:shift_id) ) pp group by h";
         $sql_avalible_labels="SELECT count(*) lcnt FROM milida.preloaded_labels where operation_id>105";
         $sql_nopacked_packages="SELECT count(*) lcnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id AND p.pallet_id is null";
-        $sql_pallets_uncompleted="SELECT count(*) CNT, pallet_id FROM packages_info p WHERE group_id in (select group_id from groups where =:shift_id) GROUP BY p.pallet_id HAVING CNT < :cnt";
+        $sql_pallets_uncompleted="SELECT count(*) CNT, pallet_id FROM packages_info p WHERE group_id in (select group_id from groups where =:shift_id) GROUP BY p.pallet_id HAVING CNT < 16";
         //SELECT p.series_id, s.series_num FROM milida.packages p left outer join series s on s.series_id=p.series_id  where p.group_id in (select group_id from groups where shift_id=8) group by series_id, series_num
 
         $this->utf8init();
@@ -296,7 +296,7 @@ order by creation_time desc";
         $result['pallets_produced_by_product']=$this->db->fetchAll($sql_pallets_by_product, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['pallets_passed']=$this->db->fetchColumn($sql_pallets_passed, ['operation_id'=>4,'shift_id'=>$shid], 'cnt');
         $result['pallets_passed_by_product']=$this->db->fetchAll($sql_pallets_passed_by_product, \Phalcon\Db::FETCH_ASSOC, ['operation_id'=>4,'shift_id'=>$shid]);
-        $result['pallets_uncompleted']=$this->db->fetchAll($sql_pallets_uncompleted, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid, 'cnt'=>16]);
+        $result['pallets_uncompleted']=$this->db->fetchAll($sql_pallets_uncompleted, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['first_package']=$this->db->fetchColumn($sql_first_package, ['shift_id'=>$shid], 'timestmp');
         $result['last_package']=$this->db->fetchOne($sql_last_package, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['all_series']=$this->db->fetchColumn($sql_all_series, ['shift_id'=>$shid], 'allseries');
