@@ -255,7 +255,7 @@ order by creation_time desc";
     }
 
     public function getShiftSuggestionsInfo()
-    {
+    {   $this->utf8init();
         $sql_min_serises_num="SELECT max(series_num) cnt FROM milida.series";
         $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, []);
         $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num, 'cnt');
