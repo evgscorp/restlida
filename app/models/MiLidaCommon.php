@@ -56,7 +56,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
 												where l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid order by idpackage LIMIT 1";
-        $sql_packages="SELECT u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+        $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p, (SELECT @row_number:=0) AS t
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
