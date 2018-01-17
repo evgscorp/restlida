@@ -62,9 +62,10 @@ order by creation_time desc";
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
-                        LEFT OUTER JOIN (select  (SELECT @row_number:=0) f, u.* from users u) u on sh.uid=u.uid
+                        LEFT OUTER JOIN users u on sh.uid=u.uid
 												where s.series_num=:sid  order by p.timestmp ";
         $this->utf8init();
+        $this->db->query("SET @row_number:=0;");
         if ($stype=='all'||$stype=='series')
         $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
         if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
