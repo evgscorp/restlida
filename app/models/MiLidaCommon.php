@@ -317,7 +317,7 @@ order by creation_time desc";
 
 
     private function getShiftInfo($gid)
-    {
+    {   $this->utf8init();
         $shid=$this->db->fetchOne("SELECT * FROM groups  where group_id =:group_id", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
         $result=$this->db->fetchOne("SELECT s.*, u.firstname, u.lastname FROM shifts s left outer join users u on u.uid=s.uid  where shift_id =:shift_id ", \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid['shift_id']]);
         return $result;
