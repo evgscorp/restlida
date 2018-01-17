@@ -286,7 +286,7 @@ order by creation_time desc";
         $this->utf8init();
         $result['shift_info']=$this->getShiftInfo($gid);
         $sql_pallets_uncompleted="SELECT count(*) pcnt, pa.pallet_code FROM packages_info p left join pallets pa on pa.pallet_id=p.pallet_id
-        WHERE group_id in (select group_id from groups where  shift_id=:shift_id) AND pa.pallet_code is not null GROUP BY p.pallet_id HAVING pcnt < ".$result['shift_info']['pallet_capacity'];
+        WHERE group_id in (select group_id from groups where  shift_id=:shift_id) AND pa.pallet_code is not null GROUP BY p.pallet_id HAVING pcnt < {$result['shift_info']['pallet_capacity']}";
 
         $shid=$result['shift_info']['shift_id'];
         $result['packages_produced_by_product']=$this->db->fetchAll($sql_packages_by_product, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
