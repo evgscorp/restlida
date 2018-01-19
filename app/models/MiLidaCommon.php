@@ -12,13 +12,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function getSentPallets()
     {
         $sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time
-	from (SELECT count(*) cnt, pallet_id, series_id, g.weight   FROM milida.packages mp left outer join groups g on mp.group_id= g.group_id
-	where mp.pallet_id in (SELECT pallet_id FROM milida.pallets where pallet_status=:sid)
+	from (SELECT count(*) cnt, pallet_id, series_id, g.weight   FROM packages mp left outer join groups g on mp.group_id= g.group_id
+	where mp.pallet_id in (SELECT pallet_id FROM pallets where pallet_status=:sid)
 	group by pallet_id, series_id, weight) p
 left outer join series s on p.series_id=s.series_id
 left outer join pallets pp on p.pallet_id=pp.pallet_id
 order by creation_time desc";
-        $sql_cnt_pallets="SELECT count(*) cnt FROM milida.pallets where pallet_status=:sid";
+        $sql_cnt_pallets="SELECT count(*) cnt FROM pallets where pallet_status=:sid";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['sid'=>4], 'cnt');
         $result['pallets']=[];
@@ -30,7 +30,7 @@ order by creation_time desc";
 
     public function getPackageLog($search){
       $sql="SELECT l.comment, l.op_stmp, l.operation_id, p.label_id, pl.UUID
-            FROM milida.operations_log l left join packages p on p.idpackage= l.idpackage
+            FROM operations_log l left join packages p on p.idpackage= l.idpackage
             left join preloaded_labels pl on p.label_id= pl.label_id
             WHERE UUID LIKE(:search)";
       $this->utf8init();
@@ -39,8 +39,8 @@ order by creation_time desc";
 
     public function getSeriesPackages($search,$stype="all")
     {
-        $sql_search_series="SELECT * FROM milida.series where series_num=:snum";
-        $sql_info_by_series="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname,  p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+        $sql_search_series="SELECT * FROM series where series_num=:snum";
+        $sql_info_by_series="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname,  p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
@@ -48,7 +48,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
 												where s.series_num=:sid  order by idpackage LIMIT 1";
-        $sql_info_by_package="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime,  sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+        $sql_info_by_package="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime,  sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
@@ -56,7 +56,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
 												where l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid order by idpackage LIMIT 1";
-        $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM milida.packages p
+        $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												LEFT OUTER JOIN preloaded_labels l on p.label_id = l.label_id
@@ -89,7 +89,7 @@ order by creation_time desc";
         $shift_suffix=" AND pa.sshid=:sshid";
         $shift_delivery_suffix=" AND pa.dsshid=:sshid";
 
-        $sql_total="SELECT count(*) cnt FROM milida.packages p
+        $sql_total="SELECT count(*) cnt FROM packages p
 							LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 							LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id IN (:operation_id,:operation_id2)";
@@ -98,7 +98,7 @@ order by creation_time desc";
         $sql_shift_delivery_total=$sql_total.$shift_delivery_suffix;
 
 
-        $sql_weight_total="SELECT sum(g.weight)/1000 weight FROM milida.packages p
+        $sql_weight_total="SELECT sum(g.weight)/1000 weight FROM packages p
 							LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 							LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 							LEFT OUTER JOIN groups g on g.group_id=p.group_id WHERE pl.operation_id IN (:operation_id,:operation_id2)";
@@ -107,7 +107,7 @@ order by creation_time desc";
         $sql_shift_delivery_weight_total=$sql_weight_total.$shift_delivery_suffix;
 
 
-        $sql_series="SELECT DISTINCT s.series_num FROM milida.packages p
+        $sql_series="SELECT DISTINCT s.series_num FROM packages p
 								LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
@@ -119,14 +119,14 @@ order by creation_time desc";
 
 
         $sql_shift_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
-								SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM milida.packages p
+								SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM packages p
 								LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 								LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 								LEFT OUTER JOIN groups g on g.group_id=p.group_id
 								WHERE storage_time is not null AND pa.pallet_status IN (:operation_id,:operation_id2) AND pa.sshid=:sshid) t group by product_type, h order by h, product_type";
 
         $sql_shift_delivery_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
-									SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM milida.packages p
+									SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m  %H ч.' ) h  FROM packages p
 									LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 									LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 									LEFT OUTER JOIN groups g on g.group_id=p.group_id
@@ -135,7 +135,7 @@ order by creation_time desc";
 
 
         $sql_chart="SELECT count(t.idpackage) cnt, t.product_type, t.h from (
-															SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m' ) h  FROM milida.packages p
+															SELECT p.idpackage, g.product_type, DATE_FORMAT(pa.storage_time, '%d.%m' ) h  FROM packages p
 															LEFT OUTER JOIN preloaded_labels pl on pl.label_id=p.label_id
 															LEFT OUTER JOIN pallets pa on pa.pallet_id=p.pallet_id
 															LEFT OUTER JOIN groups g on g.group_id=p.group_id
@@ -257,7 +257,7 @@ order by creation_time desc";
 
     public function getShiftSuggestionsInfo()
     {   $this->utf8init();
-        $sql_min_serises_num="SELECT max(series_num) cnt FROM milida.series";
+        $sql_min_serises_num="SELECT max(series_num) cnt FROM series";
         $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, []);
         $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num, 'cnt');
         return $result;
@@ -277,11 +277,11 @@ order by creation_time desc";
         $sql_first_package="SELECT timestmp FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id)  order by timestmp limit 1";
         $sql_last_package="SELECT p.*, IFNULL(ss.series_num,0) series, pl.UUID FROM packages p left outer join preloaded_labels pl on pl.label_id = p.label_id left outer join series ss on ss.series_id = p.series_id where group_id in (select group_id from shifts where shift_id=:shift_id)  order by idpackage desc limit 1";
         $sql_all_series="SELECT GROUP_CONCAT(sr.series_num SEPARATOR ', ') allseries from (SELECT s.series_num FROM packages p left outer join series s on s.series_id=p.series_id  where p.group_id in (select group_id from groups where shift_id=:shift_id) group by series_num ) sr";
-        $sql_all_packers="SELECT GROUP_CONCAT(first_name SEPARATOR ', ') allpackers FROM milida.groups where shift_id=:shift_id";
+        $sql_all_packers="SELECT GROUP_CONCAT(first_name SEPARATOR ', ') allpackers FROM groups where shift_id=:shift_id";
         $sql_current_series="select count(*) produced, (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  packages p where p.series_id = (select max(series_id) from series)";
         $sql_last_series="select (select quantity from series  order by series_id desc limit 1) planned, (select series_num from series  order by series_id desc limit 1) snum from  dual";
-        $sql_chart_prod_per_hour="SELECT count(h) pkg, h from (SELECT DATE_FORMAT(p.timestmp, '%d.%m  %H ч.' ) h FROM milida.packages p where group_id in (select group_id from groups where shift_id=:shift_id) ) pp group by h";
-        $sql_avalible_labels="SELECT count(*) lcnt FROM milida.preloaded_labels where operation_id>105";
+        $sql_chart_prod_per_hour="SELECT count(h) pkg, h from (SELECT DATE_FORMAT(p.timestmp, '%d.%m  %H ч.' ) h FROM packages p where group_id in (select group_id from groups where shift_id=:shift_id) ) pp group by h";
+        $sql_avalible_labels="SELECT count(*) lcnt FROM preloaded_labels where operation_id>105";
         $sql_nopacked_packages="SELECT count(*) lcnt FROM packages_info where group_id in (select group_id from groups where shift_id=:shift_id) AND pallet_id is null";
         $sql_pallets_uncompleted="SELECT count(*) pcnt, pa.pallet_code FROM packages_info p left join pallets pa on pa.pallet_id=p.pallet_id
         WHERE group_id in (select group_id from groups where  shift_id=:shift_id) AND pa.pallet_code is not null GROUP BY p.pallet_id HAVING pcnt < :cnt";
@@ -453,7 +453,7 @@ order by creation_time desc";
 
     public function getStorageShift($uid)
     {
-        $sql="SELECT shift_id FROM milida.storage_shifts where uid=:uid and shift_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) ORDER BY shift_date DESC LIMIT 1";
+        $sql="SELECT shift_id FROM storage_shifts where uid=:uid and shift_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) ORDER BY shift_date DESC LIMIT 1";
         $shid=$this->db->fetchColumn($sql, ['uid'=>$uid], 'shift_id');
         if ($shid<1) {
             $isql="INSERT INTO storage_shifts (`startstmp`, `shift_date`, `uid`) VALUES (NOW(), NOW(), ?)";
