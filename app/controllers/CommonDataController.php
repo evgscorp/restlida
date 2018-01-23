@@ -29,7 +29,7 @@ public function getSentPallets(){
 public function getSeriesPackages(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
-	$result=$MiLidaCommonModel->getSeriesPackages($request->get("search"),$request->get("stype"));
+	$result=$MiLidaCommonModel->getSeriesPackages($request->get("search"),$request->get("stype"),$request->get("selproduct"),$request->get("year"));
 	$Response=$this->allowCORS();
 	return $Response->setJsonContent($result);
 }

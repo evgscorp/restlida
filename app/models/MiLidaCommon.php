@@ -37,7 +37,7 @@ order by creation_time desc";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
 
-    public function getSeriesPackages($search,$stype="all")
+    public function getSeriesPackages($search,$stype="all",$selproduct, $year)
     {
         $sql_search_series="SELECT * FROM series where series_num=:snum";
         $sql_info_by_series="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname,  p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
@@ -47,7 +47,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid  order by idpackage LIMIT 1";
+												where s.series_num=:sid and s.series_year=:year and s.product_type=:selproduct  order by idpackage LIMIT 1";
         $sql_info_by_package="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname, p.timestmp ptime,  sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN groups g on g.group_id=p.group_id
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
@@ -63,18 +63,18 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
                         LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid  order by p.timestmp ";
+												where s.series_num=:sid  and s.series_year=:year and s.product_type=:selproduct  order by p.timestmp ";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
         if ($stype=='all'||$stype=='series')
-        $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
+        $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
         if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
            if ($stype=='all'||$stype=='packages') {
             $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search]);
             $result['packages']=[$result['series']];
           }
         } else {
-            $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search]);
+            $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
         }
         return $result;
     }
