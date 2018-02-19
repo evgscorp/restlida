@@ -328,6 +328,7 @@ order by creation_time desc";
       $result=[];
       $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users";
       $sql_workshops="SELECT * FROM workshops;";
+      $this->utf8init();
       $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
       $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
       foreach ($result['users'] as $key=>$val) {
