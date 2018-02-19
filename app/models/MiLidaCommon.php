@@ -331,7 +331,7 @@ order by creation_time desc";
       $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
       $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
       foreach ($result['users'] as $key=>$val) {
-          $result['users'][$key]['workshops']=$this.getUserWorkshops($val['uid']);
+          $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
       }
       return $result;
     }
