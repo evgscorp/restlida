@@ -331,10 +331,15 @@ order by creation_time desc";
         //$result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken",\Phalcon\Db::FETCH_ASSOC,['atoken'=>$token]);
         $result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken", \Phalcon\Db::FETCH_ASSOC, ['atoken'=>$token]);
         $roles=[];
+        $workshops=[];
+
         if ($result['uid']>0) {
             $roles=$this->getUserRoles($result['uid']);
+            $workshops=$this->getUserWorkshops($result['uid']);
         }
         $result['roles']=$roles;
+        $result['workshops']=$workshops;
+      
         return $result;
     }
 
@@ -347,6 +352,18 @@ order by creation_time desc";
         }
         return $result;
     }
+
+    private function getUserWorkshops($uid)
+    {
+        $result=[];
+        $res=$this->db->fetchAll("SELECT DISTINCT w.* FROM user_role ur LEFT OUTER JOIN workshops w on w.workshop_id = ur.workshop_id
+        where uid=:uid", \Phalcon\Db::FETCH_ASSOC, ['uid'=>$uid]);
+        foreach ($res as $val) {
+            $result[$val['workshop_id']]=$val;
+        }
+        return $result;
+    }
+
 
     public function getlastGroup()
     {
