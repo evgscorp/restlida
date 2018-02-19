@@ -19,6 +19,14 @@ class CommonDataController extends \Phalcon\Mvc\Controller {
 
 	}
 
+public function getloginFormData(){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$result=$MiLidaCommonModel->getloginFormData();
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($result);
+}
+
 public function getSentPallets(){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	$this->allowCORS($this->response);

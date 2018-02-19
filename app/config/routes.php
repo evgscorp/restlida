@@ -21,6 +21,12 @@ $routes[] = [
 ];
 
 $routes[] = [
+	'method' => 'get',
+	'route' => '/loginform-data',
+	'handler' => [new \Controllers\CommonDataController(), 'getloginFormData']
+];
+
+$routes[] = [
 	'method' => 'post',
 	'route' => '/add-shift',
 	'handler' => [new \Controllers\CommonDataController(), 'createShift']

@@ -324,6 +324,18 @@ order by creation_time desc";
         return $result;
     }
 
+    public function getloginFormData(){
+      $result=[];
+      $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users";
+      $sql_workshops="SELECT * FROM workshops;";
+      $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
+      $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+      foreach ($result['users'] as $key=>$val) {
+          $result['users'][$key]['workshops']=$this.getUserWorkshops($val['uid']);
+      }
+      return $result;
+    }
+
     public function getUserInfo($token)
     {
         //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
@@ -339,7 +351,7 @@ order by creation_time desc";
         }
         $result['roles']=$roles;
         $result['workshops']=$workshops;
-      
+
         return $result;
     }
 
