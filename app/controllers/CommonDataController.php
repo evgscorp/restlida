@@ -27,10 +27,10 @@ public function getloginFormData(){
 	return $Response->setJsonContent($result);
 }
 
-public function getSeriesFormData(){
+public function getSeriesFormData($wid){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
-	$result=$MiLidaCommonModel->getSeriesFormData();
+	$result=$MiLidaCommonModel->getSeriesFormData($wid);
 	$Response=$this->allowCORS();
 	return $Response->setJsonContent($result);
 }

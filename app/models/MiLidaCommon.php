@@ -255,14 +255,9 @@ order by creation_time desc";
         return  $products[$key];
     }
 
-    public function getShiftSuggestionsInfo()
-    {   $this->utf8init();
-        $sql_min_serises_num="SELECT max(series_num) cnt FROM series";
-        $sql_min_serises_year="SELECT max(series_year) yr FROM series";
-        $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num, 'cnt');
-        $result['min_year_num']=$this->db->fetchColumn($sql_min_serises_year, 'yr');
-
+    public function getShiftSuggestionsInfo($wid)
+    {   $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+        $result['last_serises_data']=$this->db->fetchOne("SELECT max(series_num) series_num,  series_year, amount, weight FROM series where workshop_id=:wid", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
 
@@ -340,14 +335,14 @@ order by creation_time desc";
       return $result;
     }
 
-    public function getSeriesFormData(){
+    public function getSeriesFormData($wid){
       $result=[];
       $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users WHERE is_packer =1";
       $sql_workshops="SELECT * FROM products;";
       $this->utf8init();
       $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
       $result['products']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
-      $result['suggestion']=$this->getShiftSuggestionsInfo();
+      $result['suggestion']=$this->getShiftSuggestionsInfo($wid);
       return $result;
     }
 

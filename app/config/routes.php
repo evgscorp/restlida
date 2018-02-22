@@ -67,7 +67,7 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/seriesform-data',
+	'route' => '/seriesform-data/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getSeriesFormData']
 ];
 
