@@ -445,24 +445,24 @@ order by creation_time desc";
         return $shid;
     }
 
-    public function createShift($pdata, $uid)
-    {
-        $shiftNum=1;
-        $hh=intval(date("H"));
-        if ($hh>20||$hh<8) {
-            $shiftNum=2;
-        }
-        $this->utf8init();
-        $this->db->query("INSERT INTO shifts (shift_number,uid) VALUES ( ?, ?)", array($shiftNum, $uid));
-        $shid=$this->get_shift_id(null, $uid);
-        $data=(object)$this->getlastGroup();
-        $result=$this->db->query(
-                "INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-             array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname,$pdata->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
-            );
+        public function createShift($pdata, $uid)
+        {
+            $shiftNum=1;
+            $hh=intval(date("H"));
+            if ($hh>20||$hh<8) {
+                $shiftNum=2;
+            }
+            $this->utf8init();
+            $this->db->query("INSERT INTO shifts (shift_number,uid,workshop_id) VALUES ( ?, ?, ?)", array($shiftNum, $uid, $pdata->workshop));
+            $shid=$this->get_shift_id(null, $uid);
+            /*$data=(object)$this->getlastGroup();
+            $result=$this->db->query(
+                    "INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+                 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname,$pdata->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
+               );*/
 
-        return $result;
-    }
+            return $result;
+        }
 
     public function updatePallets($data, $uid)
     {
