@@ -261,7 +261,7 @@ order by creation_time desc";
         $sql_min_serises_year="SELECT max(series_year) yr FROM series";
         $result=$this->db->fetchOne("SELECT * FROM groups order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, []);
         $result['min_serises_num']=$this->db->fetchColumn($sql_min_serises_num, 'cnt');
-        $result['min_year_num']=$this->db->fetchColumn($sql_min_serises_num, 'yr');
+        $result['min_year_num']=$this->db->fetchColumn($sql_min_serises_year, 'yr');
 
         return $result;
     }
