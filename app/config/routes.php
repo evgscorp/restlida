@@ -67,8 +67,8 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/shift-suggestion',
-	'handler' => [new \Controllers\CommonDataController(), 'getShiftSuggestions']
+	'route' => '/seriesform-data',
+	'handler' => [new \Controllers\CommonDataController(), 'getSeriesFormData']
 ];
 
 $routes[] = [

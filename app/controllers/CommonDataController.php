@@ -27,6 +27,16 @@ public function getloginFormData(){
 	return $Response->setJsonContent($result);
 }
 
+public function getSeriesFormData(){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$result=$MiLidaCommonModel->getloginFormData();
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($result);
+}
+
+
+
 public function getSentPallets(){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	$this->allowCORS($this->response);
@@ -96,14 +106,6 @@ public function getStorageShiftReport(){
  	$Response=$this->allowCORS();
  	return $Response->setJsonContent($result);
 }
-
-// http://172.16.130.180/restlida/shift-suggestion?token=ufMCdE8EehMSZ7uiQhEVuZfTWbUA8X7yXBxLBufL
-public function getShiftSuggestions(){
-	$MiLidaCommonModel = new \Models\MiLidaCommon();
-	$Response=$this->allowCORS();
-	return $Response->setJsonContent($MiLidaCommonModel->getShiftSuggestionsInfo());
-}
-
 
 
 
