@@ -35,7 +35,7 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'post',
-	'route' => '/add-group',
+	'route' => '/add-series',
 	'handler' => [new \Controllers\CommonDataController(), 'createGroup']
 ];
 

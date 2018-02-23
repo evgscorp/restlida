@@ -134,7 +134,7 @@ public function getStorageShiftReport(){
 			 try {
 				 $MiLidaCommonModel = new \Models\MiLidaCommon();
 				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
-				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>0){
 					$data=$this->request->getJsonRawBody();
 				 	$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
 				 	$res='ok';

@@ -448,13 +448,36 @@ order by creation_time desc";
     {
         //print_r(\Phalcon\Di::getDefault()->getShared('db')); // This is the ugly way to grab the connection.
         $this->utf8init();
-        $shid=$this->get_shift_id($data, $uid);
+        /*
+
+        "wrks": this.workshop.id,
+        "prod": this.seriesForm.value.selproduct!==undefined?this.seriesForm.value.selproduct: data.product_id,
+        "year": this.seriesForm.value.yearNum!==undefined?this.seriesForm.value.yearNum: data.series_year,
+        "amount": this.seriesForm.value.amount!==undefined?this.seriesForm.value.amount: data.amount,
+        "weight": this.seriesForm.value.pweight!==undefined?this.seriesForm.value.pweight: data.weight,
+        "manual": this.seriesForm.value.manual!==undefined?this.seriesForm.value.manual: '0',
+        "sid": this.seriesForm.value.sid?0:data.series_id,
+        "puid": this.seriesForm.value.packer.uid,
+        "uid":  this.authService.user.uid,
+
+
+         */
+        //<{IN `wrks` INT}>, <{IN `prod` INT}>, <{IN `year` INT(4)}>, <{IN `snum` INT}>, <{IN `amount` INT}>, <{IN `weight` INT}>, <{IN `manual` INT}>, <{IN `sid` INT}>, <{IN `packer_uid` INT}>, <{IN `usrid` INT}>, <{OUT xmsg VARCHAR(64)}>
+        $sid='null';
+        if (intval($data->sid)>0){$sid=$data->sid;}
+
+        $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$uid, @smsg);";
+        $this->db->query($sql);
+        $sql_res="SELECT @smsg;";
+
+        /*$shid=$this->get_shift_id($data, $uid);
         $result=$this->db->query(
                 "INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
              array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
             );
+        */
 
-        return $shid;
+        return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
         public function createShift($pdata, $uid)
