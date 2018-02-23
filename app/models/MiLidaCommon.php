@@ -468,7 +468,7 @@ order by creation_time desc";
 
         $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$uid, @smsg);";
         $this->db->query($sql);
-        $sql_res="SELECT @smsg;";
+        $sql_res="SELECT @smsg as smsg;";
 
         /*$shid=$this->get_shift_id($data, $uid);
         $result=$this->db->query(
