@@ -256,9 +256,9 @@ order by creation_time desc";
     }
 
     public function getShiftSuggestionsInfo($wid)
-    {   $result=$this->db->fetchOne("SELECT series_num,  series_year, amount, weight, product_id, series_id FROM series
-where series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
-        $result['last_serises_data']=$this->db->fetchOne("SELECT max(series_num) series_num,  series_year, amount, weight, product_id, series_id FROM series where workshop_id=:wid", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+    {   $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+        $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
+          FROM series where workshop_id=1 and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
 
