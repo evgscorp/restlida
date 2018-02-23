@@ -136,9 +136,8 @@ public function getStorageShiftReport(){
 				 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 				 if (isset($UserInfo['uid'])&&$UserInfo['uid']>0){
 					$data=$this->request->getJsonRawBody();
-				 	$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
-				 	$res='ok';
-			   }
+				 	$res=$MiLidaCommonModel->createGropup($data,$UserInfo['uid']);
+				 }
 			 }
 			 catch (\Exception $e) {
 				 $res='Error: '.get_class($e).": ".$e->getMessage();
