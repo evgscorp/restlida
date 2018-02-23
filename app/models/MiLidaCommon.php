@@ -271,6 +271,7 @@ order by creation_time desc";
             left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
             left outer join shifts sh on sh.shift_id=g.shift_id
             where c.workshop_id=:wid LIMIT 1";
+       $this->utf8init();     
        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       return $result;
     }
