@@ -262,6 +262,17 @@ order by creation_time desc";
         return $result;
     }
 
+    public function getProductionData($wid)
+    {
+
+      $sql="SELECT c.*, p.*, g.* FROM current_programm c
+            left outer join series s on c.series_id=s.series_id
+            left outer join products p on p.product_id=s.product_id
+            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
+            where c.workshop_id=:wid LIMIT 1";
+       $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+      return $result;
+    }
 
     public function getShiftProductionInfo($gid)
     {

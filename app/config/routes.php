@@ -108,5 +108,10 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getShiftProduction']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/production-data/{wid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'getProductionData']
+];
 
 return $routes;

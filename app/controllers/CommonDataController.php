@@ -84,6 +84,12 @@ public function getShiftProduction($gid){
 	return $Response->setJsonContent($MiLidaCommonModel->getShiftProductionInfo($gid));
 }
 
+public function getProductionData($wid){
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$Response=$this->allowCORS();
+	return $Response->setJsonContent($MiLidaCommonModel->getProductionData($wid));
+}
+
 public function getShiftbyDate() {
 
 	$request = new \Phalcon\Http\Request();
