@@ -339,7 +339,7 @@ order by creation_time desc";
       $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
       foreach ($res as $row) {
         $result['prows']['p'.$row['product_id']][]=$row;
-        $result['products'][intval($row['product_id'])]=['id'=>$row['product_id'],'name'=>$row['product_short']];
+        $result['products'][intval($row['product_id'])]=['id'=>'p'.$row['product_id'],'name'=>$row['product_short']];
         $result['tweight']+=$row['wtotal'];
         $result['tcnt']+=$row['cnt'];
       }
