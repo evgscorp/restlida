@@ -265,13 +265,15 @@ order by creation_time desc";
     public function getProductionData($wid)
     {
 
-      $sql="SELECT c.*, p.*, g.*, sh.* FROM current_programm c
+      $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
             left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
             left outer join shifts sh on sh.shift_id=g.shift_id
-            where c.workshop_id=:wid LIMIT 1";
-       $this->utf8init();     
+            left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
+            left outer join labels l on pckg.label_id=l.label_id
+             where c.workshop_id=:wid LIMIT 1";
+       $this->utf8init();
        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       return $result;
     }
