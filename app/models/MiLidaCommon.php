@@ -68,15 +68,15 @@ order by creation_time desc";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
         if ($stype=='all'||$stype=='series') {
-            $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
+            $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct, 'wid'=>$wid]);
         }
         if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
             if ($stype=='all'||$stype=='packages') {
-                $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search]);
+                $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search, 'selproduct'=>$selproduct, 'wid'=>$wid]);
                 $result['packages']=[$result['series']];
             }
         } else {
-            $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
+            $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct,'wid'=>$wid]);
         }
         return $result;
     }
