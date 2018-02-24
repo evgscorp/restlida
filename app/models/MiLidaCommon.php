@@ -330,7 +330,7 @@ order by creation_time desc";
             try{
             $result['shift_series_products']=$this->db->fetchAll($shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$result['shift_id']]);
               }
-            catch (Exception $e)
+            catch (PDOException$e)
             {
              $result['shift_series_products']=[];
             }
