@@ -28,16 +28,17 @@ order by creation_time desc";
         return $result;
     }
 
-    public function getPackageLog($search){
-      $sql="SELECT l.comment, l.op_stmp, l.operation_id, p.label_id, pl.UUID
+    public function getPackageLog($search)
+    {
+        $sql="SELECT l.comment, l.op_stmp, l.operation_id, p.label_id, pl.UUID
             FROM operations_log l left join packages p on p.idpackage= l.idpackage
             left join preloaded_labels pl on p.label_id= pl.label_id
             WHERE UUID LIKE(:search)";
-      $this->utf8init();
-      return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
+        $this->utf8init();
+        return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
 
-    public function getSeriesPackages($search,$stype="all",$selproduct, $year)
+    public function getSeriesPackages($search, $stype="all", $selproduct, $year)
     {
         $sql_search_series="SELECT * FROM series where series_num=:snum";
         $sql_info_by_series="SELECT 1 AS row_number, u.firstname foremanfirstname , u.lastname foremanlastname,  p.timestmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
@@ -66,13 +67,14 @@ order by creation_time desc";
 												where s.series_num=:sid  and s.series_year=:year and s.product_type=:selproduct  order by p.timestmp ";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
-        if ($stype=='all'||$stype=='series')
-        $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
+        if ($stype=='all'||$stype=='series') {
+            $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
+        }
         if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
-           if ($stype=='all'||$stype=='packages') {
-            $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search]);
-            $result['packages']=[$result['series']];
-          }
+            if ($stype=='all'||$stype=='packages') {
+                $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search]);
+                $result['packages']=[$result['series']];
+            }
         } else {
             $result['packages']=$this->db->fetchAll($sql_packages, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct]);
         }
@@ -224,20 +226,19 @@ order by creation_time desc";
             $res[$row[$gkey]][]=['name'=>$this->getProductShortName($row[$nkey]),'value'=>$row[$vkey]];
         }
         foreach ($res as $key=>$value) {
-						if (count($value)==1){
-							if ($value[0]['name']==$this->getProductShortName('1'))
- 								 {$value[1]=['name'=>$this->getProductShortName('10'),'value'=>'0'];}
-								else {
-									$value[1]=$value[0];
-									$value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
-								}
+            if (count($value)==1) {
+                if ($value[0]['name']==$this->getProductShortName('1')) {
+                    $value[1]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
+                } else {
+                    $value[1]=$value[0];
+                    $value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
+                }
+            } elseif (!is_array($value)||count($value)<1) {
+                $value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
+                $value[0]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
+            }
 
-						} elseif(!is_array($value)||count($value)<1){
-								$value[0]=['name'=>$this->getProductShortName('1'),'value'=>'0'];
-								$value[0]=['name'=>$this->getProductShortName('10'),'value'=>'0'];
-						}
-
-					  $result[]=[
+            $result[]=[
             'name'=>$key,
             'series'=>$value
         ];
@@ -256,16 +257,16 @@ order by creation_time desc";
     }
 
     public function getShiftSuggestionsInfo($wid)
-    {   $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+    {
+        $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
           FROM series where workshop_id=1 and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
 
-    public function getProductionData($wid)
+    public function getProductionData($wid, $sid=0)
     {
-
-      $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
+        $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
             left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
@@ -273,12 +274,42 @@ order by creation_time desc";
             left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
-       $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
-       $this->utf8init();
-       $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
-       
-       if ($result['series_id']>0) $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
-      return $result;
+        if ($sid>0) {
+            $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM (
+                            SELECT
+                        `a`.`workshop_id` AS `workshop_id`,
+                        MAX(`a`.`series_id`) AS `series_id`,
+                        `a`.`series_name` AS `series_name`,
+                        `a`.`amount` AS `amount`,
+                        (SELECT
+                                COUNT(0)
+                            FROM
+                                `packages` `b`
+                            WHERE
+                                (`b`.`series_id` = `a`.`series_id`)) AS `total`
+                    FROM
+                        `series` `a`
+                    WHERE
+                        (`a`.`is_manual` = 0 and `a`.`series_id`=:sid)
+                    GROUP BY `a`.`workshop_id`
+                  ) c
+            left outer join series s on c.series_id=s.series_id
+            left outer join products p on p.product_id=s.product_id
+            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
+            left outer join shifts sh on sh.shift_id=g.shift_id
+            left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
+            left outer join labels l on pckg.label_id=l.label_id
+             where c.workshop_id=:wid LIMIT 1";
+        }
+
+        $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
+        $this->utf8init();
+        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+
+        if ($result['series_id']>0) {
+            $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
+        }
+        return $result;
     }
 
     public function getShiftProductionInfo($gid)
@@ -325,7 +356,7 @@ order by creation_time desc";
         $result['labels_avalible']=$this->db->fetchOne($sql_nopacked_packages, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
         $result['last_series']=$this->db->fetchOne($sql_last_series, \Phalcon\Db::FETCH_ASSOC, []);
         $result['chart_prod_per_hour']=$this->db->fetchAll($sql_chart_prod_per_hour, \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid]);
-      return $result;
+        return $result;
     }
 
     private function getGroupInfo($gid)
@@ -335,34 +366,37 @@ order by creation_time desc";
 
 
     private function getShiftInfo($gid)
-    {   $this->utf8init();
+    {
+        $this->utf8init();
         $shid=$this->db->fetchOne("SELECT * FROM groups  where group_id =:group_id", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
         $result=$this->db->fetchOne("SELECT s.*, u.firstname, u.lastname FROM shifts s left outer join users u on u.uid=s.uid  where shift_id =:shift_id ", \Phalcon\Db::FETCH_ASSOC, ['shift_id'=>$shid['shift_id']]);
         return $result;
     }
 
-    public function getloginFormData(){
-      $result=[];
-      $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users users WHERE is_packer <1";
-      $sql_workshops="SELECT * FROM workshops;";
-      $this->utf8init();
-      $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
-      $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
-      foreach ($result['users'] as $key=>$val) {
-          $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
-      }
-      return $result;
+    public function getloginFormData()
+    {
+        $result=[];
+        $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users users WHERE is_packer <1";
+        $sql_workshops="SELECT * FROM workshops;";
+        $this->utf8init();
+        $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+        foreach ($result['users'] as $key=>$val) {
+            $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
+        }
+        return $result;
     }
 
-    public function getSeriesFormData($wid){
-      $result=[];
-      $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users WHERE is_packer =1";
-      $sql_workshops="SELECT * FROM products;";
-      $this->utf8init();
-      $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
-      $result['products']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
-      $result['suggestion']=$this->getShiftSuggestionsInfo($wid);
-      return $result;
+    public function getSeriesFormData($wid)
+    {
+        $result=[];
+        $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users WHERE is_packer =1";
+        $sql_workshops="SELECT * FROM products;";
+        $this->utf8init();
+        $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['products']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['suggestion']=$this->getShiftSuggestionsInfo($wid);
+        return $result;
     }
 
 
@@ -428,14 +462,15 @@ order by creation_time desc";
     }
 
 
-    public function getShiftbyDate($date, $action, $shid)
+    public function getShiftbyDate($date, $action,$shid)
     {
         //$timestmp= strtotime(str_replace('/', '.', $date));
         $timestmp=$date;
         $res['status']=0;
         $res['reportData']=[];
         $res['shiftProductionInfo']=[];
-        $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
+        // $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
+        $sql="SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts  s order by s.shift_id limit 1";
         $qoptions=['timestmp'=>intval($timestmp)];
         if ($action=="prev") {
             $sql="SELECT * FROM shifts where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
@@ -448,12 +483,17 @@ order by creation_time desc";
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $qoptions);
         $res['shift_search']=$result;
         if (isset($result['shift_id'])&&$result['shift_id']>0) {
-            $gid=$this->db->fetchColumn("SELECT min(group_id) gid FROM groups where shift_id=:shift_id", ['shift_id'=>$result['shift_id']], 'gid');
-            if ($gid>0) {
+            $gid=$this->db->fetchColumn("SELECT max(group_id) gid FROM groups where shift_id=:shift_id", ['shift_id'=>$result['shift_id']], 'gid');
+            $sid=$this->db->fetchColumn("SELECT max(series_id) sid FROM groups where group_id=:group_id", ['group_id'=>$gid], 'sid');
+            $wid=$this->db->fetchColumn("SELECT workshop_id wid FROM groups where group_id=:group_id LIMIT 1", ['group_id'=>$gid], 'wid');
+
+            if ($gid>0&&$wid>0&&$sid>0) {
                 $res['status']=1;
-                $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
-                $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
-                $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
+                $res['group']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
+                $res['productionData']= $this->getProductionData($wid,$sid);
+                /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
+                 $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
+                 $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);*/
                 $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid", ['shid'=>$result['shift_id']], 'next');
                 $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid", ['shid'=>$result['shift_id']], 'prev');
             }
@@ -482,7 +522,9 @@ order by creation_time desc";
          */
         //<{IN `wrks` INT}>, <{IN `prod` INT}>, <{IN `year` INT(4)}>, <{IN `snum` INT}>, <{IN `amount` INT}>, <{IN `weight` INT}>, <{IN `manual` INT}>, <{IN `sid` INT}>, <{IN `packer_uid` INT}>, <{IN `usrid` INT}>, <{OUT xmsg VARCHAR(64)}>
         $sid='null';
-        if (intval($data->sid)>0){$sid=$data->sid;}
+        if (intval($data->sid)>0) {
+            $sid=$data->sid;
+        }
 
         $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$uid, @smsg);";
         $this->db->query($sql);
@@ -498,24 +540,24 @@ order by creation_time desc";
         return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
-        public function createShift($pdata, $uid)
-        {
-            $shiftNum=1;
-            $hh=intval(date("H"));
-            if ($hh>20||$hh<8) {
-                $shiftNum=2;
-            }
-            $this->utf8init();
-            $this->db->query("INSERT INTO shifts (shift_number,uid,workshop_id) VALUES ( ?, ?, ?)", array($shiftNum, $uid, $pdata->workshop));
-            $shid=$this->get_shift_id(null, $uid);
-            /*$data=(object)$this->getlastGroup();
-            $result=$this->db->query(
-                    "INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-                 array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname,$pdata->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
-               );*/
-
-            return $result;
+    public function createShift($pdata, $uid)
+    {
+        $shiftNum=1;
+        $hh=intval(date("H"));
+        if ($hh>20||$hh<8) {
+            $shiftNum=2;
         }
+        $this->utf8init();
+        $this->db->query("INSERT INTO shifts (shift_number,uid,workshop_id) VALUES ( ?, ?, ?)", array($shiftNum, $uid, $pdata->workshop));
+        $shid=$this->get_shift_id(null, $uid);
+        /*$data=(object)$this->getlastGroup();
+        $result=$this->db->query(
+                "INSERT INTO groups (group_number,  first_name, surname, foreman_name, foreman_surname, workshop, product_type, weight, pallet_capacity, series_capcity, labman_name, labman_surname, uid, shift_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+             array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname,$pdata->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
+           );*/
+
+        return $result;
+    }
 
     public function updatePallets($data, $uid)
     {
