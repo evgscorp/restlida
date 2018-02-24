@@ -70,7 +70,7 @@ order by creation_time desc";
         if ($stype=='all'||$stype=='series') {
             $result['series']=$this->db->fetchOne($sql_info_by_series, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$search,'year'=>$year,'selproduct'=>$selproduct, 'wid'=>$wid]);
         }
-        if (!isset($result['series']['idpackage'])||$result['series']['idpackage']<1) {
+        if (!isset($result['series']['label_id'])||$result['series']['label_id']<1) {
             if ($stype=='all'||$stype=='packages') {
                 $result['series']=$this->db->fetchOne($sql_info_by_package, \Phalcon\Db::FETCH_ASSOC, ['uuid'=>$search, 'selproduct'=>$selproduct, 'wid'=>$wid]);
                 $result['packages']=[$result['series']];
