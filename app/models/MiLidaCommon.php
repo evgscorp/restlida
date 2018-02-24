@@ -327,16 +327,9 @@ order by creation_time desc";
             foreach ($result['passedto_locatons'] as $key => $value) {
               $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
             }
-            try{
-            $result['shift_series_products']=$this->db->fetchAll($shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$result['shift_id']]);
-              }
-            catch (PDOException$e)
-            {
-             $result['shift_series_products']=[];
-            }
+            $result['shift_series_products']=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$result['shift_id']]);
 
-
-            }
+          }
 
 
         return $result;
