@@ -64,7 +64,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid  and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid order by p.timestmp ";
+												where s.series_num=:sid  and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid order by p.prod_stmp ";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
         if ($stype=='all'||$stype=='series') {
