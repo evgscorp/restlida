@@ -264,7 +264,7 @@ order by creation_time desc";
         return $result;
     }
 
-    public function getProductionData($wid, $sid=0)
+    public function getProductionData($wid, $sid=0, $shid=0)
     {
         $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
             left outer join series s on c.series_id=s.series_id
@@ -276,7 +276,7 @@ order by creation_time desc";
              where c.workshop_id=:wid LIMIT 1";
          $sql_params=['wid'=>$wid];
         if ($sid>0) {
-            $sql_params=['sid'=>$sid,'wid'=>$wid];
+            $sql_params=['sid'=>$sid,'shid'=>$shid,'wid'=>$wid];
             $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM (
                             SELECT
                         `a`.`workshop_id` AS `workshop_id`,
@@ -297,7 +297,7 @@ order by creation_time desc";
                   ) c
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
-            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
+            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id and shift_id=:shid)
             left outer join shifts sh on sh.shift_id=g.shift_id
             left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
             left outer join labels l on pckg.label_id=l.label_id
@@ -492,7 +492,7 @@ order by creation_time desc";
             if ($gid>0&&$wid>0&&$sid>0) {
                 $res['status']=1;
                 $res['group']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
-                $res['productionData']= $this->getProductionData($wid,$sid);
+                $res['productionData']= $this->getProductionData($wid,$sid,$result['shift_id']);
                 /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
                  $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
                  $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);*/
