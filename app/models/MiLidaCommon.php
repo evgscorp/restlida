@@ -321,7 +321,7 @@ order by creation_time desc";
             foreach ($result['passedto_locatons'] as $key => $value) {
               $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
             }
-            if ($result['shift_id']>0) $result['shift_series_products']=$this.getShiftProductionReportArea($result['shift_id']);
+            if ($result['shift_id']>0) $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id']);
 
           }
 
