@@ -273,8 +273,11 @@ order by creation_time desc";
             left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
+       $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
        $this->utf8init();
        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+       
+       if ($result['series_id']>0) $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
       return $result;
     }
 
