@@ -40,7 +40,7 @@ order by creation_time desc";
 
     public function getSeriesPackages($search, $stype="all", $selproduct, $year, $wid)
     {
-        $sql_search_series="SELECT * FROM fork.series s.series_num=:sid and s.series_year=:year and s.product_type=:selproduct";
+        $sql_search_series="SELECT * FROM fork.series s.series_num=:sid and s.series_year=:year and s.product_id=:selproduct";
         $sql_info_by_series="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
@@ -48,7 +48,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid and s.series_year=:year and s.product_type=:selproduct and s.workshop_id=:wid  order by idpackage LIMIT 1";
+												where s.series_num=:sid and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid  order by idpackage LIMIT 1";
         $sql_info_by_package="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
@@ -56,7 +56,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where (l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid ) and s.product_type=:selproduct and s.workshop_id=:wid order by idpackage LIMIT 1";
+												where (l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid ) and s.product_id=:selproduct and s.workshop_id=:wid order by idpackage LIMIT 1";
         $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.* FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
@@ -64,7 +64,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
-												where s.series_num=:sid  and s.series_year=:year and s.product_type=:selproduct and s.workshop_id=:wid order by p.timestmp ";
+												where s.series_num=:sid  and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid order by p.timestmp ";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
         if ($stype=='all'||$stype=='series') {
