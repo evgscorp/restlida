@@ -338,13 +338,13 @@ order by creation_time desc";
       $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
       $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
       foreach ($res as $row) {
-        $result['prows'][intval($row['product_id'])][]=$row;
+        $result['prows']['p'.$row['product_id']][]=$row;
         $result['products'][intval($row['product_id'])]=['id'=>$row['product_id'],'name'=>$row['product_short']];
         $result['tweight']+=$row['wtotal'];
         $result['tcnt']+=$row['cnt'];
       }
       $result['products']=array_values($result['products']);
-      
+
      return $result;
     }
 
