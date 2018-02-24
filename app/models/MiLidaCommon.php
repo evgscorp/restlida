@@ -336,7 +336,7 @@ order by creation_time desc";
                                   where p.workshop_id=1 and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
                                   group by s.series_name, pr.product_id, pr.product_short";
       $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
-      $result=['prows'=>[],'products'=>0,'tweight'=>0,'tcnt'=>0];
+      $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
       foreach ($res as $row) {
         $result['prows'][$row['product_id']][]=$row;
         $result['products'][$row['product_id']]=$row['product_short'];
