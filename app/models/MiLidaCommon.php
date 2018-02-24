@@ -310,12 +310,6 @@ order by creation_time desc";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
 
-        $sql_shift_series_products="SELECT count(*) cnt, s.series_name, pr.product_id, pr.product_short from packages p
-                                    left outer join series s on s.series_id=p.series_id
-                                    left outer join products pr on pr.product_id=s.product_id
-                                    where p.workshop_id=1 and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
-                                    group by s.series_name, pr.product_id, pr.product_short";
-
         $this->utf8init();
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $sql_params);
 
@@ -327,12 +321,29 @@ order by creation_time desc";
             foreach ($result['passedto_locatons'] as $key => $value) {
               $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
             }
-            $result['shift_series_products']=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$result['shift_id']]);
+            if ($result['shift_id']>0) $result['shift_series_products']=$this.getShiftProductionReportArea($result['shift_id']);
 
           }
 
 
         return $result;
+    }
+
+    private function getShiftProductionReportArea($shid){
+      $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short from packages p
+                                  left outer join series s on s.series_id=p.series_id
+                                  left outer join products pr on pr.product_id=s.product_id
+                                  where p.workshop_id=1 and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
+                                  group by s.series_name, pr.product_id, pr.product_short";
+      $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
+      $result=['prows'=>[],'products'=>0,'tweight'=>0,'tcnt'=>0];
+      foreach ($res as $row) {
+        $result['prows'][$row['product_id']][]=$row;
+        $result['products'][$row['product_id']]=$row['product_short'];
+        $result['tweight']+=$row['wtotal'];
+        $result['tcnt']+=$row['cnt'];
+      }
+     return $result;
     }
 
     public function getShiftProductionInfo($gid)
