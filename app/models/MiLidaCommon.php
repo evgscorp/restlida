@@ -308,7 +308,7 @@ order by creation_time desc";
         $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
         $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 50";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid";
-        $sql_external_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 50";
+        $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
 
 
         $this->utf8init();
@@ -319,6 +319,9 @@ order by creation_time desc";
             $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort,['wid'=>$wid],'cnt');
             $result['local_stroage']=$this->db->fetchAll($sql_local_storage_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['passedto_locatons']=$this->db->fetchAll($sql_passed_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$wid]);
+            foreach ($result['passedto_locatons'] as $key => $value) {
+              $result['passedto_locatons']['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
+            }
 
         }
 
