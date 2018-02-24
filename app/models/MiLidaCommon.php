@@ -471,8 +471,7 @@ order by creation_time desc";
         $res['status']=0;
         $res['reportData']=[];
         $res['shiftProductionInfo']=[];
-        // $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
-        $sql="SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts  s order by s.shift_id limit 1";
+        $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
         $qoptions=['timestmp'=>intval($timestmp)];
         if ($action=="prev") {
             $sql="SELECT * FROM shifts where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
