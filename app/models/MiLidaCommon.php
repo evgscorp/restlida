@@ -11,7 +11,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getSentPallets()
     {
-        $sql="SELECT p.*, s.series_num, s.weight, pp.pallet_code, pp.creation_time, ll.*
+        $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
             	where  mp.location_id > :lid  and pallet_id>0
             	group by pallet_id, mp.location_id ) p
