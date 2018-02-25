@@ -610,7 +610,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             if($location>30){
               $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
               $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$cuser));
-              $stmt = $db->query("SELECT LAST_INSERT_ID()");
+              $stmt = $this->db->query("SELECT LAST_INSERT_ID()");
               $lastId = $stmt->fetchColumn();
               $location=$lastId;
             }
