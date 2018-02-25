@@ -618,7 +618,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $sql_res='SELECT @smsg as smsg;';
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
-                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location,null, @smsg);";
+                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, null, @smsg);";
                 $this->db->query($sql);
             }
             return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
