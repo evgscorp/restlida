@@ -603,20 +603,31 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function updatePallets($data, $uid)
+    public function updatePallets($data, $user)
     {
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
+            $location=intval($data->location);
+            if($location>30){
+              $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
+              $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$cuser));
+              $stmt = $db->query("SELECT LAST_INSERT_ID()");
+              $lastId = $stmt->fetchColumn();
+              $location=$lastId;
+            }
             $date = new \DateTime("NOW");
             $futuredate = $date->format('Y-m-d H:i:s');
             $pids=[];
+            $sql_res='SELECT @smsg as smsg;';
             foreach ($data->pallets as $pallet) {
-                $pids[]=$pallet->pallet_id;
+                //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
+                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location,null, @smsg);";
+                $this->db->query($sql);
             }
-            $shid=$this->getStorageShift($uid);
-            $sql="UPDATE pallets SET pallet_status=?, storage_time=?, sshid=? WHERE pallet_id IN(".implode(',', $pids).")";
-            $psql= "UPDATE preloaded_labels SET operation_id=?  WHERE label_id IN(SELECT label_id from packages  where  pallet_id IN(".implode(',', $pids)."))";
-            $result = $this->db->query($sql, array(105,$futuredate,$shid));
-            $result = $this->db->query($psql, array(105));
+            return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
+            //$sql="UPDATE pallets SET pallet_status=?, storage_time=? WHERE pallet_id IN(".implode(',', $pids).")";
+            //$psql= "UPDATE preloaded_labels SET operation_id=?  WHERE label_id IN(SELECT label_id from packages  where  pallet_id IN(".implode(',', $pids)."))";
+            //$result = $this->db->query($sql, array(105,$futuredate));
+            //$result = $this->db->query($psql, array(105));
         }
     }
 

@@ -219,7 +219,7 @@ public function getStorageShiftReport(){
 					 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 					 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
 						$data=$this->request->getJsonRawBody();
-						$MiLidaCommonModel->updatePallets($data,$UserInfo['uid']);
+						$MiLidaCommonModel->updatePallets($data,$UserInfo);
 						$res=$data;
 					 }
 				 }
