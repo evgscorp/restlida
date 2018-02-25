@@ -9,24 +9,30 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->db=$this->getDi()->getShared('db');
     }
 
-    public function getSentPallets()
+    public function getSentPallets($wid)
     {
         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
             	where  mp.location_id > :lid  and pallet_id>0
+              and mp.location_id in (SELECT allowed_location as location_id FROM move_rules
+                where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))
             	group by pallet_id, mp.location_id ) p
             left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
             left outer join pallets pp on p.pallet_id=pp.pallet_id
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
-        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0 ";
+        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0
+        and mp.location_id in (SELECT allowed_location as location_id FROM move_rules
+           where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))
+         group by pallet_id, mp.location_id ) p
+         ";
         $sql_locations="SELECT * FROM locations where location_id > 10 and location_id < 40";
         $this->utf8init();
-        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10], 'cnt');
+        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10,'wid'=>$wid], 'cnt');
         $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
         $result['pallets']=[];
         if ($result['cnt']>0) {
-            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>10]);
+            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>10,'wid'=>$wid]);
         }
         return $result;
     }

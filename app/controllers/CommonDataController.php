@@ -37,11 +37,11 @@ public function getSeriesFormData($wid){
 
 
 
-public function getSentPallets(){
+public function getSentPallets($wid){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	$this->allowCORS($this->response);
 	$Response=$this->allowCORS();
-	return $Response->setJsonContent($MiLidaCommonModel->getSentPallets());
+	return $Response->setJsonContent($MiLidaCommonModel->getSentPallets($wid));
 }
 
 public function getSeriesPackages(){

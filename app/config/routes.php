@@ -60,7 +60,7 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/sents-pallets',
+	'route' => '/sents-pallets/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getSentPallets']
 ];
 
