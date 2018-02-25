@@ -13,7 +13,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     {
         $sql="SELECT p.*, s.series_num, s.weight, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
-            	where  mp.location_id > :lid
+            	where  mp.location_id > :lid  and pallet_id>0
             	group by pallet_id, mp.location_id ) p
             left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
             left outer join pallets pp on p.pallet_id=pp.pallet_id
