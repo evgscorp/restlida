@@ -515,7 +515,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $res['reportData']=[];
         $res['shiftProductionInfo']=[];
         $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd and s.workshop_id=:wid order by s.shift_id limit 1";
-        $qoptions=['timestmp'=>intval($timestmp)];
+        $qoptions=['timestmp'=>intval($timestmp),'wid'=>$wid];
         if ($action=="prev") {
             $sql="SELECT * FROM shifts where shift_id < :shid and workshop_id=:wid and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
             $qoptions=['shid'=>intval($shid),'wid'=>$wid];
