@@ -41,7 +41,7 @@ order by creation_time desc";
     public function getSeriesPackages($search, $stype="all", $selproduct, $year, $wid)
     {
         $sql_search_series="SELECT * FROM fork.series s.series_num=:sid and s.series_year=:year and s.product_id=:selproduct";
-        $sql_info_by_series="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short FROM packages p
+        $sql_info_by_series="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short, lc.location_name FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
 												LEFT OUTER JOIN labels l on p.label_id = l.label_id
@@ -49,8 +49,9 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
                         LEFT OUTER JOIN products prd on prd.product_id=s.product_id
+                        LEFT OUTER JOIN locations lc on lc.location_id=p.location_id
 												where s.series_num=:sid and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid  order by l.label_id LIMIT 1";
-        $sql_info_by_package="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short FROM packages p
+        $sql_info_by_package="SELECT 1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short, lc.location_name FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
 												LEFT OUTER JOIN labels l on p.label_id = l.label_id
@@ -58,8 +59,9 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
                         LEFT OUTER JOIN products prd on prd.product_id=s.product_id
+                        LEFT OUTER JOIN locations lc on lc.location_id=p.location_id
 												where (l.UUID=:uuid OR CAST(l.h_number AS UNSIGNED)=:uuid ) and s.product_id=:selproduct and s.workshop_id=:wid order by l.label_id LIMIT 1";
-        $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short FROM packages p
+        $sql_packages="SELECT @row_number:=@row_number+1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short, lc.location_name FROM packages p
 												LEFT OUTER JOIN series s on p.series_id = s.series_id
 												left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
 												LEFT OUTER JOIN labels l on p.label_id = l.label_id
@@ -67,6 +69,7 @@ order by creation_time desc";
 												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
 												LEFT OUTER JOIN users u on sh.uid=u.uid
                         LEFT OUTER JOIN products prd on prd.product_id=s.product_id
+                        LEFT OUTER JOIN locations lc on lc.location_id=p.location_id
 												where s.series_num=:sid  and s.series_year=:year and s.product_id=:selproduct and s.workshop_id=:wid order by p.prod_stmp ";
         $this->utf8init();
         $this->db->query("SET @row_number:=0;");
