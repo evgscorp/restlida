@@ -11,19 +11,20 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getSentPallets()
     {
-        $sql="SELECT p.*, s.series_num, pp.pallet_code, pp.creation_time
-	from (SELECT count(*) cnt, pallet_id, series_id, g.weight   FROM packages mp left outer join groups g on mp.group_id= g.group_id
-	where mp.pallet_id in (SELECT pallet_id FROM pallets where pallet_status=:sid)
-	group by pallet_id, series_id, weight) p
-left outer join series s on p.series_id=s.series_id
-left outer join pallets pp on p.pallet_id=pp.pallet_id
-order by creation_time desc";
-        $sql_cnt_pallets="SELECT count(*) cnt FROM pallets where pallet_status=:sid";
+        $sql="SELECT p.*, s.series_num, s.weight, pp.pallet_code, pp.creation_time, ll.*
+            	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
+            	where  mp.location_id > :lid
+            	group by pallet_id, mp.location_id ) p
+            left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
+            left outer join pallets pp on p.pallet_id=pp.pallet_id
+            left outer join locations ll on ll.location_id=p.location_id
+            order by creation_time desc";
+        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0 ";
         $this->utf8init();
-        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['sid'=>4], 'cnt');
+        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10], 'cnt');
         $result['pallets']=[];
         if ($result['cnt']>0) {
-            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['sid'=>4]);
+            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>10]);
         }
         return $result;
     }
