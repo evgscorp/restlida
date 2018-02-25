@@ -20,8 +20,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0 ";
+        $sql_locations="SELECT * FROM locations where location.id > 3";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10], 'cnt');
+        $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
         $result['pallets']=[];
         if ($result['cnt']>0) {
             $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>10]);
