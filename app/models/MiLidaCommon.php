@@ -538,8 +538,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
                  $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
                  $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);*/
-                $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'next');
-                $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'prev');
+                $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid and workshop_id=:wid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'next');
+                $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid and workshop_id=:wid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'prev');
             }
         }
         return $res;
