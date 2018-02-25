@@ -533,7 +533,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
             if ($gid>0&&$wid>0&&$sid>0) {
                 $res['status']=1;
-                $res['group']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
+                $res['group']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id and workshop_id=:wid LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid,'wid'=>$wid]);
                 $res['productionData']= $this->getProductionData($wid,$sid,$result['shift_id']);
                 /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
                  $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
