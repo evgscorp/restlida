@@ -30,10 +30,10 @@ order by creation_time desc";
 
     public function getPackageLog($search)
     {
-        $sql="SELECT l.comment, l.op_stmp, l.operation_id, p.label_id, pl.UUID
-            FROM operations_log l left join packages p on p.idpackage= l.idpackage
-            left join preloaded_labels pl on p.label_id= pl.label_id
-            WHERE UUID LIKE(:search)";
+        $sql="SELECT l.message, l.op_stmp, l.operation_id, p.label_id, pl.UUID
+            FROM operation_log l left join packages p on p.label_id= l.label_id
+            left join labels pl on p.label_id= pl.label_id
+            WHERE UUID LIKE(:search) order by l.op_stmp";
         $this->utf8init();
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
