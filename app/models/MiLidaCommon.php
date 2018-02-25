@@ -22,10 +22,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0
-        and mp.location_id in (SELECT allowed_location as location_id FROM move_rules
-           where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))
-         group by pallet_id, mp.location_id ) p
-         ";
+        and location_id in (SELECT allowed_location as location_id FROM move_rules
+           where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
+
         $sql_locations="SELECT * FROM locations where location_id > 10 and location_id < 40";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10,'wid'=>$wid], 'cnt');
