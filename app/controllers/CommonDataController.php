@@ -94,7 +94,7 @@ public function getShiftbyDate() {
 
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
-	$result=$MiLidaCommonModel->getShiftbyDate($request->get("date"),$request->get("action"), $request->get("shid"));
+	$result=$MiLidaCommonModel->getShiftbyDate($request->get("date"),$request->get("action"), $request->get("shid"),$request->get("wid"));
 	$Response=$this->allowCORS();
 	return $Response->setJsonContent($result);
 

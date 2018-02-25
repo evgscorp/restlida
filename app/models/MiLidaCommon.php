@@ -507,29 +507,29 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     }
 
 
-    public function getShiftbyDate($date, $action,$shid)
+    public function getShiftbyDate($date, $action,$shid,$wid)
     {
         //$timestmp= strtotime(str_replace('/', '.', $date));
         $timestmp=$date;
         $res['status']=0;
         $res['reportData']=[];
         $res['shiftProductionInfo']=[];
-        $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd order by s.shift_id limit 1";
+        $sql="SELECT * from (SELECT *, from_unixtime(UNIX_TIMESTAMP(startstmp),'%Y-%m-%d') shd,  from_unixtime(:timestmp, '%Y-%m-%d') cd FROM shifts ) s where s.cd=s.shd and s.workshop_id=:wid order by s.shift_id limit 1";
         $qoptions=['timestmp'=>intval($timestmp)];
         if ($action=="prev") {
-            $sql="SELECT * FROM shifts where shift_id < :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
-            $qoptions=['shid'=>intval($shid)];
+            $sql="SELECT * FROM shifts where shift_id < :shid and workshop_id=:wid and shift_id in (select shift_id from groups group by shift_id ) order by shift_id desc limit 1";
+            $qoptions=['shid'=>intval($shid),'wid'=>$wid];
         } elseif ($action=="next") {
-            $sql="SELECT * FROM shifts where shift_id > :shid  and shift_id in (select shift_id from groups group by shift_id ) order by shift_id limit 1";
-            $qoptions=['shid'=>intval($shid)];
+            $sql="SELECT * FROM shifts where shift_id > :shid  and workshop_id=:wid and shift_id in (select shift_id from groups group by shift_id ) order by shift_id limit 1";
+            $qoptions=['shid'=>intval($shid),'wid'=>$wid];
         }
 
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $qoptions);
         $res['shift_search']=$result;
         if (isset($result['shift_id'])&&$result['shift_id']>0) {
-            $gid=$this->db->fetchColumn("SELECT max(group_id) gid FROM groups where shift_id=:shift_id", ['shift_id'=>$result['shift_id']], 'gid');
-            $sid=$this->db->fetchColumn("SELECT max(series_id) sid FROM groups where group_id=:group_id", ['group_id'=>$gid], 'sid');
-            $wid=$this->db->fetchColumn("SELECT workshop_id wid FROM groups where group_id=:group_id LIMIT 1", ['group_id'=>$gid], 'wid');
+            $gid=$this->db->fetchColumn("SELECT max(group_id) gid FROM groups where shift_id=:shift_id  and workshop_id=:wid", ['shift_id'=>$result['shift_id'],'wid'=>$wid], 'gid');
+            $sid=$this->db->fetchColumn("SELECT max(series_id) sid FROM groups where group_id=:group_id and workshop_id=:wid", ['group_id'=>$gid,'wid'=>$wid], 'sid');
+           // $wid=$this->db->fetchColumn("SELECT workshop_id wid FROM groups where group_id=:group_id LIMIT 1", ['group_id'=>$gid], 'wid');
 
             if ($gid>0&&$wid>0&&$sid>0) {
                 $res['status']=1;
@@ -538,8 +538,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
                  $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
                  $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);*/
-                $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid", ['shid'=>$result['shift_id']], 'next');
-                $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid", ['shid'=>$result['shift_id']], 'prev');
+                $res['next']=$this->db->fetchColumn("SELECT count(*) next FROM shifts where shift_id > :shid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'next');
+                $res['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM shifts where shift_id < :shid", ['shid'=>$result['shift_id'],'wid'=>$wid], 'prev');
             }
         }
         return $res;
