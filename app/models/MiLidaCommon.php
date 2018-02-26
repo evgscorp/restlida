@@ -283,9 +283,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
-            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id)
+            left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id and workshop_id=:wid)
             left outer join shifts sh on sh.shift_id=g.shift_id
-            left outer join packages pckg on pckg.label_id=(select max(label_id) from packages where series_id = s.series_id)
+            left outer join packages pckg on pckg.label_id=(select label_id from packages where series_id = s.series_id and workshop_id=:wid order by prod_stmp DESC LIMIT 1)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
          $sql_unsort="SELECT count(*) cnt FROM packages p WHERE p.workshop_id = :wid and p.series_id = -1";
