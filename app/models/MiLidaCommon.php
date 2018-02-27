@@ -311,7 +311,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
         $sql_unsort="SELECT count(*) cnt FROM packages p WHERE p.workshop_id = :wid and p.series_id = -1";
         $sql_unsorted_packages="SELECT p.prod_stmp, l.* FROM packages p left outer join labels l on p.label_id=l.label_id
-        WHERE p.workshop_id = = :wid and p.series_id = -1";
+        WHERE p.workshop_id = :wid and p.series_id = -1";
 
         $sql_params=['wid'=>$wid];
         if ($sid>0) {
