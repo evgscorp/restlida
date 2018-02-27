@@ -290,10 +290,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
              where c.workshop_id=:wid LIMIT 1";
 
         $sql="SELECT 	A.*
-          		,p.product_id, p.product_name
-          		,sh.*, CONCAT(b.second_name, ' ', b.first_name) as master_name
-                  ,g.packer_name as packer_name
-                  ,pckg.prod_stmp
+          		,p.product_id, p.product_name, p.product_short,
+              sh.*, CONCAT(b.second_name, ' ', b.first_name) as master_name,g.packer_name as packer_name,pckg.prod_stmp
           		,l.UUID, l.h_number
           		FROM current_programm A
           						 left outer join series s on s.series_id = a.series_id
