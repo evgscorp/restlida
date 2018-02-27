@@ -288,8 +288,32 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join packages pckg on pckg.label_id=(select label_id from packages where series_id = s.series_id and workshop_id=:wid order by prod_stmp DESC LIMIT 1)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
-         $sql_unsort="SELECT count(*) cnt FROM packages p WHERE p.workshop_id = :wid and p.series_id = -1";
-         $sql_params=['wid'=>$wid];
+
+        $sql="SELECT 	A.*
+          		,p.product_id, p.product_name
+          		,sh.*, CONCAT(b.second_name, ' ', b.first_name) as master_name
+                  ,g.packer_name as packer_name
+                  ,pckg.prod_stmp
+          		,l.UUID, l.h_number
+          		FROM current_programm A
+          						 left outer join series s on s.series_id = a.series_id
+          						 left outer join products p on p.product_id=s.product_id
+          						 left join fork.shifts sh ON sh.workshop_id = a.workshop_id and sh.shift_id = (SELECT max(shift_id) from fork.shifts where workshop_id = :wid)
+                                   left join users b on b.uid = sh.uid
+                                   left join groups g on g.series_id = a.series_id
+                                   left join packages pckg on pckg.series_id = a.series_id
+                                   and pckg.label_id = (select label_id from packages where series_id = a.series_id and workshop_id= :wid
+                                     order by prod_stmp DESC LIMIT 1)
+          						 left join labels l on pckg.label_id=l.label_id
+          WHERE A.workshop_id = :wid ORDER BY prod_stmp DESC,  startstmp DESC LIMIT 1";
+
+
+
+        $sql_unsort="SELECT count(*) cnt FROM packages p WHERE p.workshop_id = :wid and p.series_id = -1";
+        $sql_unsorted_packages="SELECT p.prod_stmp, l.* FROM packages p left outer join labels l on p.label_id=l.label_id
+        WHERE p.workshop_id = = :wid and p.series_id = -1";
+
+        $sql_params=['wid'=>$wid];
         if ($sid>0) {
             $sql_params=['sid'=>$sid,'shid'=>$shid,'wid'=>$wid];
             $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM (
@@ -321,7 +345,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
         $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid and pallet_id is not null GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
         $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 50";
-        $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid";
+        $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
 
         $this->utf8init();
@@ -329,37 +353,40 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
         if ($result['series_id']>0) {
             $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
-            $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort,['wid'=>$wid],'cnt');
+            $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort, ['wid'=>$wid], 'cnt');
+            $result['unsorted_packages']=$this->db->fetchAll($sql_unsorted_packages, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['local_stroage']=$this->db->fetchAll($sql_local_storage_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['passedto_locatons']=$this->db->fetchAll($sql_passed_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$wid]);
             foreach ($result['passedto_locatons'] as $key => $value) {
-              $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
+                $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
             }
-            if ($result['shift_id']>0) $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id']);
-
-          }
+            if ($result['shift_id']>0) {
+                $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id']);
+            }
+        }
 
 
         return $result;
     }
 
-    private function getShiftProductionReportArea($shid){
-      $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short from packages p
+    private function getShiftProductionReportArea($shid)
+    {
+        $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short from packages p
                                   left outer join series s on s.series_id=p.series_id
                                   left outer join products pr on pr.product_id=s.product_id
                                   where p.workshop_id=1 and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
                                   group by s.series_name, pr.product_id, pr.product_short";
-      $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
-      $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
-      foreach ($res as $row) {
-        $result['prows'][$row['product_id']][]=$row;
-        $result['products'][intval($row['product_id'])]=['id'=>$row['product_id'],'name'=>$row['product_short']];
-        $result['tweight']+=$row['wtotal'];
-        $result['tcnt']+=$row['cnt'];
-      }
-      $result['products']=array_values($result['products']);
+        $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
+        $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
+        foreach ($res as $row) {
+            $result['prows'][$row['product_id']][]=$row;
+            $result['products'][intval($row['product_id'])]=['id'=>$row['product_id'],'name'=>$row['product_short']];
+            $result['tweight']+=$row['wtotal'];
+            $result['tcnt']+=$row['cnt'];
+        }
+        $result['products']=array_values($result['products']);
 
-     return $result;
+        return $result;
     }
 
     public function getShiftProductionInfo($gid)
@@ -512,7 +539,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     }
 
 
-    public function getShiftbyDate($date, $action,$shid,$wid)
+    public function getShiftbyDate($date, $action, $shid, $wid)
     {
         //$timestmp= strtotime(str_replace('/', '.', $date));
         $timestmp=$date;
@@ -534,12 +561,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($result['shift_id'])&&$result['shift_id']>0) {
             $gid=$this->db->fetchColumn("SELECT max(group_id) gid FROM groups where shift_id=:shift_id  and workshop_id=:wid", ['shift_id'=>$result['shift_id'],'wid'=>$wid], 'gid');
             $sid=$this->db->fetchColumn("SELECT max(series_id) sid FROM groups where group_id=:group_id and workshop_id=:wid", ['group_id'=>$gid,'wid'=>$wid], 'sid');
-           // $wid=$this->db->fetchColumn("SELECT workshop_id wid FROM groups where group_id=:group_id LIMIT 1", ['group_id'=>$gid], 'wid');
+            // $wid=$this->db->fetchColumn("SELECT workshop_id wid FROM groups where group_id=:group_id LIMIT 1", ['group_id'=>$gid], 'wid');
 
             if ($gid>0&&$wid>0&&$sid>0) {
                 $res['status']=1;
                 $res['group']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id and workshop_id=:wid LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid,'wid'=>$wid]);
-                $res['productionData']= $this->getProductionData($wid,$sid,$result['shift_id']);
+                $res['productionData']= $this->getProductionData($wid, $sid, $result['shift_id']);
                 /* $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);
                  $res['shiftProductionInfo']= $this->getShiftProductionInfo($gid);
                  $res['reportData']=$this->db->fetchOne("SELECT * FROM groups where group_id = :group_id LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['group_id'=>$gid]);*/
@@ -612,10 +639,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     {
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
             $location=intval($data->location);
-            if($location>30){
-              $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
-              $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$cuser));
-              $location=$this->db->lastInsertId();
+            if ($location>30) {
+                $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
+                $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$cuser));
+                $location=$this->db->lastInsertId();
             }
             $date = new \DateTime("NOW");
             $futuredate = $date->format('Y-m-d H:i:s');
