@@ -288,10 +288,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join packages pckg on pckg.label_id=(select label_id from packages where series_id = s.series_id and workshop_id=:wid order by prod_stmp DESC LIMIT 1)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
-
-          
-
-              g.group_id = (SELECT max(group_id) from fork.groups where workshop_id = 2)
+         
         $sql="SELECT 	A.*
           		,p.product_id, p.product_name, p.product_short,
               sh.*, CONCAT(b.second_name, ' ', b.first_name) as master_name,g.packer_name as packer_name,pckg.prod_stmp
