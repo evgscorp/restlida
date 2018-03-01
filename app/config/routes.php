@@ -51,6 +51,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'updatePallets']
 ];
 
+$routes[] = [
+	'method' => 'post',
+	'route' => '/update-upackages',
+	'handler' => [new \Controllers\CommonDataController(), 'updateUPackages']
+];
 
 $routes[] = [
 	'method' => 'get',

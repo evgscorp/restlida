@@ -232,6 +232,26 @@ public function getStorageShiftReport(){
 		}
 
 
+		public function updateUPackages() {
+				 $res='error';
+				 try {
+					 $MiLidaCommonModel = new \Models\MiLidaCommon();
+					 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+					 if (isset($UserInfo['uid'])&&$UserInfo['uid']>0){
+						$data=$this->request->getJsonRawBody();
+						$MiLidaCommonModel->updateUPackages($data,$UserInfo);
+						$res=$data;
+					 }
+				 }
+				 catch (\Exception $e) {
+					 $res='Error: '.get_class($e).": ".$e->getMessage();
+				 }
+				 $Response=$this->allowCORS();
+				 return $Response->setJsonContent(['status'=>$res]);
+
+		}
+
+
 
  public function allowCORS(){
 	 $this->response->setHeader('Access-Control-Allow-Origin', '*');

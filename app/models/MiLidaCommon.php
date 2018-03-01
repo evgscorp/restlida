@@ -636,6 +636,20 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function updateUPackages($data, $user)
+    {
+        if (isset($data->packages)&&(count($data->packages)>0&&$data->series_id>0)) {
+            $series_id=intval($data->series_id);
+            $lids=[];
+            foreach ($data->packages as $package) {
+                $lids[]=$package->label_id;
+            }
+            $sql="UPDATE packages SET series_id=? WHERE pallet_id IN(".implode(',', $lids).")";
+            $this->db->query($sql);
+            }
+    }
+
+
     public function updatePallets($data, $user)
     {
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
