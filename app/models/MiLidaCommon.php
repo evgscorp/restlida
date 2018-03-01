@@ -644,7 +644,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             foreach ($data->packages as $package) {
                 $lids[]=$package->label_id;
             }
-            $sql="UPDATE packages SET series_id=? WHERE pallet_id IN(".implode(',', $lids).")";
+            $sql="UPDATE packages SET series_id=? WHERE label_id IN(".implode(',', $lids).")";
             $this->db->query($sql);
             }
     }
