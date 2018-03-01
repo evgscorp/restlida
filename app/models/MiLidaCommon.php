@@ -280,7 +280,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getProductionData($wid, $sid=0, $shid=0)
     {
-        $sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
+
+        $result['wid']=$wid;
+        /*$sql="SELECT c.*, p.*, g.*, sh.*, pckg.prod_stmp, l.h_number, l.UUID  FROM current_programm c
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
             left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id and workshop_id=:wid)
@@ -296,7 +298,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join fork.shifts sh on sh.shift_id=g.shift_id and sh.shift_id = (SELECT max(shift_id) from fork.shifts where workshop_id = :wid)
             left outer join fork.packages pckg on pckg.label_id=(select label_id from fork.packages where series_id = s.series_id and workshop_id=:wid order by prod_stmp DESC LIMIT 1)
             left outer join fork.labels l on pckg.label_id=l.label_id
-             where c.workshop_id=:wid LIMIT 1";   
+             where c.workshop_id=:wid LIMIT 1";*/
+
 
         $sql="SELECT 	A.*
           		,p.product_id, p.product_name, p.product_short,
@@ -305,10 +308,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
           		FROM current_programm A
           						 left outer join series s on s.series_id = a.series_id
           						 left outer join products p on p.product_id=s.product_id
-          						 left join fork.shifts sh ON sh.workshop_id = a.workshop_id and sh.shift_id = (SELECT max(shift_id) from fork.shifts where workshop_id = :wid)
+          						 left join shifts sh ON sh.workshop_id = a.workshop_id and sh.shift_id = (SELECT max(shift_id) from shifts where workshop_id = :wid)
                                    left join users b on b.uid = sh.uid
-                                   left join groups g on g.series_id = a.series_id
-                                   left join packages pckg on pckg.series_id = a.series_id
+                                   left join groups g on g.series_id = a.series_id and g.group_id = (SELECT max(group_id) from groups where series_id = s.series_id and workshop_id = 2)
+                                   left join packages pckg on pckg.series_id = a.series_id and pckg.label_id = (select label_id from packages where series_id = a.series_id and workshop_id= 2 order by prod_stmp DESC LIMIT 1)
                                    and pckg.label_id = (select label_id from packages where series_id = a.series_id and workshop_id= :wid
                                      order by prod_stmp DESC LIMIT 1)
           						 left join labels l on pckg.label_id=l.label_id
@@ -373,6 +376,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             if ($result['shift_id']>0) {
                 $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id']);
             }
+
         }
 
 
