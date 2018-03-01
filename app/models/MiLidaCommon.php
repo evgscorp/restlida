@@ -345,6 +345,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 50";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
+        $sql_last_ten_series="SELECT series_id, series_name FROM series where workshop_id=:wid and series_id > 0 order by timestmp desc limit 15";
+
 
         $this->utf8init();
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $sql_params);
@@ -354,6 +356,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort, ['wid'=>$wid], 'cnt');
             $result['unsorted_packages']=$this->db->fetchAll($sql_unsorted_packages, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['local_stroage']=$this->db->fetchAll($sql_local_storage_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+            $result['last_ten_series']=$this->db->fetchAll($sql_last_ten_series, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['passedto_locatons']=$this->db->fetchAll($sql_passed_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$wid]);
             foreach ($result['passedto_locatons'] as $key => $value) {
                 $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
