@@ -274,7 +274,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     {
         $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
-          FROM series where workshop_id=1 and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+          FROM series where workshop_id=:wid and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
 
@@ -284,11 +284,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join series s on c.series_id=s.series_id
             left outer join products p on p.product_id=s.product_id
             left outer join groups g on g.series_id=s.series_id and g.group_id= (select max(group_id) from groups where series_id = s.series_id and workshop_id=:wid)
-            left outer join shifts sh on sh.shift_id=g.shift_id
+            left outer join shifts sh on sh.shift_id=g.shift_id and sh.shift_id = (SELECT max(shift_id) from shifts where workshop_id = :wid)
             left outer join packages pckg on pckg.label_id=(select label_id from packages where series_id = s.series_id and workshop_id=:wid order by prod_stmp DESC LIMIT 1)
             left outer join labels l on pckg.label_id=l.label_id
              where c.workshop_id=:wid LIMIT 1";
 
+          
+
+              g.group_id = (SELECT max(group_id) from fork.groups where workshop_id = 2)
         $sql="SELECT 	A.*
           		,p.product_id, p.product_name, p.product_short,
               sh.*, CONCAT(b.second_name, ' ', b.first_name) as master_name,g.packer_name as packer_name,pckg.prod_stmp
