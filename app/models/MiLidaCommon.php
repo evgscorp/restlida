@@ -21,7 +21,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join pallets pp on p.pallet_id=pp.pallet_id
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
-        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0
+        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid 
         and location_id in (SELECT allowed_location as location_id FROM move_rules
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
         $lid=10;
