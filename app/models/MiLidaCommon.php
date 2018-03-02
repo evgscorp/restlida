@@ -9,7 +9,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->db=$this->getDi()->getShared('db');
     }
 
-    public function getSentPallets($wid)
+    public function getSentPallets($wid,$customer="0")
     {
         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
@@ -24,14 +24,15 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and pallet_id >0
         and location_id in (SELECT allowed_location as location_id FROM move_rules
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
-
+        $lid=10;
+        if ($customer>0) $lid=32;
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
-        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10,'wid'=>$wid], 'cnt');
+        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'wid'=>$wid], 'cnt');
         $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
         $result['pallets']=[];
         if ($result['cnt']>0) {
-            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>10,'wid'=>$wid]);
+            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'wid'=>$wid]);
         }
         return $result;
     }
@@ -671,6 +672,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
                 $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$data->customer));
                 $location=$this->db->lastInsertId();
+                $location=$this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');
+       
             }
             $date = new \DateTime("NOW");
             $futuredate = $date->format('Y-m-d H:i:s');
