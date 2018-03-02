@@ -34,7 +34,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if ($result['cnt']>0) {
             $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'wid'=>$wid]);
         }
-        $result['shipmentStatus']=
+        $result['shipmentStatus']=$shipment;
         return $result;
     }
 
