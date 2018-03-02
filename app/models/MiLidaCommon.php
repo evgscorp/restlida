@@ -25,7 +25,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         and location_id in (SELECT allowed_location as location_id FROM move_rules
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
 
-        $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 30";
+        $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>10,'wid'=>$wid], 'cnt');
         $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
@@ -669,7 +669,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $location=intval($data->location);
             if ($location>30) {
                 $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
-                $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$cuser));
+                $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$data->customer));
                 $location=$this->db->lastInsertId();
             }
             $date = new \DateTime("NOW");
