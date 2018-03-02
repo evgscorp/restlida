@@ -11,7 +11,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getSentPallets($wid,$shipment="0")
     {
-        $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
+        /*$sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
             	where  mp.location_id > :lid and location_id < 33
               and mp.location_id in (SELECT allowed_location as location_id FROM move_rules
@@ -20,12 +20,28 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
             left outer join pallets pp on p.pallet_id=pp.pallet_id
             left outer join locations ll on ll.location_id=p.location_id
+            order by creation_time desc";*/
+
+         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
+            	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
+            	 where pallet_id in 
+                 ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < 40 and workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))
+            	group by pallet_id, mp.location_id ) p
+            left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
+            left outer join pallets pp on p.pallet_id=pp.pallet_id
+            left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
-        $sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and  location_id < 33
+
+
+        /*$sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and  location_id < 34
         and location_id in (SELECT allowed_location as location_id FROM move_rules
-           where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
-        $lid=10;
-        if ($shipment!="0") $lid=23;
+           where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";*/
+        
+        $sql_cnt_pallets="SELECT count(*) cnt FROM packages 
+        where pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < 40 and workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";  
+        
+         $lid=10;
+        if ($shipment!="0") $lid=20;
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'wid'=>$wid], 'cnt');
