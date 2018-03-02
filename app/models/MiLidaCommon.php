@@ -9,7 +9,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->db=$this->getDi()->getShared('db');
     }
 
-    public function getSentPallets($wid,$customer="0")
+    public function getSentPallets($wid,$shipment="0")
     {
         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
@@ -25,7 +25,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         and location_id in (SELECT allowed_location as location_id FROM move_rules
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";
         $lid=10;
-        if ($customer>0) $lid=32;
+        if ($shipment!="0") $lid=32;
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'wid'=>$wid], 'cnt');
@@ -34,6 +34,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if ($result['cnt']>0) {
             $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'wid'=>$wid]);
         }
+        $result['shipmentStatus']=
         return $result;
     }
 
