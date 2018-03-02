@@ -37,7 +37,7 @@ public function getSeriesFormData($wid){
 
 
 
-public function getSentPallets($wid,){
+public function getSentPallets($wid){
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
 	$request = new \Phalcon\Http\Request();
 	$this->allowCORS($this->response);
