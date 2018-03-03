@@ -341,7 +341,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                                    and pckg.label_id = (select label_id from packages where series_id = a.series_id and workshop_id= :wid
                                      order by prod_stmp DESC LIMIT 1)
           						 left join labels l on pckg.label_id=l.label_id
-          WHERE A.workshop_id = :wid and and s.is_manual=0  ORDER BY prod_stmp DESC,  startstmp DESC LIMIT 1";
+          WHERE A.workshop_id = :wid  ORDER BY prod_stmp DESC,  startstmp DESC LIMIT 1";
 
 
 
