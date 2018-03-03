@@ -24,7 +24,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
          $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
-            	 where pallet_id in 
+            	 where pallet_id is not null and pallet_id in 
                  ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid and workshop_id =:wid)
             	group by pallet_id, mp.location_id ) p
             left outer join series s on s.series_id = (select max(series_id) from packages where pallet_id=p.pallet_id)
@@ -38,7 +38,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";*/
         
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages 
-        where pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid and workshop_id=:wid )";  
+        where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid and workshop_id=:wid )";  
         
          $lid=20;
          $mlid=30;
