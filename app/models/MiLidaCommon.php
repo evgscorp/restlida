@@ -40,7 +40,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages 
         where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid and workshop_id=:wid )";  
         
-         $lid=20;
+         $lid=10;
          $mlid=30;
         if ($shipment!="0") {$lid=30; $mlid=40;};
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
