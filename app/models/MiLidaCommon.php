@@ -41,7 +41,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         where pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < 40 and workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";  
         
          $lid=10;
-        if ($shipment!="0") $lid=20;
+        if ($shipment!="0") $lid=30;
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'wid'=>$wid], 'cnt');
