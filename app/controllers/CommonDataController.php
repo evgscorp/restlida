@@ -114,6 +114,17 @@ public function getStorageShiftReport(){
  	return $Response->setJsonContent($result);
 }
 
+public function getStorageOverview($wid){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+	$result=[];
+	//if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']>0&&in_array(3,$UserInfo['roles'])){
+		  $result=$MiLidaCommonModel->getStorageOverview($wid);
+	 //}
+ 	$Response=$this->allowCORS();
+ 	return $Response->setJsonContent($result);
+}
 
 
   /*

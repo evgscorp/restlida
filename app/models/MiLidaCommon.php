@@ -289,6 +289,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return  $products[$key];
     }
 
+    public function getStorageOverview($wid)  {
+          $this->utf8init();
+          $sql="SELECT * FROM overview_by_location where workshop_id=:wid and pallet_code is not null";
+        return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+      }
+
+
     public function getShiftSuggestionsInfo($wid)
     {
         $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);

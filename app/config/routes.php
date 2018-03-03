@@ -94,6 +94,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getStorageShiftReport']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/storage-overview/{wid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'getStorageOverview']
+];
 
 $routes[] = [
 	'method' => 'get',
