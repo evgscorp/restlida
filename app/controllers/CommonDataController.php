@@ -126,6 +126,17 @@ public function getStorageOverview($wid){
  	return $Response->setJsonContent($result);
 }
 
+public function getStorageOverviewDates($wid){
+	$request = new \Phalcon\Http\Request();
+	$MiLidaCommonModel = new \Models\MiLidaCommon();
+	$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+	$result=[];
+	//if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']>0&&in_array(3,$UserInfo['roles'])){
+		  $result=$MiLidaCommonModel->getStorageOverviewDates($wid);
+	 //}
+ 	$Response=$this->allowCORS();
+ 	return $Response->setJsonContent($result);
+}
 
   /*
 	URL: http://172.16.130.180/restlida/add-group?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD

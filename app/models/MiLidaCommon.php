@@ -295,6 +295,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       }
 
+    public function getStorageOverviewDates($wid){
+        $this->utf8init();
+        $sql="SELECT DATE(series_date) edate, datediff( DATE(series_date), NOW() )+365*2 dremains, sum(total) total  FROM overview_by_location 
+        where workshop_id=:wid group by edate, dremains";
+       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+    }
 
     public function getShiftSuggestionsInfo($wid)
     {

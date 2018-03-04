@@ -102,6 +102,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/storage-overview-dates/{wid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'getStorageOverviewDates']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/search-series-packages',
 	'handler' => [new \Controllers\CommonDataController(), 'getSeriesPackages']
 ];
