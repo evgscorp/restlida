@@ -406,7 +406,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $result['passedto_locatons'][$key]['pallets']=$this->db->fetchAll($sql_external_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$value['location_id']]);
             }
             if ($result['shift_id']>0) {
-                $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id']);
+                $result['shift_series_products']=$this->getShiftProductionReportArea($result['shift_id'],$wid);
             }
 
         }
@@ -415,14 +415,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    private function getShiftProductionReportArea($shid)
+    private function getShiftProductionReportArea($shid,$wid)
     {
         $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short from packages p
                                   left outer join series s on s.series_id=p.series_id
                                   left outer join products pr on pr.product_id=s.product_id
-                                  where p.workshop_id=1 and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
+                                  where p.workshop_id=:wid and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
                                   group by s.series_name, pr.product_id, pr.product_short";
-        $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['shid'=>$shid]);
+        $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'shid'=>$shid]);
         $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
         foreach ($res as $row) {
             $result['prows'][$row['product_id']][]=$row;
