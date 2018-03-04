@@ -131,4 +131,13 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getProductionData']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/summary-report',
+	'handler' => [new \Controllers\CommonDataController(), 'getSummaryReport']
+];
+
+
+
+
 return $routes;

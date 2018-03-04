@@ -522,6 +522,27 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function getSummaryReport($sdate,$edate){
+        $result=[];
+        $sql_workshops="SELECT * FROM workshops where workshop_id < 4;";
+        $sql_storage_workshops="SELECT * FROM workshops where workshop_id  between 20 and 30";
+        $this->utf8init();
+        $result["workshops"]=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+        $result["storageWorkshops"]=$this->db->fetchAll($sql_storage_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+        
+        foreach ($result["workshops"] as $row) {
+            $sql_report_1="CALL report_1({$row['workshop_id']}, '$sdate', '$edate');";
+            $sql_report_3="CALL report_3({$row['workshop_id']}, '$sdate', '$edate');";
+            $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
+            $result['report3'][$row['workshop_id']]=$this->db->fetchAll($sql_report_3, \Phalcon\Db::FETCH_ASSOC, []);
+        } 
+
+        foreach ($result["storageWorkshops"] as $row) {
+            $sql_report_2="CALL `report_2`({$row['workshop_id']});";
+            $result['report2'][$row['workshop_id']]=$this->db->fetchAll($sql_report_2, \Phalcon\Db::FETCH_ASSOC, []);
+        } 
+        return $result;
+    }
 
 
     public function getUserInfo($token)
