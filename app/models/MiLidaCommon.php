@@ -530,7 +530,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $result["workshops"]=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         $result["storageWorkshops"]=$this->db->fetchAll($sql_storage_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         $result['report1'][0]=$this->db->fetchAll("CALL report_1(0, '$sdate', '$edate');", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['report2'][0]=$this->db->fetchAll("CALL `report_2`(0);", \Phalcon\Db::FETCH_ASSOC, []);
+        $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
         $result['report3'][0]=$this->db->fetchAll("CALL report_3(0, '$sdate', '$edate');", \Phalcon\Db::FETCH_ASSOC, []);
         
         foreach ($result["workshops"] as $row) {
@@ -539,11 +539,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
             $result['report3'][$row['workshop_id']]=$this->db->fetchAll($sql_report_3, \Phalcon\Db::FETCH_ASSOC, []);
         } 
-        /*
-        foreach ($result["storageWorkshops"] as $row) {
-            $sql_report_2="CALL `report_2`({$row['workshop_id']});";
-            $result['report2'][$row['workshop_id']]=$this->db->fetchAll($sql_report_2, \Phalcon\Db::FETCH_ASSOC, []);
-        } */
+        
+        foreach ($result["storageWorkshops"] as $srow) {
+            if ($srow['workshop_id']>0){
+            $sql_report_2="CALL report_2({$srow['workshop_id']});";
+            $result['report2'][$srow['workshop_id']]=$this->db->fetchAll($sql_report_2, \Phalcon\Db::FETCH_ASSOC, []);
+            } 
+        } 
         return $result;
     }
 
