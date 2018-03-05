@@ -239,6 +239,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 																								 select dsshid shift_id from pallets where dsshid is not null ) r
 																								 group by r.shift_id
 																								 )", ['shid'=>$shid], 'next');
+        
         $result['prev']=$this->db->fetchColumn("SELECT count(*) prev FROM storage_shifts s  LEFT OUTER JOIN users u on u.uid=s.uid where shift_id < :shid  and shift_id in (select r.shift_id  from (
 																								select sshid shift_id from pallets where sshid is not null
 																								union
@@ -522,8 +523,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function getSummaryReport($sdate,$edate){
+    public function getSummaryReport($stdate,$endate){
         $result=[];
+        $sdate=date("Y-m-d",intval($stdate));
+        $edate=date("Y-m-d",intval($endate));
+        $result['sdateFormatted']=$sdate;
+        $result['edateFormatted']=$edate;
+        
         $sql_workshops="SELECT * FROM workshops where workshop_id < 4;";
         $sql_storage_workshops="SELECT * FROM workshops where workshop_id between 20 and 30";
         $this->utf8init();
