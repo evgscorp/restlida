@@ -529,9 +529,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $edate=date("Y-m-d",intval($endate));
         $result['sdateFormatted']=$sdate;
         $result['edateFormatted']=$edate;
-        $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
         $result['report2'][21]=$this->db->fetchAll("CALL report_2(21);", \Phalcon\Db::FETCH_ASSOC, []);
-
+        $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
+        
         $sql_workshops="SELECT * FROM workshops where workshop_id < 4;";
         $sql_storage_workshops="SELECT * FROM workshops where workshop_id between 20 and 30";
         $this->utf8init();
