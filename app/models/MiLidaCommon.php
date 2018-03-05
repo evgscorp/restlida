@@ -549,7 +549,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
        
         foreach ($result["storageWorkshops"] as $srow) {
             $sql_report_2="CALL report_2(".$srow['workshop_id'].");";
-            //$result['report2'][$srow['workshop_id']]=$this->db->fetchAll($sql_report_2, \Phalcon\Db::FETCH_ASSOC, []);
+            $result['report2'][$srow['workshop_id']]=$this->db->fetchAll($sql_report_2, \Phalcon\Db::FETCH_ASSOC, []);
         } 
         return $result;
     }
