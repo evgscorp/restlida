@@ -548,28 +548,30 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $sql_report_3="CALL report_3({$row['workshop_id']}, '$sdate', '$edate');";
             $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
             $result['report3'][$row['workshop_id']]=$this->db->fetchAll($sql_report_3, \Phalcon\Db::FETCH_ASSOC, []);
-
-            usort( $result['report1'][$row['workshop_id']], function ($item1, $item2) {
-                return $item1['product_id'] > $item2['product_id'];
-            });
-
-          /*  usort( $result['report3'][$row['workshop_id']], function ($item1, $item2) {
-                return $item1['product_id'] > $item2['product_id'];
-            });*/
-    
         } 
         
-        usort( $result['report1'][0], function ($item1, $item2) {
-            return $item1['product_id'] > $item2['product_id'];
-        });
-        
+      
         $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
-        /*
+       
+
+        /* sorting results */
+        foreach ($result['report1'] as $key => $value) {
+            usort( $result['report1'][$key], function ($item1, $item2) {
+                return $item1['product_id'] > $item2['product_id'];
+            });
+        }
+
         foreach ($result['report2'] as $key => $value) {
             usort( $result['report2'][$key], function ($item1, $item2) {
                 return $item1['product_id'] > $item2['product_id'];
             });
-        }*/
+        }
+
+        foreach ($result['report3'] as $key => $value) {
+            usort( $result['report3'][$key], function ($item1, $item2) {
+                return $item1['product_id'] > $item2['product_id'];
+            });
+        }
         //$result['report2'][1]=$this->db->fetchAll("CALL report_2(21);", \Phalcon\Db::FETCH_ASSOC, []);
         //$result['report2'][2]=$this->db->fetchAll("CALL report_2(22);", \Phalcon\Db::FETCH_ASSOC, []);
         //$result['report2'][3]=$this->db->fetchAll("CALL report_2(23);", \Phalcon\Db::FETCH_ASSOC, []);
