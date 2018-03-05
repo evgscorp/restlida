@@ -45,11 +45,11 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if ($shipment!="0") {$lid=30; $mlid=40;};
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
-        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid,'wid'=>$wid], 'cnt');
+        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
         $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
         $result['pallets']=[];
         if ($result['cnt']>0) {
-            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'mlid'=>$mlid,'wid'=>$wid]);
+            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'mlid'=>$mlid]);
         }
         $result['shipmentStatus']=$shipment;
         return $result;
