@@ -38,7 +38,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";*/
 
         $sql_cnt_pallets="SELECT count(*) cnt FROM packages
-        where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid and workshop_id=:wid )";
+        where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )";
 
          $lid=10;
          $mlid=20;
