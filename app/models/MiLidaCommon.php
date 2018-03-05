@@ -540,18 +540,18 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->utf8init();
         $result["workshops"]=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         //$result["storageWorkshops"]=$this->db->fetchAll($sql_storage_workshops, \Phalcon\Db::FETCH_ASSOC, []);
-       // $result['report1'][0]=$this->db->fetchAll("CALL report_1(0, '$sdate', '$edate');", \Phalcon\Db::FETCH_ASSOC, []);
+        $result['report1'][0]=$this->db->fetchAll("CALL report_1(0, '$sdate', '$edate');", \Phalcon\Db::FETCH_ASSOC, []);
         $result['report3'][0]=$this->db->fetchAll("CALL report_3(0, '$sdate', '$edate');", \Phalcon\Db::FETCH_ASSOC, []);
         
         foreach ($result["workshops"] as $row) {
             $sql_report_1="CALL report_1({$row['workshop_id']}, '$sdate', '$edate');";
             $sql_report_3="CALL report_3({$row['workshop_id']}, '$sdate', '$edate');";
-           // $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
+            $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
             $result['report3'][$row['workshop_id']]=$this->db->fetchAll($sql_report_3, \Phalcon\Db::FETCH_ASSOC, []);
 
-           /* usort( $result['report1'][$row['workshop_id']], function ($item1, $item2) {
+            usort( $result['report1'][$row['workshop_id']], function ($item1, $item2) {
                 return $item1['product_id'] > $item2['product_id'];
-            });*/
+            });
 
           /*  usort( $result['report3'][$row['workshop_id']], function ($item1, $item2) {
                 return $item1['product_id'] > $item2['product_id'];
