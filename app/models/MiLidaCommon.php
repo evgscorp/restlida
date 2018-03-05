@@ -549,9 +549,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['report1'][$row['workshop_id']]=$this->db->fetchAll($sql_report_1, \Phalcon\Db::FETCH_ASSOC, []);
             $result['report3'][$row['workshop_id']]=$this->db->fetchAll($sql_report_3, \Phalcon\Db::FETCH_ASSOC, []);
 
-            usort( $result['report1'][$row['workshop_id']], function ($item1, $item2) {
+           /* usort( $result['report1'][$row['workshop_id']], function ($item1, $item2) {
                 return $item1['product_id'] > $item2['product_id'];
-            });
+            });*/
 
           /*  usort( $result['report3'][$row['workshop_id']], function ($item1, $item2) {
                 return $item1['product_id'] > $item2['product_id'];
