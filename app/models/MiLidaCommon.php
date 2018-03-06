@@ -634,14 +634,15 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function getProbeData($serach)
+    public function getProbeData($serach,$pid,$year)
     {
         $this->utf8init();
         // $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
-        $sql="SELECT D.*, gr.product_type from (SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum limit 1 ) D
-				 			left outer join (select * from packages ) pr on pr.series_id=D.seriesId
-							left outer join groups gr on gr.group_id=pr.group_id LIMIT 1";
-        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach)]);
+        $sql="SELECT s.*,  p.product_name, p.product_short, pr.* FROM fork.series  s
+        left outer join products p on p.product_id=s.product_id
+        left outer join probes pr on pr.seriesId=s.series_id
+         where s.product_id=:pid and s.series_num=:snum and s.series_year=:year LIMIT 1";
+        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year)]);
         return $result;
     }
 
@@ -827,8 +828,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->seriesId,
                 ));
         } else {
-            $sql="SELECT s.series_id FROM series s where s.series_num = :snum LIMIT 1";
-            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num], 'series_id');
+            $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year LIMIT 1";
+            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year,], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`)

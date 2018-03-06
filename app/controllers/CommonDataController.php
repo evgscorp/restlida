@@ -64,7 +64,7 @@ public function getPackageLog(){
 public function getProbe(){
 	$request = new \Phalcon\Http\Request();
 	$MiLidaCommonModel = new \Models\MiLidaCommon();
-	$result=$MiLidaCommonModel->getProbeData($request->get("search"));
+	$result=$MiLidaCommonModel->getProbeData($request->get("search"),$request->get("pid"),$request->get("year"));
 	$Response=$this->allowCORS();
 	return $Response->setJsonContent($result);
 }
@@ -233,7 +233,7 @@ public function getSummaryReport(){
 				 try {
 					 $MiLidaCommonModel = new \Models\MiLidaCommon();
 					 $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
-					 if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']!=3){
+					 if (isset($UserInfo['uid'])&&$UserInfo['uid']>0){
 						$data=$this->request->getJsonRawBody();
 					 	$MiLidaCommonModel->createProbe($data,$UserInfo['uid']);
 					 	$res='ok';
