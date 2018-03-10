@@ -386,7 +386,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
              where c.workshop_id=:wid LIMIT 1";
         }
 
-        $sql_pallets="SELECT count(*) cnt , pallet_id from packages where series_id = :sid and pallet_id is not null GROUP BY pallet_id  ORDER BY ISNULL(pallet_id), pallet_id ASC";
+        $sql_pallets="SELECT count(*) cnt , p.pallet_id, pp.pallet_code from packages p
+        left outer join pallets pp on pp.pallet_id=p.pallet_id
+        where p.series_id = :sid and p.pallet_id is not null  
+        GROUP BY pallet_id, pallet_code  ORDER BY  p.pallet_id ASC";
         $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 50";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
