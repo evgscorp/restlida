@@ -394,7 +394,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 150";
         $sql_last_ten_series="SELECT series_id, series_name FROM series where workshop_id=:wid and series_id > 0 order by timestmp desc limit 15";
-        $sql_manual_proramm="SELECT * FROM current_program_manual where workshop_id=:wid;";
+        $sql_manual_proramm="SELECT * FROM current_program_manual where workshop_id=:wid order by series_id desc limit 1";
 
         $this->utf8init();
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $sql_params);
@@ -403,7 +403,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
             $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort, ['wid'=>$wid], 'cnt');
             $result['unsorted_packages']=$this->db->fetchAll($sql_unsorted_packages, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
-            $result['manual_proramm']=$this->db->fetchAll($sql_manual_proramm, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+            $result['manual_proramm']=$this->db->fetchOne($sql_manual_proramm, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['local_stroage']=$this->db->fetchAll($sql_local_storage_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['last_ten_series']=$this->db->fetchAll($sql_last_ten_series, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['passedto_locatons']=$this->db->fetchAll($sql_passed_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$wid]);
