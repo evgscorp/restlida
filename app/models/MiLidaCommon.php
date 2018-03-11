@@ -390,11 +390,11 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         left outer join pallets pp on pp.pallet_id=p.pallet_id
         where p.series_id = :sid and p.pallet_id is not null  
         GROUP BY pallet_id, pallet_code  ORDER BY  p.pallet_id ASC";
-        $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 50";
+        $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 150";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
-        $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 25";
+        $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 150";
         $sql_last_ten_series="SELECT series_id, series_name FROM series where workshop_id=:wid and series_id > 0 order by timestmp desc limit 15";
-
+        $sql_manual_proramm="SELECT * FROM current_program_manual where workshop_id=:wid;";
 
         $this->utf8init();
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, $sql_params);
@@ -403,6 +403,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['pallets']=$this->db->fetchAll($sql_pallets, \Phalcon\Db::FETCH_ASSOC, ['sid'=>$result['series_id']]);
             $result['unsorted_cnt']=$this->db->fetchColumn($sql_unsort, ['wid'=>$wid], 'cnt');
             $result['unsorted_packages']=$this->db->fetchAll($sql_unsorted_packages, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+            $result['manual_proramm']=$this->db->fetchAll($sql_manual_proramm, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['local_stroage']=$this->db->fetchAll($sql_local_storage_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['last_ten_series']=$this->db->fetchAll($sql_last_ten_series, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
             $result['passedto_locatons']=$this->db->fetchAll($sql_passed_storages_info, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'lid'=>$wid]);
@@ -713,7 +714,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $sid=$data->sid;
         }
 
-        $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$uid, @smsg);";
+        $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$data->puid2,$uid, @smsg);";
         $this->db->query($sql);
         $sql_res="SELECT @smsg as smsg;";
 
