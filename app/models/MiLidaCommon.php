@@ -303,8 +303,19 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
        return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
     }
 
-    public function getShiftSuggestionsInfo($wid)
-    {
+    public function getUsersList()
+    {   $this->utf8init();
+        $result=$this->db->fetchAll("SELECT * FROM users", \Phalcon\Db::FETCH_ASSOC, []);
+        foreach ($result as $key => $value) {
+            $result[$key]['roles']=$this->db->fetchAll("SELECT ur.role_id, rr.role_name FROM  user_role ur
+            left outer join roles rr on rr.role_id=ur.role_id
+            where uid=:uid", \Phalcon\Db::FETCH_ASSOC, ['uid'=>$value['uid']]);
+        }
+        
+        return $result;
+    }
+
+    public function getShiftSuggestionsInfo($wid){
         $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
           FROM series where workshop_id=:wid and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);

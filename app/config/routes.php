@@ -137,6 +137,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getSummaryReport']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/users-list',
+	'handler' => [new \Controllers\CommonDataController(), 'getUsersList']
+];
 
 
 
