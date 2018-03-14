@@ -527,7 +527,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function getloginFormData()
     {
         $result=[];
-        $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM users users WHERE is_packer <1";
+        $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM  users WHERE is_packer <1 order by users.first_name";
         $sql_workshops="SELECT * FROM workshops;";
         $this->utf8init();
         $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
