@@ -307,7 +307,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     {   $this->utf8init();
         $result=$this->db->fetchAll("SELECT * FROM users", \Phalcon\Db::FETCH_ASSOC, []);
         foreach ($result as $key => $value) {
-            $result[$key]['roles']=$this->db->fetchAll("SELECT ur.role_id, rr.role_name FROM  user_role ur
+            $result[$key]['roles']=$this->db->fetchAll("SELECT DISTINCT ur.role_id, rr.role_name FROM  user_role ur
             left outer join roles rr on rr.role_id=ur.role_id
             where uid=:uid", \Phalcon\Db::FETCH_ASSOC, ['uid'=>$value['uid']]);
             $result[$key]['avalible_roles']=$this->db->fetchAll("SELECT DISTINCT ur.role_id, rr.role_name FROM  user_role ur
