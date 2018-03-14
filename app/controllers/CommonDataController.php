@@ -279,6 +279,23 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 
 	}
 
+	public function updateUserData(){
+		$res = 'error';
+		try {
+			$MiLidaCommonModel = new \Models\MiLidaCommon();
+			$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+			if (isset($UserInfo['uid'])&&$UserInfo['uid']>0&&in_array(10,$UserInfo['roles'])){
+				$data = $this->request->getJsonRawBody();
+				$MiLidaCommonModel->updateUserData($data, $UserInfo);
+				$res = $data;
+			}
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
+	}
+
 	public function updatePallets()
 	{
 		$res = 'error';

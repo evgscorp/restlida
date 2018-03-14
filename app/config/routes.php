@@ -58,6 +58,13 @@ $routes[] = [
 ];
 
 $routes[] = [
+	'method' => 'post',
+	'route' => '/user-crud',
+	'handler' => [new \Controllers\CommonDataController(), 'updateUserData']
+];
+
+
+$routes[] = [
 	'method' => 'get',
 	'route' => '/last-group',
 	'handler' => [new \Controllers\CommonDataController(), 'getlastGroup']
