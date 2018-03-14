@@ -310,8 +310,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result[$key]['roles']=$this->db->fetchAll("SELECT ur.role_id, rr.role_name FROM  user_role ur
             left outer join roles rr on rr.role_id=ur.role_id
             where uid=:uid", \Phalcon\Db::FETCH_ASSOC, ['uid'=>$value['uid']]);
+            $result[$key]['avalible-roles']=$this->db->fetchAll("SELECT ur.role_id, rr.role_name FROM  user_role ur
+            left outer join roles rr on rr.role_id=ur.role_id", \Phalcon\Db::FETCH_ASSOC, []);
         }
-        
         return $result;
     }
 
