@@ -319,7 +319,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function getShiftSuggestionsInfo($wid){
         $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
-          FROM series where workshop_id=:wid and series_id = (select max(series_id) from series where workshop_id=:wid )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
+          FROM series where workshop_id=:wid and series_id = (select max(series_id) from series where workshop_id=:wid and is_manual<1 )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
 
@@ -439,6 +439,17 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                                   left outer join products pr on pr.product_id=s.product_id
                                   where p.workshop_id=:wid and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
                                   group by s.series_name, pr.product_id, pr.product_short";
+
+    $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short 
+    from packages p
+            left outer join series s on s.series_id=p.series_id
+            left outer join products pr on pr.product_id=s.product_id
+        where p.workshop_id=:wid and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
+        and p.prod_stmp >= (select startstmp from shifts where shift_id = :shid) 
+                group by s.series_name, pr.product_id, pr.product_short";
+
+
+
         $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'shid'=>$shid]);
         $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
         foreach ($res as $row) {
