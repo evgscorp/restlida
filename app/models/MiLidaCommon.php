@@ -776,7 +776,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if ($data->del==true&&$data->uid>0){
             $this->db->query("DELETE FROM users WHERE uid=".$data->uid);
         } elseif ($data->uid>0){
-            this.updateRoles($data->uid,$data->roles);
+            $this->updateRoles($data->uid,$data->roles);
             $sql="UPDATE `users` SET `second_name`='{$data->sname}', `first_name`='{$data->fname}', `password`='{$data->pass}' WHERE `uid`='{$data->uid}'";
             $this->db->query($sql);
         } else {
