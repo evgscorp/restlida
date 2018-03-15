@@ -445,10 +445,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join series s on s.series_id=p.series_id
             left outer join products pr on pr.product_id=s.product_id
         where p.workshop_id=:wid and pr.product_id >0 and s.series_id in (select distinct series_id from groups where shift_id=:shid)
-        and p.prod_stmp >= (select startstmp from shifts where shift_id = :shid) 
+        and p.prod_stmp < COALESCE( (select startstmp from shifts where workshop_id=:wid and shift_id > :shid order by shift_id limit 1), '9999-12-31') 
                 group by s.series_name, pr.product_id, pr.product_short";
-
-
+    
 
         $res=$this->db->fetchAll($sql_shift_series_products, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid,'shid'=>$shid]);
         $result=['prows'=>[],'products'=>[],'tweight'=>0,'tcnt'=>0];
