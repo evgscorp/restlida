@@ -313,9 +313,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result[$key]['avalible_roles']=$this->db->fetchAll("SELECT DISTINCT ur.role_id, rr.role_name FROM  user_role ur
             left outer join roles rr on rr.role_id=ur.role_id", \Phalcon\Db::FETCH_ASSOC, []);
         
-            $result[$key]['workshops']=$this->db->fetchAll("SELECT ww.workshop_id, ww.* FROM  workshops ww", \Phalcon\Db::FETCH_ASSOC, []);
+            $result[$key]['workshops']=$this->db->fetchAll("SELECT ww.workshop_id as, ww.* FROM  workshops ww", \Phalcon\Db::FETCH_ASSOC, []);
         
-            $result[$key]['avalible_workshops']=$this->db->fetchAll("SELECT DISTINCT ur.workshop_id, ww.* FROM  user_role ur
+            $result[$key]['avalible_workshops']=$this->db->fetchAll("SELECT DISTINCT ur.workshop_id as wid, ww.* FROM  user_role ur
             left outer join workshops ww on ww.workshop_id=ur.workshop_id  where uid=:uid", \Phalcon\Db::FETCH_ASSOC, []);
             
         }
