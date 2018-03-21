@@ -316,7 +316,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result[$key]['workshops']=$this->db->fetchAll("SELECT ww.workshop_id as wid, ww.* FROM  workshops ww", \Phalcon\Db::FETCH_ASSOC, []);
         
             $result[$key]['avalible_workshops']=$this->db->fetchAll("SELECT DISTINCT ur.workshop_id as wid, ww.* FROM  user_role ur
-            left outer join workshops ww on ww.workshop_id=ur.workshop_id  where uid=:uid", \Phalcon\Db::FETCH_ASSOC, []);
+            left outer join workshops ww on ww.workshop_id=ur.workshop_id  where uid=:uid", \Phalcon\Db::FETCH_ASSOC, ['uid'=>$value['uid']]);
             
         }
         return $result;
