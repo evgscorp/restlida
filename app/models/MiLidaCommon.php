@@ -791,19 +791,29 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function updateUserData($data, $UserInfo){
         if ($data->del==true&&$data->uid>0){
             $this->db->query("DELETE FROM users WHERE uid=".$data->uid);
+            $this->db->query("DELETE FROM user_role WHERE uid=".$data->uid);
+
         } elseif ($data->uid>0){
-            $this->updateRoles($data->uid,$data->roles);
-            $sql="UPDATE `users` SET `second_name`='{$data->sname}', `first_name`='{$data->fname}', `password`='{$data->pass}' WHERE `uid`='{$data->uid}'";
+            $this->updateRoles($data->uid,$data->roles,$data->workshops);
+            $sql="UPDATE `users` SET `second_name`='{$data->sname}', `first_name`='{$data->fname}',
+             `password`='{$data->pass}', `is_packer`={$data->packer} WHERE `uid`='{$data->uid}'";
             $this->db->query($sql);
         } else {
-            $sql="INSERT INTO `users` (`second_name`, `first_name`, `password`) VALUES ('{$data->sname}', '{$data->fname}', '{$data->pass}')";
+            $sql="INSERT INTO `users` (`second_name`, `first_name`, `password`, `is_packer`) VALUES ('{$data->sname}', '{$data->fname}', '{$data->pass}', {$data->packer})";
             $this->db->query($sql);
+            $uid=$this->db->lastInsertId();
+            $this->updateRoles($uid,$data->roles,$data->workshops);
         }
        
     }
 
-    private function updateRoles($uid,$roles){
-
+    private function updateRoles($uid,$roles,$workshops){
+        $this->db->query("DELETE FROM user_role WHERE uid=".$uid);
+        foreach ($workshops as $workshop) {
+           foreach ($roles as $role) {
+            $this->db->query("INSERT INTO `user_role` (`uid`, `role_id`, `workshop_id`) VALUES ('$uid', '$role', '$workshop')");
+           }
+        }
     }
 
     public function updatePallets($data, $user)
