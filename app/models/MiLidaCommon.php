@@ -440,12 +440,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     private function getShiftProductionReportArea($shid,$wid)
     {
-        $sql_shift_series_products = "SELECT pr.product_short, s.series_name, count(*) cnt, SUM(s.weight) total 
-        FROM fork.shifts h 
-                    join fork.groups g on g.shift_id = h.shift_id
-                    join fork.packages p  on p.group_id = g.group_id        
-                    join fork.series s on s.series_id = p.series_id
-                                          join fork.products pr on pr.product_id = s.product_id
+        $sql_shift_series_products = "SELECT pr.product_short, pr.product_id, s.series_name, count(*) cnt, SUM(s.weight) wtotal 
+        FROM shifts h 
+                    join groups g on g.shift_id = h.shift_id
+                    join packages p  on p.group_id = g.group_id        
+                    join series s on s.series_id = p.series_id
+                    join products pr on pr.product_id = s.product_id
         where  h.workshop_id = :wid and h.shift_id = :shid
         group by pr.product_short, s.series_name
         order by s.series_name asc
