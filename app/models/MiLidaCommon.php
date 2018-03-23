@@ -440,11 +440,16 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     private function getShiftProductionReportArea($shid,$wid)
     {
-        $sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short from packages p
-                                  left outer join series s on s.series_id=p.series_id
-                                  left outer join products pr on pr.product_id=s.product_id
-                                  where p.workshop_id=:wid and pr.product_id >0 and p.group_id in (select distinct group_id from groups where shift_id=:shid)
-                                  group by s.series_name, pr.product_id, pr.product_short";
+        $sql_shift_series_products = "SELECT pr.product_short, s.series_name, count(*) cnt, SUM(s.weight) total 
+        FROM fork.shifts h 
+                    join fork.groups g on g.shift_id = h.shift_id
+                    join fork.packages p  on p.group_id = g.group_id        
+                    join fork.series s on s.series_id = p.series_id
+                                          join fork.products pr on pr.product_id = s.product_id
+        where  h.workshop_id = :wid and h.shift_id = :shid
+        group by pr.product_short, s.series_name
+        order by s.series_name asc
+        ";
 
     /*$sql_shift_series_products="SELECT count(*) cnt, SUM(s.weight) wtotal, s.series_name, pr.product_id, pr.product_short 
     from packages p
@@ -675,6 +680,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         left outer join probes pr on pr.seriesId=s.series_id
          where s.product_id=:pid and s.series_num=:snum and s.series_year=:year LIMIT 1";
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year)]);
+        $result['probes_tnpa']=$this->db->fetchAll("SELECT * from probes_tnpa", \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
     }
 
