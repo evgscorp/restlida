@@ -897,6 +897,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->storingRequirement,
                     $uid,
                     $data->labman,
+                    $data->labman2,
                     $data->standart,
                     $data->lactose,
                     $data->seriesId,
