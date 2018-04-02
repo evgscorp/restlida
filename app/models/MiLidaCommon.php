@@ -685,6 +685,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
          where s.product_id=:pid and s.series_num=:snum and s.series_year=:year LIMIT 1";
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year)]);
         $result['probes_tnpa']=$this->db->fetchAll("SELECT * from probes_tnpa", \Phalcon\Db::FETCH_ASSOC, []);
+        $result['labmans']=$this->db->fetchAll("SELECT * from probes_staff", \Phalcon\Db::FETCH_ASSOC, []);
+        $result['labmans2']=$this->db->fetchAll("SELECT * from probes_staff", \Phalcon\Db::FETCH_ASSOC, []);
+        
         return $result;
     }
 
