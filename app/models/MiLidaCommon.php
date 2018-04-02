@@ -876,7 +876,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->seriesId)&&($data->seriesId>0)) {
             $query ="UPDATE probes SET fat=?, moisture=?, como=?, protein=?, acidity=?, milkAcidity=?,
 						 purityLevel=?, solubility=?, enterobacteria=?, enterococci=?, koe=?, yeast=?, bgkp=?, bgkp0=?,
-						 expirationTime=?, storingRequirement=?, timestmp='', timestmp2='', uid=?, labman=?, labman2=?, standart=?, lactose=? WHERE seriesId = ?";
+						 expirationTime=?, storingRequirement=?, timestmp=null, timestmp2=null, uid=?, labman=?, labman2=?, standart=?, lactose=? WHERE seriesId = ?";
 
             $result = $this->db->query($query, array(
                     $data->fat,
