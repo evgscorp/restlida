@@ -689,7 +689,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=5)", \Phalcon\Db::FETCH_ASSOC, []);
         $result['labmans2']=$this->db->fetchAll("SELECT  u.uid as sid, CONCAT(u.second_name,' ',u.first_name) as Name, '0' as biologist FROM users u
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=6)", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['previous']=$this->db->fetchAll("SELECT * FROM probes where seriesId <:seriesId
+        $result['previous']=$this->db->fetchOne("SELECT * FROM probes where seriesId <:seriesId
          order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['seriesId']]);
         
         return $result;
