@@ -679,7 +679,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     {
         $this->utf8init();
         // $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
-        $sql="SELECT s.*,  p.product_name, p.product_short, pr.* FROM fork.series  s
+        $sql="SELECT s.timestmp pallet_timestmp, s.*,  p.product_name, p.product_short, pr.* FROM fork.series  s
         left outer join products p on p.product_id=s.product_id
         left outer join probes pr on pr.seriesId=s.series_id
          where s.product_id=:pid and s.series_num=:snum and s.series_year=:year LIMIT 1";
