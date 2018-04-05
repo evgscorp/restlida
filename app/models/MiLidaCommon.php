@@ -690,7 +690,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $result['labmans2']=$this->db->fetchAll("SELECT  u.uid as sid, CONCAT(u.second_name,' ',u.first_name) as Name, '0' as biologist FROM users u
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=6)", \Phalcon\Db::FETCH_ASSOC, []);
         $result['previous']=$this->db->fetchOne("SELECT * FROM probes where seriesId <:seriesId
-         order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['seriesId']]);
+         order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);
         
         return $result;
     }
@@ -880,7 +880,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->seriesId)&&($data->seriesId>0)) {
             $query ="UPDATE probes SET fat=?, moisture=?, como=?, protein=?, acidity=?, milkAcidity=?,
 						 purityLevel=?, solubility=?, enterobacteria=?, enterococci=?, koe=?, yeast=?, bgkp=?, bgkp0=?,
-						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=? WHERE seriesId = ?";
+						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=?, termoresist =? WHERE seriesId = ?";
 
             $result = $this->db->query($query, array(
                     $data->fat,
@@ -904,6 +904,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->labman2,
                     $data->standart,
                     $data->lactose,
+                    $data->termoresist,
                     $data->seriesId,
                 ));
         } else {
@@ -911,7 +912,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year,], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
-                "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`)
+                "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`,`lactose`, `termoresist`)
 			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             array($seriesId,
                 $data->fat,
@@ -931,7 +932,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $data->storingRequirement,
                 $uid,
                 $data->labman,
-                $data->standart
+                $data->standart,
+                $data->lactose,
+                $data->termoresist
             )
             );
             }
