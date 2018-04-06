@@ -915,8 +915,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 
-                `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`,`lactose`, `termoresist`, `timestmp`, `timestmp2`)
-			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                `koe`, `yeast`, `bgkp`, `bgkp0`, `expirationTime`, `storingRequirement`, `uid`, `labman`, `labman2`, `standart`,`lactose`, `termoresist`, `timestmp`, `timestmp2`)
+			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             array($seriesId,
                 $data->fat,
                 $data->moisture,
@@ -931,10 +931,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $data->koe,
                 $data->yeast,
                 $data->bgkp,
+                $data->bgkp0,
                 $data->expirationTime,
                 $data->storingRequirement,
                 $uid,
                 $data->labman,
+                $data->labman2,
                 $data->standart,
                 $data->lactose,
                 $data->termoresist,
