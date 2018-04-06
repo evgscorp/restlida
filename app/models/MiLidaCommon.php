@@ -691,8 +691,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=6)", \Phalcon\Db::FETCH_ASSOC, []);
         $result['previous']=$this->db->fetchOne("SELECT * FROM probes where seriesId <:seriesId
          order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);
-        $result['packagesCnt']=$this->db->fetchColumn("SELECT count(*) FROM packages where series_id=:seriesId", 
-        \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);
+        $result['packagesCnt']=$this->db->fetchColumn("SELECT count(*) cnt FROM packages where series_id=:seriesId",['seriesId'=> $result['series_id']],'cnt');
        
         return $result;
     }
