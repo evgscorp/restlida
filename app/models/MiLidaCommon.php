@@ -880,7 +880,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->seriesId)&&($data->seriesId>0)) {
             $query ="UPDATE probes SET fat=?, moisture=?, como=?, protein=?, acidity=?, milkAcidity=?,
 						 purityLevel=?, solubility=?, enterobacteria=?, enterococci=?, koe=?, yeast=?, bgkp=?, bgkp0=?,
-						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=?, termoresist =? WHERE seriesId = ?";
+						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=?, termoresist =?, timestmp=?, timestmp2=? WHERE seriesId = ?";
 
             $result = $this->db->query($query, array(
                     $data->fat,
@@ -905,6 +905,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->standart,
                     $data->lactose,
                     $data->termoresist,
+                    $data->timestmp,
+                    $data->timestmp2,
                     $data->seriesId,
                 ));
         } else {
@@ -912,7 +914,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year,], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
-                "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`,`lactose`, `termoresist`)
+                "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 
+                `koe`, `yeast`, `bgkp`, `expirationTime`, `storingRequirement`, `uid`, `labman`,`standart`,`lactose`, `termoresist`, `timestmp`, `timestmp2`)
 			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             array($seriesId,
                 $data->fat,
@@ -934,7 +937,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $data->labman,
                 $data->standart,
                 $data->lactose,
-                $data->termoresist
+                $data->termoresist,
+                $data->timestmp,
+                $data->timestmp2
             )
             );
             }
