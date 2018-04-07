@@ -760,7 +760,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $sid=$data->sid;
         }
 
-        $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$data->puid2,$uid, @smsg);";
+        $sql = "CALL `create_group`($data->wrks, $data->prod, $data->year,$data->snum,$data->amount,$data->weight,$data->manual,$sid,$data->puid,$data->puid2,$uid,$data->pdate, @smsg);";
         $this->db->query($sql);
         $sql_res="SELECT @smsg as smsg;";
 
