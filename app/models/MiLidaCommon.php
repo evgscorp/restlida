@@ -770,7 +770,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
              array($data->group_number, $data->first_name, $data->surname, $data->foreman_name, $data->foreman_surname, $data->workshop, $data->product_type, $data->weight, $data->pallet_capacity, $data->series_capcity, $data->labman_name, $data->labman_surname, $uid,$shid)
             );
         */
-
+        return $sql;    
         return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
