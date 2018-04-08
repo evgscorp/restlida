@@ -150,6 +150,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getUsersList']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/product-types',
+	'handler' => [new \Controllers\CommonDataController(), 'getProductTypes']
+];
 
 
 return $routes;

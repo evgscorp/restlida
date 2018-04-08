@@ -675,6 +675,11 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function getProductTypes(){
+        $this->utf8init();
+        return $this->db->fetchAll("SELECT * from products", \Phalcon\Db::FETCH_ASSOC, []);
+    }
+
     public function getProbeData($serach,$pid,$year)
     {
         $this->utf8init();
