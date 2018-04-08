@@ -680,6 +680,21 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $this->db->fetchAll("SELECT * from products", \Phalcon\Db::FETCH_ASSOC, []);
     }
 
+    public function  getPalletsPackages($pid){
+        $sql="SELECT @row_number:=@row_number+1 AS row_number, u.first_name foremanfirstname , u.second_name foremanlastname,  p.prod_stmp ptime, sh.*, l.*, p.*, g.*, s.*, pl.*, prd.product_short, lc.location_name FROM packages p
+												LEFT OUTER JOIN series s on p.series_id = s.series_id
+												left outer join groups g on g.series_id=s.series_id and g.group_id= p.group_id
+												LEFT OUTER JOIN labels l on p.label_id = l.label_id
+												LEFT OUTER JOIN pallets pl on p.pallet_id = pl.pallet_id
+												LEFT OUTER JOIN shifts sh on sh.shift_id=g.shift_id
+												LEFT OUTER JOIN users u on sh.uid=u.uid
+                        LEFT OUTER JOIN products prd on prd.product_id=s.product_id
+                        LEFT OUTER JOIN locations lc on lc.location_id=p.location_id
+                                                where p.pallet_id=:pid order by p.prod_stmp";
+          return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['pid'=>intval($pid)]);                                       
+
+    }
+
     public function getProbeData($serach,$pid,$year)
     {
         $this->utf8init();

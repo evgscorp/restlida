@@ -83,6 +83,13 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getSeriesFormData']
 ];
 
+
+$routes[] = [
+	'method' => 'get',
+	'route' => '/search-pallet-packages',
+	'handler' => [new \Controllers\CommonDataController(), 'getPalletsPackages']
+];
+
 $routes[] = [
 	'method' => 'get',
 	'route' => '/series-probes',

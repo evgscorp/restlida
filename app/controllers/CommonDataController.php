@@ -189,7 +189,14 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent($result);
 	}
-
+	
+	public function getPalletsPackages(){
+		$request = new \Phalcon\Http\Request();
+		$MiLidaCommonModel = new \Models\MiLidaCommon();
+		$result = $MiLidaCommonModel->getPalletsPackages($request->get("pid"));
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent($result);
+	}
 
   /*
 	URL: http://172.16.130.180/restlida/add-group?token=20WIh7QKUt8U0sJBOMTAYmRy0ZNFwkeQn6LPSeeD
