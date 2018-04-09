@@ -860,7 +860,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $location=intval($data->location);
             if ($location>30) {
                 $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
-                $this->db->query("INSERT INTO shipments (doc_number, client_name) VALUES ( ?, ?)", array($data->invoice,$data->customer));
+                $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
+                array($data->invoice,$data->customer,$data->invoice2, $data->driver, $data->car));
                 $location=$this->db->lastInsertId();
                 $location=$this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');
 
