@@ -296,7 +296,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getStorageOverview($wid)  {
           $this->utf8init();
-          $sql="SELECT *, (select count(*) from packages where series_id=o.series_id and location_id > 0 ) as scnt,
+          $sql="SELECT *, (select count(*) from packages where series_id=o.series_id and location_id > 0 ) as scnt
            FROM overview_by_location o where workshop_id=:wid and pallet_code is not null";
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       }
