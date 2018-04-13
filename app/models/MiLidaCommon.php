@@ -861,10 +861,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $location=intval($data->location);
             if ($location>30) {
                 $cuser=$user['first_name'].' '.$user['second_name'].' '.$user['uid'];
-               /* $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
+                $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
                 array($data->invoice,$data->customer,$data->invoice2, $data->driver, $data->car));
                 $location=$this->db->lastInsertId();
-                $location=$this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');*/
+                $location=$this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');
 
             }
             $date = new \DateTime("NOW");
@@ -873,11 +873,19 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $sql_res='SELECT @smsg as smsg;';
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
+                if (isset($pallet->packages)&&count($pallet->packages)>0){
+                   foreach ($pallet->packages as $package) {
+                    $sql = "CALL `move_package`($data->wrks, $package->UUID, $location, null, @smsg);";
+                    $this->db->query($sql);
+                   }
+                    
+                } else {
                 $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, null, @smsg);";
-               // $this->db->query($sql);
+                $this->db->query($sql);
+                }
             }
-            //return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
-            return $data;
+            return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
+            //return $data;
             //$sql="UPDATE pallets SET pallet_status=?, storage_time=? WHERE pallet_id IN(".implode(',', $pids).")";
             //$psql= "UPDATE preloaded_labels SET operation_id=?  WHERE label_id IN(SELECT label_id from packages  where  pallet_id IN(".implode(',', $pids)."))";
             //$result = $this->db->query($sql, array(105,$futuredate));
