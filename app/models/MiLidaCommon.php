@@ -875,7 +875,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
                 if (isset($pallet->packages)&&count($pallet->packages)>0){
                    foreach ($pallet->packages as $package) {
-                    $sql = "CALL `move_package`($data->wrks, $package->UUID, $location, null, @smsg);";
+                    $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, null, @smsg);";
                     $this->db->query($sql);
                    }
                     
