@@ -75,7 +75,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 	{
 		$request = new \Phalcon\Http\Request();
 		$MiLidaCommonModel = new \Models\MiLidaCommon();
-		$result = $MiLidaCommonModel->getProbeData($request->get("search"), $request->get("pid"), $request->get("year"));
+		$result = $MiLidaCommonModel->getProbeData($request->get("search"), $request->get("pid"), $request->get("year"), $request->get("wid"));
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent($result);
 	}

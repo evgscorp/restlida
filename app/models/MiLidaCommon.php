@@ -696,14 +696,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     }
 
-    public function getProbeData($serach,$pid,$year)
+    public function getProbeData($serach,$pid,$year,$wid)
     {
         $this->utf8init();
         // $sql="SELECT p.*, s.series_num FROM probes p left outer join series s on s.series_id=p.seriesId where s.series_num = :snum LIMIT 1";
         $sql="SELECT s.timestmp pallet_timestmp, s.*,  p.product_name, p.product_short, pr.* FROM fork.series  s
         left outer join products p on p.product_id=s.product_id
         left outer join probes pr on pr.seriesId=s.series_id
-         where s.product_id=:pid and s.series_num=:snum and s.series_year=:year LIMIT 1";
+         where s.product_id=:pid and s.series_num=:snum and s.series_year=:year and s.workshop_id=:wid LIMIT 1";
         $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year)]);
         $result['probes_tnpa']=$this->db->fetchAll("SELECT * from probes_tnpa", \Phalcon\Db::FETCH_ASSOC, []);
         $result['labmans']=$this->db->fetchAll("SELECT  u.uid as sid, CONCAT(u.second_name,' ',u.first_name) as Name, '0' as biologist FROM users u
