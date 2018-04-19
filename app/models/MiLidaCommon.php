@@ -704,7 +704,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         left outer join products p on p.product_id=s.product_id
         left outer join probes pr on pr.seriesId=s.series_id
          where s.product_id=:pid and s.series_num=:snum and s.series_year=:year and s.workshop_id=:wid LIMIT 1";
-        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year)]);
+        $result=$this->db->fetchOne($sql, \Phalcon\Db::FETCH_ASSOC, ['snum'=>intval($serach),'pid'=>intval($pid),'year'=>intval($year),'wid'=>intval($wid)]);
         $result['probes_tnpa']=$this->db->fetchAll("SELECT * from probes_tnpa", \Phalcon\Db::FETCH_ASSOC, []);
         $result['labmans']=$this->db->fetchAll("SELECT  u.uid as sid, CONCAT(u.second_name,' ',u.first_name) as Name, '0' as biologist FROM users u
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=5)", \Phalcon\Db::FETCH_ASSOC, []);
