@@ -912,7 +912,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->seriesId)&&($data->seriesId>0)) {
             $query ="UPDATE probes SET fat=?, moisture=?, como=?, protein=?, acidity=?, milkAcidity=?,
 						 purityLevel=?, solubility=?, enterobacteria=?, enterococci=?, koe=?, yeast=?, bgkp=?, bgkp0=?,
-						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=?, termoresist =?, timestmp=?, timestmp2=? WHERE seriesId = ?";
+						 expirationTime=?, storingRequirement=?, uid=?, labman=?, labman2=?, standart=?, lactose=?, termoresist =?, timestmp=?, timestmp2=?, rad=? WHERE seriesId = ?";
 
             $result = $this->db->query($query, array(
                     $data->fat,
@@ -939,6 +939,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->termoresist,
                     $data->timestmp,
                     $data->timestmp2,
+                    $data->rad,
                     $data->seriesId,
                 ));
         } else {
@@ -947,8 +948,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 
-                `koe`, `yeast`, `bgkp`, `bgkp0`, `expirationTime`, `storingRequirement`, `uid`, `labman`, `labman2`, `standart`,`lactose`, `termoresist`, `timestmp`, `timestmp2`)
-			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                `koe`, `yeast`, `bgkp`, `bgkp0`, `expirationTime`, `storingRequirement`, `uid`, `labman`, `labman2`, `standart`,`lactose`, `termoresist`, `timestmp`, `timestmp2`,`rad`)
+			VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             array($seriesId,
                 $data->fat,
                 $data->moisture,
@@ -973,7 +974,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $data->lactose,
                 $data->termoresist,
                 $data->timestmp,
-                $data->timestmp2
+                $data->timestmp2,
+                $data->rad,
+                
             )
             );
             }
