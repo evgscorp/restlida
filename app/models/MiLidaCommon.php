@@ -827,6 +827,28 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             }
     }
 
+    public function updateSeries($wid, $data,$uid)
+    {
+        $sql_res = 'SELECT @smsg as smsg;';
+        if (isset($data->series) && (count($data->series) > 0 && $wid > 0)) {
+            foreach ($data->series as $s) {
+                $oldloc=intval($wid);
+                $newloc=10+$oldloc;
+                $sql = "CALL `move_series`($wid,$s->series_id, $oldloc, $newloc, $uid, @smsg);";
+               /* $sql="CALL `fork`.`move_series`(
+                    21 		-- workshop_id (id склада 21, 22 или 23) 
+                    , 27 	-- series_id 
+                    , 31 	-- newloc	  куда перемещаем (fork.move_rules)	
+                    , 7		-- userid     (опционально) 
+                    , @smsg );
+                SELECT @smsg;"; */
+                $this->db->query($sql);
+            }
+
+            return $this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
+        }
+    }
+
     public function updateUserData($data, $UserInfo){
         if ($data->del==true&&$data->uid>0){
             $this->db->query("DELETE FROM users WHERE uid=".$data->uid);

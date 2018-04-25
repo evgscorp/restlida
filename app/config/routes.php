@@ -53,6 +53,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'post',
+	'route' => '/sent-series/{wid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
+];
+
+
+$routes[] = [
+	'method' => 'post',
 	'route' => '/update-upackages',
 	'handler' => [new \Controllers\CommonDataController(), 'updateUPackages']
 ];
