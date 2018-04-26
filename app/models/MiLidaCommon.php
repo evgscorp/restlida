@@ -698,7 +698,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getAllowedMoves($wid){
         $sql="SELECT * FROM allowed_moves WHERE workshop_id = :wid and allowed_id >0";
-        return $this->db->fetchAll( $sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>intval($wid)]);
+        return $sql;
+        //return $this->db->fetchAll( $sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>intval($wid)]);
 
     }
 
