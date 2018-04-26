@@ -840,7 +840,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->series) && (count($data->series) > 0 && $wid > 0)) {
             foreach ($data->series as $s) {
                 $oldloc=intval($wid);
-                $newloc=10+$oldloc;
+                $newloc=$oldloc;
                 $sql = "CALL `move_series`($wid,$s->series_id, $newloc, $uid, @smsg);";
                /* $sql="CALL `fork`.`move_series`(
                     21 		-- workshop_id (id склада 21, 22 или 23) 
