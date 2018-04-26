@@ -841,7 +841,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             foreach ($data->series as $s) {
                 $oldloc=intval($wid);
                 $newloc=$oldloc;
-                $sql = "CALL `move_series`($wid,$s->series_id, $newloc, $uid, @smsg);";
+                $sql = "CALL `move_series`($data->wid,$s->series_id, $newloc, $uid, @smsg);";
                /* $sql="CALL `fork`.`move_series`(
                     21 		-- workshop_id (id склада 21, 22 или 23) 
                     , 27 	-- series_id 
