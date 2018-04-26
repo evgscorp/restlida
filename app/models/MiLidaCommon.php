@@ -967,8 +967,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->seriesId,
                 ));
         } else {
-            $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year LIMIT 1";
-            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year,], 'series_id');
+            $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year and s.workshop_id=:wid LIMIT 1";
+            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year, 'wid'=>$wid], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 
