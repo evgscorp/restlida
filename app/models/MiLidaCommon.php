@@ -696,6 +696,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     }
 
+    public function getAllowedMoves($wid){
+        $sql="SELECT * FROM allowed_moves WHERE workshop_id = :wid";
+        return $this->db->fetchAll( $sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>intval($wid)]);
+        
+    }
+
     public function getProbeData($serach,$pid,$year,$wid)
     {
         $this->utf8init();
@@ -968,7 +974,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 ));
         } else {
             $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year and s.workshop_id=:wid LIMIT 1";
-            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year, 'wid'=>$wid], 'series_id');
+            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year, 'wid'=>$data->wid], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 

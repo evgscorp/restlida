@@ -170,5 +170,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getProductTypes']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/allowed-moves/{wid:[0-9]+}',
+	'handler' => [new \Controllers\CommonDataController(), 'getAllowedMoves']
+];
+
 
 return $routes;

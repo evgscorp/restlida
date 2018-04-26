@@ -182,6 +182,14 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 		return $Response->setJsonContent($result);
 	}
 
+	public function getAllowedMoves(){
+		$request = new \Phalcon\Http\Request();
+		$MiLidaCommonModel = new \Models\MiLidaCommon();
+		$result = $MiLidaCommonModel->getAllowedMoves($request->get("wid"));
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent($result);
+	}
+
 	public function getProductTypes(){
 		$request = new \Phalcon\Http\Request();
 		$MiLidaCommonModel = new \Models\MiLidaCommon();
