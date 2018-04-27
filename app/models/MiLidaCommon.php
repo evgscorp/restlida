@@ -707,6 +707,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     }
 
+    public function getAllowedMoves($wid){
+        $sql="SELECT * FROM allowed_moves WHERE workshop_id = $wid and allowed_id >0";
+        $this->utf8init();
+        return $this->db->fetchAll( $sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>intval($wid)]);
+
+    }
+
     public function getProbeData($serach,$pid,$year,$wid)
     {
         $this->utf8init();
@@ -844,8 +851,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if (isset($data->series) && (count($data->series) > 0 && $wid > 0)) {
             foreach ($data->series as $s) {
                 $oldloc=intval($wid);
-                $newloc=10+$oldloc;
-                $sql = "CALL `move_series`($wid,$s->series_id, $newloc, $uid, @smsg);";
+                $newloc=$oldloc;
+                $sql = "CALL `move_series`($data->wid,$s->series_id, $newloc, $uid, @smsg);";
                /* $sql="CALL `fork`.`move_series`(
                     21 		-- workshop_id (id склада 21, 22 или 23) 
                     , 27 	-- series_id 
@@ -978,8 +985,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                     $data->seriesId,
                 ));
         } else {
-            $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year LIMIT 1";
-            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year,], 'series_id');
+            $sql="SELECT s.series_id FROM series s where s.series_num = :snum  and s.product_id=:pid and s.series_year=:year and s.workshop_id=:wid LIMIT 1";
+            $seriesId=0+$this->db->fetchColumn($sql, ['snum'=>$data->series_num,'pid'=>$data->pid,'year'=>$data->year, 'wid'=>$data->wid], 'series_id');
             if ($seriesId>0) {
                 $result=$this->db->query(
                 "INSERT INTO probes (`seriesId`, `fat`, `moisture`, `como`, `protein`, `acidity`, `milkAcidity`, `purityLevel`, `solubility`, `enterobacteria`, `enterococci`, 
