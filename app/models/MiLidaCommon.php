@@ -31,6 +31,17 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join pallets pp on p.pallet_id=pp.pallet_id
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";
+          
+         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*, (select count(*) from packages where series_id=s.series_id and location_id > 0 ) as scnt
+         from (SELECT count(*) cnt, pallet_id, mp.location_id, mp.series_id  FROM packages mp
+          where pallet_id is not null and pallet_id in
+          ( SELECT pallet_id FROM overview_by_location where  location_id >:lid and  location_id < :mlid )
+         group by pallet_id, mp.location_id ) p
+     left outer join pallets pp on p.pallet_id=pp.pallet_id
+     left outer join locations ll on ll.location_id=p.location_id
+     left outer join series s on s.series_id = p.series_id
+    
+     order by creation_time desc";
 
 
         /*$sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and  location_id < 34
