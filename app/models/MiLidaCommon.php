@@ -22,7 +22,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             left outer join locations ll on ll.location_id=p.location_id
             order by creation_time desc";*/
 
-         $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*, (select count(*) from packages where series_id=s.series_id and location_id > 0 ) as scnt
+     /*    $sql="SELECT p.*, s.*, pp.pallet_code, pp.creation_time, ll.*, (select count(*) from packages where series_id=s.series_id and location_id > 0 ) as scnt
             	from (SELECT count(*) cnt, pallet_id, mp.location_id  FROM packages mp
             	 where pallet_id is not null and pallet_id in
                  ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )
@@ -41,33 +41,41 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
      left outer join locations ll on ll.location_id=p.location_id
      left outer join series s on s.series_id = p.series_id
     
-     order by creation_time desc";
+     order by creation_time desc";*/
 
-     $sql="SELECT * FROM overview_by_location_2 order by creation_time desc";
+     $sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by creation_time desc";
 
 
         /*$sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and  location_id < 34
         and location_id in (SELECT allowed_location as location_id FROM move_rules
            where workshop_id in (select workshop_id from workshops where parent_workshop_id = :wid))";*/
 
-        $sql_cnt_pallets="SELECT count(*) cnt FROM packages
-        where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )";
+       /* $sql_cnt_pallets="SELECT count(*) cnt FROM packages
+        where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )";*/
+
+        $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid ";
+
 
          $lid=10;
          $mlid=20;
-        if ($shipment!="0") {$lid=30; $mlid=40;};
+         $swid=$wid;
+        if ($shipment!="0") {$lid=30; $mlid=40;}
+        $swid=$lid+$wid;
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
-        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
+        //$result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
+        $result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['wid'=>$swid], 'cnt');
+        
         $result['locations']=$this->db->fetchAll($sql_locations, \Phalcon\Db::FETCH_ASSOC, []);
         $result['pallets']=[];
         if ($result['cnt']>0) {
-            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'mlid'=>$mlid]);
+            //$result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['lid'=>$lid,'mlid'=>$mlid]);
+            $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC,  ['wid'=>$swid]);
         }
         $result['shipmentStatus']=$shipment;
-        $result['shipment_pallets_24h']=$this->db->fetchOne("SELECT count(*)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['shipment_packages_24h']=$this->db->fetchOne("SELECT sum(total)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY", \Phalcon\Db::FETCH_ASSOC, []);
+        $result['shipment_pallets_24h']=$this->db->fetchOne("SELECT count(*)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        $result['shipment_packages_24h']=$this->db->fetchOne("SELECT sum(total)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        $result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
        
         return $result;
     }
