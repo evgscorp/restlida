@@ -43,6 +43,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     
      order by creation_time desc";
 
+     $sql="SELECT * FROM overview_by_location_2 order by creation_time desc";
+
 
         /*$sql_cnt_pallets="SELECT count(*) cnt FROM packages where location_id >:lid and  location_id < 34
         and location_id in (SELECT allowed_location as location_id FROM move_rules
