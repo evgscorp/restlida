@@ -53,7 +53,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
        /* $sql_cnt_pallets="SELECT count(*) cnt FROM packages
         where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )";*/
 
-        $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid ";
+        $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
 
 
          $lid=10;
@@ -73,9 +73,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $result['pallets']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC,  ['wid'=>$swid]);
         }
         $result['shipmentStatus']=$shipment;
-        $result['shipment_pallets_24h']=$this->db->fetchOne("SELECT count(*)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
-        $result['shipment_packages_24h']=$this->db->fetchOne("SELECT sum(total)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
-        $result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and location_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        $result['shipment_pallets_24h']=$this->db->fetchOne("SELECT count(*)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        $result['shipment_packages_24h']=$this->db->fetchOne("SELECT sum(total)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        $result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
        
         return $result;
     }
