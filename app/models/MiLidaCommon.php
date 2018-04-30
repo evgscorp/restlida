@@ -58,9 +58,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
          $lid=10;
          $mlid=20;
-         $swid=$wid;
-        if ($shipment!="0") {$lid=30; $mlid=40;}
-        $swid=$lid+$wid;
+         $swid=intval($wid)+10;;
+        if ($shipment!="0") {$lid=30; $mlid=40;  $swid=$swid+10;}
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         //$result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
