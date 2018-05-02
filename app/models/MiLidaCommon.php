@@ -323,7 +323,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
       public function getShipmentOverview($wid)  {
         $this->utf8init();
-        $sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
+        //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
+        $sql= "SELECT * FROM fork.overwiew_shipment_2 where ship_stmp > '2018-01-13'";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
