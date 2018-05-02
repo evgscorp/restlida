@@ -178,7 +178,7 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/shipment-overview',
+	'route' => '/shipment-overview/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'getShipmentOverview']
 ];
 

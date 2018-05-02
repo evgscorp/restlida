@@ -321,7 +321,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       }
 
-      public function getShipmentOverview()  {
+      public function getShipmentOverview($wid)  {
         $this->utf8init();
         $sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
