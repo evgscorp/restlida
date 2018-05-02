@@ -45,7 +45,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
      $sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by series_timestmp desc";
      if ($shipment!="0"){
-     $sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from .view_rules where workshop_id = :wid and operation = 'ship'";
+     $sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
      }
      /* and operation = 'ship');" */
 
