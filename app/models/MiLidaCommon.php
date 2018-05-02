@@ -321,6 +321,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       }
 
+      public function getShipmentOverview()  {
+        $this->utf8init();
+        $sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
+      return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
+    }
+
+
     public function getStorageOverviewDates($wid){
         $this->utf8init();
         $sql="SELECT UNIX_TIMESTAMP(DATE(series_date)) edate, datediff( DATE(series_date), NOW() )+365*2 dremains, sum(total) total  FROM overview_by_location 

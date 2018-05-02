@@ -176,5 +176,11 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'getAllowedMoves']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/shipment-overview',
+	'handler' => [new \Controllers\CommonDataController(), 'getShipmentOverview']
+];
+
 
 return $routes;

@@ -143,6 +143,18 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 		return $Response->setJsonContent($result);
 	}
 
+	public function getShipmentOverview(){
+		$request = new \Phalcon\Http\Request();
+		$MiLidaCommonModel = new \Models\MiLidaCommon();
+		$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+		$result = [];
+	//if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']>0&&in_array(3,$UserInfo['roles'])){
+		$result = $MiLidaCommonModel->getShipmentOverview();
+	 //}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent($result);
+	}
+
 	public function getStorageOverviewDates($wid)
 	{
 		$request = new \Phalcon\Http\Request();
