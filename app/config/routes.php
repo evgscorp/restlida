@@ -64,6 +64,13 @@ $routes[] = [
 	'handler' => [new \Controllers\CommonDataController(), 'updateUPackages']
 ];
 
+
+$routes[] = [
+	'method' => 'post',
+	'route' => '/update-shipment-item',
+	'handler' => [new \Controllers\CommonDataController(), 'updateShipmentItem']
+];
+
 $routes[] = [
 	'method' => 'post',
 	'route' => '/user-crud',

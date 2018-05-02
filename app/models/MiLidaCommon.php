@@ -850,6 +850,15 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function updateShipmentItem($data) {
+
+        if (isset($data->id)&&($data->id>0)) {
+            $sql="UPDATE `shipments` SET `doc_number`='$data->doc1', `doc_number2`='$data->doc2' WHERE `ship_id`=$data->id;
+            ";
+            $this->db->query($sql);
+            }
+    }
+
     public function updateUPackages($data, $user)
     {
         if (isset($data->packages)&&(count($data->packages)>0&&$data->series_id>0)) {
