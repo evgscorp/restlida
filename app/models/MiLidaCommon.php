@@ -46,8 +46,8 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
      $sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by series_timestmp desc";
      $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
      if ($shipment!="0"){
-     //$sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
-     //$sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2  WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
+     $sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
+     $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2  WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
      }
      /* and operation = 'ship');" */
 
@@ -65,7 +65,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
          $lid=10;
          $mlid=20;
          $swid=intval($wid)+10;;
-        if ($shipment!="0") {$lid=30; $mlid=40;  $swid=$swid+10;}
+        if ($shipment!="0") {$lid=30; $mlid=40;  $swid=$swid+10; $swid=$wid;}
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         //$result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
