@@ -44,8 +44,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
      order by creation_time desc";*/
 
      $sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by series_timestmp desc";
+     $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
      if ($shipment!="0"){
      $sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
+     $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2  WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
      }
      /* and operation = 'ship');" */
 
@@ -57,7 +59,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
        /* $sql_cnt_pallets="SELECT count(*) cnt FROM packages
         where pallet_id is not null and pallet_id in ( SELECT pallet_id FROM overview_by_location where location_id >:lid and  location_id < :mlid )";*/
 
-        $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
+        
 
 
          $lid=10;
