@@ -43,8 +43,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     
      order by creation_time desc";*/
 
-     $sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by series_timestmp desc";
-     $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
+     //$sql="SELECT * FROM overview_by_location_2 WHERE location_id = :wid order by series_timestmp desc";
+     //$sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2 WHERE location_id = :wid";
+
+     $sql="SELECT * FROM overview_by_location_2 where location_id  
+     IN (SELECT location_id FROM view_rules where workshop_id = :wid and operation = 'reciev')";
+     $sql_cnt_pallets= "SELECT count(*) cnt FROM overview_by_location_2 where location_id  
+     IN (SELECT location_id FROM view_rules where workshop_id = :wid and operation = 'reciev')";
+        
      if ($shipment!="0"){
      $sql="SELECT * FROM overview_by_location_2 WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
      $sql_cnt_pallets="SELECT count(*) cnt FROM overview_by_location_2  WHERE location_id in (select location_id from view_rules where workshop_id = :wid and operation = 'ship')";
@@ -64,8 +70,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
          $lid=10;
          $mlid=20;
-         $swid=intval($wid)+10;;
-        if ($shipment!="0") {$lid=30; $mlid=40;  $swid=$swid+10; $swid=$wid;}
+         $swid=$wid;
+         //$swid=intval($wid)+10;
+
+    if ($shipment!="0") {$lid=30; $mlid=40; /* $swid=$swid+10; $swid=$wid;*/}
         $sql_locations="SELECT * FROM locations where location_id > 20 and location_id < 40";
         $this->utf8init();
         //$result['cnt']=$this->db->fetchColumn($sql_cnt_pallets, ['lid'=>$lid,'mlid'=>$mlid], 'cnt');
@@ -753,8 +761,10 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=5)", \Phalcon\Db::FETCH_ASSOC, []);
         $result['labmans2']=$this->db->fetchAll("SELECT  u.uid as sid, CONCAT(u.second_name,' ',u.first_name) as Name, '0' as biologist FROM users u
         where u.uid in (select ur.uid from user_role ur  where ur.role_id=6)", \Phalcon\Db::FETCH_ASSOC, []);
-        $result['previous']=$this->db->fetchOne("SELECT * FROM probes where seriesId <:seriesId
-         order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);
+       /* $result['previous']=$this->db->fetchOne("SELECT * FROM probes where seriesId <:seriesId
+         order by seriesId desc limit 1", \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);*/
+         $result['previous'] = $this->db->fetchOne("SELECT * FROM probes where seriesId <> :seriesId order by idprobes desc limit 1",
+          \Phalcon\Db::FETCH_ASSOC, ['seriesId'=> $result['series_id']]);
         $result['packagesCnt']=$this->db->fetchColumn("SELECT count(*) cnt FROM packages where series_id=:seriesId",['seriesId'=> $result['series_id']],'cnt');
        
         return $result;
