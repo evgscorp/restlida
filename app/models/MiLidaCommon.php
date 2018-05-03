@@ -48,7 +48,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
      $sql="SELECT * FROM overview_by_location_2 where location_id  
      IN (SELECT location_id FROM view_rules where workshop_id = :wid and operation = 'reciev')";
-     $sql_cnt_pallets= "SELECT count(*) FROM overview_by_location_2 where location_id  
+     $sql_cnt_pallets= "SELECT count(*) cnt FROM overview_by_location_2 where location_id  
      IN (SELECT location_id FROM view_rules where workshop_id = :wid and operation = 'reciev')";
         
      if ($shipment!="0"){
