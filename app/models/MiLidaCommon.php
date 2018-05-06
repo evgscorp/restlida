@@ -950,12 +950,12 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                 $location=$this->db->lastInsertId();
                 $location=$this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');
 
-            } elseif(isset($data->wid)&&intval($data->wid)>0) {
+            } /* elseif(isset($data->wid)&&intval($data->wid)>0) {
                 
                  if (isset($data->pallets[0]->location_id)&&$data->pallets[0]->location_id<20){
                       $location=intval($data->wid);
                  }
-            }
+            } */
             $date = new \DateTime("NOW");
             $futuredate = $date->format('Y-m-d H:i:s');
             $pids=[];
