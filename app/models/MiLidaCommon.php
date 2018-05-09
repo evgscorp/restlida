@@ -960,10 +960,17 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             $futuredate = $date->format('Y-m-d H:i:s');
             $pids=[];
             $sql_res='SELECT @smsg as smsg;';
-           
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
-                if (isset($pallet->packages)&&count($pallet->packages)>0){
+        
+	        if ($pallet->pallet_code == '~') {
+			error_log("MY:go to fake packages", 0);
+			$sql = "CALL `move_fake_pallet`($data->wrks, $pallet->series_id, $pallet->location_id, $location, 21, @smsg);";		    		
+			$this->db->query($sql);
+		}
+		
+		if ((isset($pallet->packages)&&count($pallet->packages)>0)){
+
                    foreach ($pallet->packages as $package) {
                     $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, null, @smsg);";
                     $this->db->query($sql);
