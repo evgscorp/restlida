@@ -336,11 +336,13 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
       }
 
-      public function getShipmentOverview($wid, $stdate)  {
+      public function getShipmentOverview($wid, $stdate, $etdate)  {
         $this->utf8init();
         $sdate=date("Y-m-d",intval($stdate)).' 00:00:00';
+        $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
+        
         //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
-        $sql= "SELECT * FROM fork.overwiew_shipment_2 where ship_stmp > '$sdate'";
+        $sql= "SELECT * FROM fork.overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate'";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 

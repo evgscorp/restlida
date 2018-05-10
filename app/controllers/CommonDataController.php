@@ -149,7 +149,7 @@ class CommonDataController extends \Phalcon\Mvc\Controller
 		$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 		$result = [];
 	//if (isset($UserInfo['uid'])&&$UserInfo['uid']>1&&$UserInfo['uid']>0&&in_array(3,$UserInfo['roles'])){
-		$result = $MiLidaCommonModel->getShipmentOverview($wid, $request->get("sdate"));
+		$result = $MiLidaCommonModel->getShipmentOverview($wid, $request->get("sdate"), $request->get("edate"));
 	 //}
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent($result);
