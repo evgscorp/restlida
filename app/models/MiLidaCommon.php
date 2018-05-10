@@ -872,8 +872,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function updateShipmentItem($data) {
 
         if (isset($data->id)&&($data->id < 0)) {
-            $sql="UPDATE `shipments` SET `doc_number`='$data->doc1', `doc_number2`='$data->doc2' WHERE `ship_id`=$data->id;
-            ";
+            $sql="UPDATE `shipments` SET `doc_number`='$data->doc1', `doc_number2`='$data->doc2', 
+            `client_name`='$data->client', `vh_number`='$data->car', `driver_name`=$data->driver' 
+            WHERE `ship_id`=$data->id";
             $this->db->query($sql);
             }
     }
