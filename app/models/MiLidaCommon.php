@@ -459,7 +459,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         left outer join pallets pp on pp.pallet_id=p.pallet_id
         where p.series_id = :sid and p.pallet_id is not null  
         GROUP BY pallet_id, pallet_code  ORDER BY  p.pallet_id ASC";
-        $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 150";
+        $sql_local_storage_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:wid limit 1000";
         $sql_passed_storages_info="SELECT DISTINCT location_id, location_name FROM overview_by_location  where workshop_id=:wid and location_id <>:lid and location_id between 11 and 20";
         $sql_external_storages_info="SELECT * FROM overview_by_location  where workshop_id=:wid and location_id=:lid limit 150";
         $sql_last_ten_series="SELECT series_id, series_name FROM series where workshop_id=:wid and series_id > 0 order by timestmp desc limit 15";
