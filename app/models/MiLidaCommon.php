@@ -871,7 +871,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function updateShipmentItem($data) {
         //$date = ''.date($data->date_invoice);
-        $date=date("Y-m-d",intval($stdate)).' 10:00:00';
+        $date=date("Y-m-d",intval($data)).' 10:00:00';
         if (isset($data->id)&&($data->id < 0)) {
             $sql="UPDATE `shipments` SET `doc_number`='$data->doc1', `doc_number2`='$data->doc2', 
             `client_name`='$data->client', `vh_number`='$data->car', `driver_name`='$data->driver', `driver_name`='$data->driver', `ship_stmp`='$date'
