@@ -342,7 +342,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
         
         //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
-        $sql= "SELECT * FROM fork.overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate'";
+        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and workshop_id = $wid";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
@@ -960,15 +960,15 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
                  }
             } */
             $date = new \DateTime("NOW");
+            $uid=intval($user['uid']);  
             $futuredate = $date->format('Y-m-d H:i:s');
             $pids=[];
             $sql_res='SELECT @smsg as smsg;';
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
-        
-	        if ($pallet->pallet_code == '~') {
+            if ($pallet->pallet_code == '~') {
 			error_log("MY:go to fake packages", 0);
-			$sql = "CALL `move_fake_pallet`($data->wrks, $pallet->series_id, $pallet->location_id, $location, 21, @smsg);";		    		
+			$sql = "CALL `move_fake_pallet`($data->wrks, $pallet->series_id, $pallet->location_id, $location, $uid, @smsg);";		    		
 			$this->db->query($sql);
 		}
 		
