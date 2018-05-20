@@ -342,7 +342,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
         
         //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
-        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and workshop_id = $wid";
+        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and ship_from = $wid";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
