@@ -945,6 +945,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function updatePallets($data, $user)
     {
+	set_time_limit(120);
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
             $location=intval($data->location);
             if ($location>30) {
@@ -968,7 +969,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
             if ($pallet->pallet_code == '~') {
-			error_log("MY:go to fake packages", 0);
+			error_log("MY:fake packages " . $data->wrks . " to " . $location, 0);
 			$sql = "CALL `move_fake_pallet`($data->wrks, $pallet->series_id, $pallet->location_id, $location, $uid, @smsg);";		    		
 			$this->db->query($sql);
 		}
@@ -976,12 +977,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 		if ((isset($pallet->packages)&&count($pallet->packages)>0)){
 
                    foreach ($pallet->packages as $package) {
-                    $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, null, @smsg);";
+			error_log("MY:move packages " . $package->UUID . " to " . $location, 0);
+                    $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, $uid, @smsg);";
                     $this->db->query($sql);
                    }
                     
                 } else {
-                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, null, @smsg);";
+			error_log("MY:move pallet " . $pallet->pallet_code . " to " . $location, 0);
+                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, $uid, @smsg);";
                 $this->db->query($sql);
                 }
             }
