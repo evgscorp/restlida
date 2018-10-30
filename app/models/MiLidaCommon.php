@@ -611,6 +611,21 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    private function getStorageReport2()
+    {
+        $result = [];
+        $mdate = $this->db->fetchColumn("SELECT MAX(mdate) mdate FROM fork.report", [], 'mdate');
+        $sql_workshops = "SELECT  DISTINCT location_id, location_short FROM fork.report  where mdate = :mdate  ORDER BY location_id";
+        $sql = "SELECT  * FROM fork.report  where mdate = :mdate  ORDER BY location_id";
+        $sql_sum = "SELECT SUM(scm) scm,  SUM(scmt) scmt,  SUM(com) com,  SUM(comt) comt, SUM(slvk) slvk, SUM(slvkt) slvkt FROM fork.report  where mdate = :mdate";
+
+        $result['sworkshops'] = $this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+        $result['data'] = $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+        $result['summary'] = $this->db->fetchAll($sql_sum, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+    
+        return $result;
+    } 
+
     public function getSummaryReport($stdate,$endate){
         $result=[];
         $sdate=date("Y-m-d",intval($stdate)).' 00:00:00';
