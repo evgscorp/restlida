@@ -656,7 +656,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         } 
         
       
-        $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
+        //$result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
        
 
         /* sorting results */
