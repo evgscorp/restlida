@@ -93,7 +93,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function getPackageLog($search)
+  /*  public function getPackageLog($search)
     {
         $sql="SELECT l.message, l.op_stmp, l.operation_id, p.label_id, pl.UUID
             FROM operation_log l left join packages p on p.label_id= l.label_id
@@ -102,6 +102,34 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->utf8init();
         return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['search'=>$search]);
     }
+*/
+    public function getPackageLog($search)
+        {
+        /*
+        $sql="SELECT l.message, l.op_stmp, l.operation_id, p.label_id,
+        pl.UUID
+        FROM operation_log l left join packages p on p.label_id=
+        l.label_id
+        left join labels pl on p.label_id= pl.label_id
+        WHERE UUID LIKE(:search) order by l.op_stmp";
+        */
+            $sql = "SELECT l.message, l.op_stmp, l.operation_id, p.label_id, pl.UUID
+                        FROM operation_log l left join packages p on p.label_id=
+                        l.label_id
+                        left join labels pl on p.label_id= pl.label_id
+                        WHERE UUID LIKE(:search)
+                        UNION ALL
+                        SELECT CONCAT(s.client_name, ' документ No', s.doc_number) as message,
+                        DATE_ADD(s.ship_stmp, INTERVAL 6 HOUR),1,1, :search from packages p
+                        JOIN shipments s on s.ship_id = p.location_id
+                        JOIN labels l on l.label_id = p.label_id
+                        where l.UUID LIKE(:search)
+                        ORDER BY 2 asc";
+            $this->utf8init();
+            return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC,
+                ['search' => $search]);
+        }
+
 
     public function getSeriesPackages($search, $stype="all", $selproduct, $year, $wid)
     {
