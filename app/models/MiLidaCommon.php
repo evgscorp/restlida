@@ -340,9 +340,9 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->utf8init();
         $sdate=date("Y-m-d",intval($stdate)).' 00:00:00';
         $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
-        
+        $wid= intval($wid)+10;
         //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
-        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and workshop_id = $wid";
+        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and ship_from = $wid";
       return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
@@ -610,6 +610,21 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $result['suggestion']=$this->getShiftSuggestionsInfo($wid);
         return $result;
     }
+
+    private function getStorageReport2()
+    {
+        $result = [];
+        $mdate = $this->db->fetchColumn("SELECT MAX(mdate) mdate FROM fork.report", [], 'mdate');
+        $sql_workshops = "SELECT  DISTINCT location_id, location_short FROM fork.report  where mdate = :mdate  ORDER BY location_id";
+        $sql = "SELECT  * FROM fork.report  where mdate = :mdate  ORDER BY location_id";
+        $sql_sum = "SELECT SUM(scm) scm,  SUM(scmt) scmt,  SUM(com) com,  SUM(comt) comt, SUM(slvk) slvk, SUM(slvkt) slvkt FROM fork.report  where mdate = :mdate";
+
+        $result['sworkshops'] = $this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+        $result['data'] = $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+        $result['summary'] = $this->db->fetchAll($sql_sum, \Phalcon\Db::FETCH_ASSOC, ['mdate'=>$mdate]);
+    
+        return $result;
+    } 
 
     public function getSummaryReport($stdate,$endate){
         $result=[];
@@ -945,6 +960,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function updatePallets($data, $user)
     {
+	set_time_limit(120);
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
             $location=intval($data->location);
             if ($location>30) {
@@ -968,7 +984,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
             foreach ($data->pallets as $pallet) {
                 //$pids[]=$pallet->pallet_id; move_pallet (wrks, pallet_code, new_location=31 | 32 | 33, null, msg);
             if ($pallet->pallet_code == '~') {
-			error_log("MY:go to fake packages", 0);
+			error_log("MY:fake packages " . $data->wrks . " to " . $location, 0);
 			$sql = "CALL `move_fake_pallet`($data->wrks, $pallet->series_id, $pallet->location_id, $location, $uid, @smsg);";		    		
 			$this->db->query($sql);
 		}
@@ -976,12 +992,14 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 		if ((isset($pallet->packages)&&count($pallet->packages)>0)){
 
                    foreach ($pallet->packages as $package) {
-                    $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, null, @smsg);";
+			error_log("MY:move packages " . $package->UUID . " to " . $location, 0);
+                    $sql = "CALL `move_package`($data->wrks, '$package->UUID', $location, $uid, @smsg);";
                     $this->db->query($sql);
                    }
                     
                 } else {
-                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, null, @smsg);";
+			error_log("MY:move pallet " . $pallet->pallet_code . " to " . $location, 0);
+                $sql = "CALL `move_pallet`($data->wrks, $pallet->pallet_code, $location, $uid, @smsg);";
                 $this->db->query($sql);
                 }
             }
