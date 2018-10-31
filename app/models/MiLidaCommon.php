@@ -632,9 +632,11 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $edate=date("Y-m-d",intval($endate)).' 23:59:59';
         $result['sdateFormatted']=date("Y-m-d",intval($stdate)).' 00:00';
         $result['edateFormatted']=date("Y-m-d",intval($endate)).' 23:59';
-        $result['report2'][1]=$this->db->fetchAll("CALL report_2(21);", \Phalcon\Db::FETCH_ASSOC, []);
+       /* $result['report2'][1]=$this->db->fetchAll("CALL report_2(21);", \Phalcon\Db::FETCH_ASSOC, []);
         $result['report2'][2]=$this->db->fetchAll("CALL report_2(22);", \Phalcon\Db::FETCH_ASSOC, []);
         $result['report2'][3]=$this->db->fetchAll("CALL report_2(23);", \Phalcon\Db::FETCH_ASSOC, []);
+        */
+        $result['report2']=$this->getStorageReport2();
         
         // $result['report2'][0]=$this->db->fetchAll("CALL report_2(0);", \Phalcon\Db::FETCH_ASSOC, []);
         
