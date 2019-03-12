@@ -6,11 +6,11 @@ namespace Controllers;
 class SalesDataController extends \Phalcon\Mvc\Controller
 {
 
-    public function getSalesData()
+    public function getSalesDataJobs()
     {
         $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
-        $result = $MiLidaSalesModel->getloginFormData();
+        $result = $MiLidaSalesModel->getSalesDataJobs();
         $Response = $this->allowCORS();
         return $Response->setJsonContent($result);
     }

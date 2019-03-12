@@ -28,8 +28,8 @@ $routes[] = [
 */
 $routes[] = [
 	'method' => 'get',
-	'route' => '/sales-data',
-	'handler' => [new \Controllers\SalesDataController(), 'getSalesData']
+	'route' => '/sales-jobs',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesDataJobs']
 ];
 
 return $routes;

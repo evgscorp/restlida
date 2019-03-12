@@ -10,17 +10,16 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
   
-    public function getloginFormData()
+    public function getSalesDataJobs()
     {
         $result=[];
-        $sql_users=" SELECT CONCAT('oauth_user_', users.uid) AS id, users.uid AS uid,CONCAT(users.first_name,'  ',users.second_name) AS name FROM  users WHERE is_packer <1 order by users.first_name";
-        $sql_workshops="SELECT * FROM workshops;";
+        $sql_jobs="SELECT * FROM jobs;";
         $this->utf8init();
-        $result['users']=$this->db->fetchAll($sql_users, \Phalcon\Db::FETCH_ASSOC, []);
-        $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+       /* $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         foreach ($result['users'] as $key=>$val) {
             $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
-        }
+        }*/
         return $result;
     }
 
