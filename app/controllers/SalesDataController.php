@@ -8,10 +8,11 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     public function getloginFormData()
     {
-        $request = new \Phalcon\Http\Request();
+       /* $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
         $result = $MiLidaSalesModel->getloginFormData();
-        $Response = $this->allowCORS();
+        $Response = $this->allowCORS();*/
+        $result=['ok'];
         return $Response->setJsonContent($result);
     }
 
