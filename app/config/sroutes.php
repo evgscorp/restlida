@@ -28,8 +28,8 @@ $routes[] = [
 */
 $routes[] = [
 	'method' => 'get',
-	'route' => '/login-form-data',
-	'handler' => [new \Controllers\SalesDataController(), 'getloginFormData']
+	'route' => '/sales-data',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesData']
 ];
 
 return $routes;

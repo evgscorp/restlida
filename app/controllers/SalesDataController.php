@@ -6,7 +6,7 @@ namespace Controllers;
 class SalesDataController extends \Phalcon\Mvc\Controller
 {
 
-    public function getloginFormData()
+    public function getSalesData()
     {
        /* $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
