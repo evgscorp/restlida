@@ -990,7 +990,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function updatePallets($data, $user)
     {
-	set_time_limit(120);
+	set_time_limit(220);
         if (isset($data->pallets)&&(count($data->pallets)>0)) {
             $location=intval($data->location);
             if ($location>30) {
