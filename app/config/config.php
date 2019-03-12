@@ -6,7 +6,7 @@
 $settings = array(
 	'database' => array(
 		'adapter' => 'Mysql',	/* Possible Values: Mysql, Postgres, Sqlite */
-		'host' => '172.16.130.180',
+		'host' => 'localhost',
 		'username' => 'misql',
     'password' => 'miliCante',
 		'name' => 'fork',
@@ -21,11 +21,11 @@ $settings = array(
 
     'oauth2' => array(
         'adapter'  => 'Mysql',
-        'host'     => '172.16.130.180',
+        'host'     => 'localhost',
         'port'     => 3306,
         'username' => 'misql',
         'password' => 'miliCante',
-        'dbname'   => 'oauth2',
+        'dbname'   => 'oauth',
 				'charset'   =>'utf8',
 				"options" => array(
 					PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
