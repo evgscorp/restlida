@@ -11,7 +11,13 @@ $routes[] = [
 
  */
 
-$routes = include 'sroutes.php';
+//$routes = include 'sroutes.php';
+
+$routes[] = [
+	'method' => 'get',
+	'route' => '/login-form-data',
+	'handler' => [new \Controllers\SalesDataController(), 'getloginFormData']
+];
 
 $routes[] = [
 	'method' => 'get',
