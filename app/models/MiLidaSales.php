@@ -9,7 +9,15 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->db=$this->getDi()->getShared('db');
     }
 
-  
+    public function getCustomersList(){
+        $result=[];
+        $sql_jobs="SELECT * FROM customers";
+        $this->utf8init();
+        $result['customers']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+        return $result;
+
+    }
+
     public function getSalesDataJobs()
     {
         $result=[];

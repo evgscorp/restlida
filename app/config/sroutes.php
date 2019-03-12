@@ -32,4 +32,11 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'getSalesDataJobs']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/listof-customers',
+	'handler' => [new \Controllers\SalesDataController(), 'getCustomersList']
+];
+
+
 return $routes;
