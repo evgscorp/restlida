@@ -8,12 +8,11 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     public function getSalesData()
     {
-       /* $request = new \Phalcon\Http\Request();
+        $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
         $result = $MiLidaSalesModel->getloginFormData();
-        $Response = $this->allowCORS();*/
-        $result=['ok'];
-        return $result;
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);
     }
 
     public function allowCORS()
