@@ -11,7 +11,7 @@ $routes[] = [
 
  */
 
-//$routes = include 'sroutes.php';
+$routes = include 'sroutes.php';
 
 $routes[] = [
 	'method' => 'get',
