@@ -383,7 +383,12 @@ class Resource
             $accessToken = ($accessToken === 'Bearer') ? '' : $accessToken;
         } elseif ($headersOnly === false) {
             $method = $this->getRequest()->server('REQUEST_METHOD');
-           if ($method=="OPTIONS")  $accessToken = $this->tokenKey;
+           if ($method=="OPTIONS")  {
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Headers: X-Requested-With');
+            header("HTTP/1.1 200 OK");
+            die();
+           }
            else $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
       //  print_r($this->getRequest()->allheaders());
