@@ -22,6 +22,21 @@ $routes[] = [
 ];
 
 
+$routes[] = [
+	'method' => 'post',
+	'route' => '/save-job',
+	'handler' => [new \Controllers\SalesDataController(), 'saveJob']
+];
+
+
+$routes[] = [
+	'method' => 'options',
+	'route' => '/save-job',
+	'handler' => [new \Controllers\SalesDataController(), 'options']
+];
+
+
+
 /*
 $routes[] = [
 	'method' => 'get',
