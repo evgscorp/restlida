@@ -49,6 +49,12 @@ class Request implements RequestInterface
         return $this->getPropertyValue('get', $index, $default);
     }
 
+    public function options($index = null, $default = null)
+    {
+        return $this->get($index, $default);
+    }
+    
+
     public function post($index = null, $default = null)
     {
         return $this->getPropertyValue('post', $index, $default);
