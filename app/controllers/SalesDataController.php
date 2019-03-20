@@ -25,6 +25,10 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     }
 
+    public function options(){
+        return TRUE;
+    }
+
     public function saveCustomer()
 	{
 		$res = 'error';
