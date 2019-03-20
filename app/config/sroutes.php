@@ -14,13 +14,13 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'saveCustomer']
 ];
 
-/*
+
 $routes[] = [
 	'method' => 'options',
 	'route' => '/save-customer',
 	'handler' => [new \Controllers\SalesDataController(), 'options']
 ];
-*/
+
 
 /*
 $routes[] = [
