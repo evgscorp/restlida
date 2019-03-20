@@ -39,21 +39,15 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     public function  saveJob($data){
         $this->utf8init();
-        /**
-         *    weight: number;
-         *   pdate: Date;
-         *   priority: number;
-         *   customerId: number;
-         *
-         INSERT INTO `fork`.`jobs` (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) 
-         VALUES (0, '4', '3', '4000', '1', '2019-05-05 00:00:00', '3');
-         *  VALUES ('4', '4', '3', '', '', '4000', '1', '2019-05-05 00:00:00', '3');
-
-         */
         $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
         array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
     }
 
+    public function deleteJob($jid){
+        if ($jid>0)
+        $this->db->query("DELETE FROM jobs WHERE job_id=".$jid);
+        return ['ok'];
+    }
 
     private function getUserWorkshops($uid)
     {
