@@ -383,8 +383,8 @@ class Resource
             $accessToken = ($accessToken === 'Bearer') ? '' : $accessToken;
         } elseif ($headersOnly === false) {
             $method = $this->getRequest()->server('REQUEST_METHOD');
-            if ($method=="OPTIONS") $method = "header";
-            $accessToken = $this->getRequest()->{$method}($this->tokenKey);
+            if ($method=="OPTIONS")  $accessToken = trim(preg_replace('/^(?:\s+)?Bearer\s/', '', $header));
+            else $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
       //  print_r($this->getRequest()->allheaders());
       //  print_r('token='.$accessToken); exit();
