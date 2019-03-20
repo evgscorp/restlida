@@ -16,7 +16,7 @@ $routes[] = [
 
 
 $routes[] = [
-	'method' => 'get',
+	'method' => 'options',
 	'route' => '/save-customer',
 	'handler' => [new \Controllers\SalesDataController(), 'options']
 ];
