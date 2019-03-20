@@ -31,6 +31,13 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function  saveCustomer($data){
+        $this->utf8init();
+        $this->db->query("INSERT INTO customers (`customer_id`, `unp`, `type`, `name_short`, `name_full`, `valid`) VALUES ( ?, ?, ?, ?, ?, ?)", 
+        array(0, $data->unp, $data->ctype, $data->shortName, $data->fullName, 1  ));
+    }
+
+
     private function getUserWorkshops($uid)
     {
         $result=[];
@@ -42,6 +49,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
 
+ 
     private function utf8init()
     {
         $this->db->query("SET NAMES 'utf8'");

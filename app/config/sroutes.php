@@ -1,19 +1,20 @@
 <?php
 $routes=[];
-/*
-$routes[] = [
+
+/*$routes[] = [
 	'method' => 'post',
 	'route' => '/sent-series/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
-];
+];*/
 
 
 $routes[] = [
 	'method' => 'post',
-	'route' => '/user-crud',
-	'handler' => [new \Controllers\CommonDataController(), 'updateUserData']
+	'route' => '/save-customer',
+	'handler' => [new \Controllers\SalesDataController(), 'saveCustomer']
 ];
 
+/*
 $routes[] = [
 	'method' => 'get',
 	'route' => '/product-types',
