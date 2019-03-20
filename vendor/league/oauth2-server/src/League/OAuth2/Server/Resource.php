@@ -384,7 +384,7 @@ class Resource
         } elseif ($headersOnly === false) {
             $method = $this->getRequest()->server('REQUEST_METHOD');
            if ($method=="OPTIONS")  $accessToken = "ok";
-           $accessToken = $this->getRequest()->{$method}($this->tokenKey);
+           else $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
       //  print_r($this->getRequest()->allheaders());
       //  print_r('token='.$accessToken); exit();
