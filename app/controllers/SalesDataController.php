@@ -71,6 +71,13 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 		return $Response->setJsonContent( $MiLidaSalesModel->deleteJob($jid));
     }
 
+    public function confirmJob($jid){
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+		$request = new \Phalcon\Http\Request();
+		$this->allowCORS($this->response);
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent( $MiLidaSalesModel->confirmJob($jid));
+    }
 
     public function allowCORS()
     {

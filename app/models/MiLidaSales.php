@@ -49,6 +49,14 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['ok'];
     }
 
+    public function  confirmJob($jid){
+     
+        if ($jid>0)
+        $this->db->query("UPDATE jobs SET status='20' WHERE job_id=".$jid);
+        return ['ok'];
+
+    }
+
     private function getUserWorkshops($uid)
     {
         $result=[];
