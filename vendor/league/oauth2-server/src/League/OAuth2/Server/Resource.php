@@ -383,7 +383,7 @@ class Resource
             $accessToken = ($accessToken === 'Bearer') ? '' : $accessToken;
         } elseif ($headersOnly === false) {
             $method = $this->getRequest()->server('REQUEST_METHOD');
-            if ($method=="OPTIONS") $method = "cookies";
+            if ($method=="OPTIONS") $method = "cookie";
             $accessToken = $this->getRequest()->{$method}($this->tokenKey);
         }
       //  print_r($this->getRequest()->allheaders());
