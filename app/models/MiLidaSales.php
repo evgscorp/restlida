@@ -50,7 +50,6 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
     public function  confirmJob($jid){
-     
         if ($jid>0)
         $this->db->query("UPDATE jobs SET status='20' WHERE job_id=".$jid);
         return ['ok'];
