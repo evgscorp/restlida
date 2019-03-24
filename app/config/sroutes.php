@@ -47,6 +47,11 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'confirmJob']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/sales-series-data/{lid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesSeriesData']
+];
 
 /*
 $routes[] = [
