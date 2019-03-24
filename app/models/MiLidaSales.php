@@ -38,6 +38,11 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
+    public function getJobItems($jid){
+        $sql = "SELECT * FROM fork.jobs_items where job_id = $jid";
+        return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
+    }
+
     public function  saveCustomer($data){
         $this->utf8init();
         $this->db->query("INSERT INTO customers (`customer_id`, `unp`, `type`, `name_short`, `name_full`, `valid`) VALUES ( ?, ?, ?, ?, ?, ?)", 
