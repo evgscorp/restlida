@@ -61,9 +61,19 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     public function saveJobItem($data){
         $this->utf8init();
+            if($data->jobId>0&&$data->seriesId>0){
+                $this->db->query("DELETE FROM `jobs_items` WHERE (`job_id` = '$data->jobId') and (`series_id` = '$data->seriesId')");
+                if ($data->delete!=true){
+                    $this->db->query("INSERT INTO jobs_items (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ( ?, ?, ?, ?, ?)", 
+                    array($data->jobId, $data->seriesId, $data->weight, $data->shortName, $data->orderedWeight ));
+                }
 
-        //$this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
-        //array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
+            }
+        //INSERT INTO `fork`.`jobs_items` (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ('1', '6203', '4000', '2019-СЦМ-81А', '0');
+        /*
+            {"delete":false,"weight":25,"orderedWeight":25,"jobId":"1","seriesId":"4019","shortName":"2018-СОМ-198A"}
+        */
+       
     }
 
     public function deleteJob($jid){
