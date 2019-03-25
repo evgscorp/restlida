@@ -89,6 +89,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/listof-ips',
+	'handler' => [new \Controllers\SalesDataController(), 'getIPsList']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/sales-storage-locations',
 	'handler' => [new \Controllers\SalesDataController(), 'getSalesStorageLocations']
 ];
