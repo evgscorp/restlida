@@ -23,7 +23,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
     public function getIPsList(){
-        $sql = "SELECT  DISTINCT ip FROM sales_start where ip is not null;"
+        $sql = "SELECT  DISTINCT ip FROM sales_start where ip is not null";
         $this->utf8init();
         $result['ips']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
