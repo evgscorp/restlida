@@ -85,7 +85,25 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent(['status' => $res]);
 
-	}
+    }
+    
+
+    public function savejobItem(){
+       
+        $res = 'error';
+		try {
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+			$data = $this->request->getJsonRawBody();
+			$MiLidaSalesModel->saveJobItem($data);
+			$res = 'ok';
+			
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
+
+    }
 
     public function deleteJob($jid){
         $MiLidaSalesModel = new \Models\MiLidaSales();

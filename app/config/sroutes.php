@@ -35,6 +35,21 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'options']
 ];
 
+
+$routes[] = [
+	'method' => 'post',
+	'route' => '/save-jobItem',
+	'handler' => [new \Controllers\SalesDataController(), 'savejobItem']
+];
+
+
+$routes[] = [
+	'method' => 'options',
+	'route' => '/save-jobItem',
+	'handler' => [new \Controllers\SalesDataController(), 'options']
+];
+
+
 $routes[] = [
 	'method' => 'get',
 	'route' => '/delete-job/{jid:[0-9]+}',

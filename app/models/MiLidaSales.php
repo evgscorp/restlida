@@ -59,6 +59,13 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
     }
 
+    public function saveJobItem($data){
+        $this->utf8init();
+
+        //$this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
+        //array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
+    }
+
     public function deleteJob($jid){
         if ($jid>0)
         $this->db->query("DELETE FROM jobs WHERE job_id=".$jid);
