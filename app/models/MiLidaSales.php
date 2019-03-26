@@ -44,10 +44,12 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function getSalesSeriesData($lid,$sname=''){
+    public function getSalesSeriesData($lid,$sname='', $ip = ''){
         $like="";
-        if (strlen($sname)>0) $like = "LIKE '%$sname%'"; 
-        $sql ="SELECT * FROM sales_start where location_id = $lid and series_name $like limit 150";
+        if (strlen($sname)>0) $like.= "and series_name LIKE '%$sname%'"; 
+        if (strlen($ip)>0)  $like.= "and ip LIKE '%$ip%'"; 
+        
+        $sql ="SELECT * FROM sales_start where location_id = $lid $like limit 150";
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
