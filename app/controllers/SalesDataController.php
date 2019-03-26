@@ -76,7 +76,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 		$request = new \Phalcon\Http\Request();
 		$this->allowCORS($this->response);
 		$Response = $this->allowCORS();
-		return $Response->setJsonContent( $MiLidaSalesModel->confirmJob($jid));
+		return $Response->setJsonContent( $MiLidaSalesModel->confirmJob($jid, $request->get("reverse")));
     }
 
     public function allowCORS()
