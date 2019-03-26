@@ -15,6 +15,16 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         return $Response->setJsonContent($result);
     }
 
+    public function getSalesStorageLocations()
+    {
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getSalesStorageLocations();
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);
+
+    }
+    
     public function getCustomersList()
     {
         $request = new \Phalcon\Http\Request();
@@ -23,6 +33,31 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         $Response = $this->allowCORS();
         return $Response->setJsonContent($result);
 
+    }
+
+    public function  getIPsList()
+    {
+        
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getIPsList();
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);
+
+    }
+
+    public function  getSalesSeriesData($lid){
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $Response = $this->allowCORS();
+		return $Response->setJsonContent($MiLidaSalesModel->getSalesSeriesData($lid,$request->get("sname")));
+    }
+
+    public function  getJobItems($jid){
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $Response = $this->allowCORS();
+		return $Response->setJsonContent($MiLidaSalesModel->getJobItems($jid));
     }
 
     public function options(){
@@ -61,7 +96,25 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent(['status' => $res]);
 
-	}
+    }
+    
+
+    public function savejobItem(){
+       
+        $res = 'error';
+		try {
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+			$data = $this->request->getJsonRawBody();
+			$MiLidaSalesModel->saveJobItem($data);
+			$res = 'ok';
+			
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
+
+    }
 
     public function deleteJob($jid){
         $MiLidaSalesModel = new \Models\MiLidaSales();

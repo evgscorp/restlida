@@ -9,11 +9,23 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->db=$this->getDi()->getShared('db');
     }
 
+    public function getSalesStorageLocations(){
+        return ['data'=>$this->db->fetchAll("SELECT * FROM fork.locations where location_id >20 and  location_id <31", \Phalcon\Db::FETCH_ASSOC, [])];
+    } 
+
     public function getCustomersList(){
         $result=[];
         $sql_jobs="SELECT * FROM customers";
         $this->utf8init();
         $result['customers']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+        return $result;
+
+    }
+
+    public function getIPsList(){
+        $sql = "SELECT  DISTINCT ip FROM sales_start where ip is not null";
+        $this->utf8init();
+        $result['ips']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
 
     }
@@ -31,6 +43,18 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
 
+    public function getSalesSeriesData($lid,$sname=''){
+        $like="";
+        if (strlen($sname)>0) $like = "LIKE '%$sname%'"; 
+        $sql ="SELECT * FROM sales_start where location_id = $lid and series_name $like limit 150";
+        return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
+    }
+
+    public function getJobItems($jid){
+        $sql = "SELECT * FROM fork.jobs_items where job_id = $jid";
+        return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
+    }
+
     public function  saveCustomer($data){
         $this->utf8init();
         $this->db->query("INSERT INTO customers (`customer_id`, `unp`, `type`, `name_short`, `name_full`, `valid`) VALUES ( ?, ?, ?, ?, ?, ?)", 
@@ -41,6 +65,23 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->utf8init();
         $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
         array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
+    }
+
+    public function saveJobItem($data){
+        $this->utf8init();
+            if($data->jobId>0&&$data->seriesId>0){
+                $this->db->query("DELETE FROM `jobs_items` WHERE (`job_id` = '$data->jobId') and (`series_id` = '$data->seriesId')");
+                if ($data->delete!=true){
+                    $this->db->query("INSERT INTO jobs_items (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ( ?, ?, ?, ?, ?)", 
+                    array($data->jobId, $data->seriesId, $data->weight, $data->shortName, $data->orderedWeight ));
+                }
+
+            }
+        //INSERT INTO `fork`.`jobs_items` (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ('1', '6203', '4000', '2019-СЦМ-81А', '0');
+        /*
+            {"delete":false,"weight":25,"orderedWeight":25,"jobId":"1","seriesId":"4019","shortName":"2018-СОМ-198A"}
+        */
+       
     }
 
     public function deleteJob($jid){
