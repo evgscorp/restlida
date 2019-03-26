@@ -34,7 +34,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     public function getSalesDataJobs()
     {
         $result=[];
-        $sql_jobs="SELECT * FROM jobs;";
+        $sql_jobs="SELECT j.*, sum(s.weight) as task_weight from jobs j 
+        LEFT OUTER join jobs_items s on s.job_id = j.job_id group by j.job_id LIMIT 1000";
         $this->utf8init();
         $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
        /* $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
