@@ -7,6 +7,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->db=$this->getDi()->getShared('db');
+        $this->utf8init();
     }
 
     public function getSentPallets($wid,$shipment="0")
