@@ -68,7 +68,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     public function  saveJob($data){
         $this->utf8init();
         $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
-        array(0, $data->customerId, 1, $data->weight, 1, $data->sdate, $data->priority ));
+        // andron 2019-03-26  location_id -> NULL, status -> 10
+		array(0, $data->customerId, $data->location_id?$data->location_id:null , $data->weight, 10, $data->sdate, $data->priority ));
     }
 
     public function saveJobItem($data){
