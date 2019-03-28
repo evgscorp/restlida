@@ -35,11 +35,12 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     {
         $result=[];
         $sql_jid='';
-        if ($jid>0) $sql_jid="AND j.job_id = ".$jid;
-        $sql_jobs="SELECT j.*, sum(s.weight) as task_weight from jobs j 
-        LEFT OUTER join jobs_items s on s.job_id = j.job_id $sql_jid group by j.job_id LIMIT 1000";
+        if ($jid>0) $sql_jobs="SELECT * from jobs WHERE job_id = ".$jid;
+        else $sql_jobs="SELECT j.*, sum(s.weight) as task_weight from jobs j 
+        LEFT OUTER join jobs_items s on s.job_id = j.job_id group by j.job_id LIMIT 1000";
         $this->utf8init();
         $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['jid'] =  $jid;
        /* $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         foreach ($result['users'] as $key=>$val) {
             $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
