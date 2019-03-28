@@ -83,6 +83,13 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
+	'route' => '/sales-job/{jid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesDataJob']
+];
+
+
+$routes[] = [
+	'method' => 'get',
 	'route' => '/listof-customers',
 	'handler' => [new \Controllers\SalesDataController(), 'getCustomersList']
 ];
