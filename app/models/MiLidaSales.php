@@ -35,9 +35,10 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     {
         $result=[];
         $sql_jid='';
-        if ($jid>0) $sql_jobs="SELECT * from jobs WHERE job_id = ".$jid;
-        else $sql_jobs="SELECT j.*, sum(s.weight) as task_weight from jobs j 
-        LEFT OUTER join jobs_items s on s.job_id = j.job_id group by j.job_id LIMIT 1000";
+        if ($jid>0) $sql_jobs="SELECT j.*, s.status_text FROM jobs j LEFT OUTER JOIN job_statuses s on s.status_id =  j.status  WHERE  j.job_id = ".$jid;
+        else $sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
+        LEFT OUTER join jobs_items s on s.job_id = j.job_id  
+        LEFT OUTER JOIN job_statuses st on st.status_id =  j.status  group by j.job_id LIMIT 1000";
         $this->utf8init();
         $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
         $result['jid'] =  $jid;
@@ -80,8 +81,11 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             if($data->jobId>0&&$data->seriesId>0){
                 $this->db->query("DELETE FROM `jobs_items` WHERE (`job_id` = '$data->jobId') and (`series_id` = '$data->seriesId')");
                 if ($data->delete!=true){
-                    $this->db->query("INSERT INTO jobs_items (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ( ?, ?, ?, ?, ?)", 
-                    array($data->jobId, $data->seriesId, $data->weight, $data->shortName, $data->orderedWeight ));
+// andron	
+//                   $this->db->query("INSERT INTO jobs_items (`job_id`, `series_id`, `weight`, `series_name`, `fact_weigh`) VALUES ( ?, ?, ?, ?, ?)", 
+//                   array($data->jobId, $data->seriesId, $data->weight, $data->shortName, $data->orderedWeight ));
+         	     $this->db->query("INSERT INTO jobs_items (`job_id`, `series_id`, `weight`, `series_name`) VALUES ( ?, ?, ?, ?)", 
+                     array($data->jobId, $data->seriesId, $data->orderedWeight, $data->shortName  ));
                 }
 
             }
