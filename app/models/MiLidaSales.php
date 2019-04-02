@@ -62,8 +62,9 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
     public function getJobItems($jid){
-        $sql = "SELECT i.*, s.ident_number ip FROM jobs_items i 
-        LEFT OUTER JOIN series s on s.series_id= i.series_id where i.job_id = $jid";
+        $sql = "SELECT i.*, ips.ip FROM jobs_items i 
+        LEFT OUTER JOIN series s on s.series_id= i.series_id
+        LEFT OUTER JOIN probes_ip ips on ips.id = s.ident_number where i.job_id = $jid";
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
