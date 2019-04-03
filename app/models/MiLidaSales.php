@@ -93,6 +93,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $data->priority, @ID, @xmsg);", \Phalcon\Db::FETCH_ASSOC, []);
         $sql_res="SELECT @xmsg as msg, @ID as jid";
         $result['res']=$this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
+        $result['sql']="CALL create_job($data->customerId, $data->weight, $data->location, $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', $data->priority, @ID, @xmsg);";
+ 
         return $result;
        // return $result['res']="CALL create_job($data->customerId, $data->weight, $data->location, $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', $data->priority);";
     }
