@@ -88,9 +88,12 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $result=[];
       //  $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
       //  array(0, $data->customerId, $data->location_id?$data->location_id:null , $data->weight, 10, $data->sdate, $data->priority ));
-        return $result['res']=$this->db->query("CALL create_job($data->customerId, $data->weight, $data->location, 
+       $this->db->query("CALL create_job($data->customerId, $data->weight, $data->location, 
         $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', 
         $data->priority, @ID, @xmsg);", \Phalcon\Db::FETCH_ASSOC, []);
+        $sql_res="SELECT @xmsg as msg, @ID as jid";
+        $result['res']=$this->db->fetchOne($sql_res, \Phalcon\Db::FETCH_ASSOC, []);
+        return $result;
        // return $result['res']="CALL create_job($data->customerId, $data->weight, $data->location, $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', $data->priority);";
     }
 
