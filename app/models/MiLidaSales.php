@@ -31,6 +31,15 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     }
 
+    public function getProductsList(){
+    
+        $sql = "SELECT * FROM products;";
+        $this->utf8init();
+        $result['products']=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
+        return $result;
+
+    }
+
     public function getSalesDataJobs($jid=0)
     {
         $result=[];

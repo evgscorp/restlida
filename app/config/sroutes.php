@@ -100,6 +100,12 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'getIPsList']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/listof-products',
+	'handler' => [new \Controllers\SalesDataController(), 'getProductsList']
+];
+
 
 $routes[] = [
 	'method' => 'get',

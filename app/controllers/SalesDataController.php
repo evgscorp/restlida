@@ -56,6 +56,16 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     }
 
+    public function getProductsList() {
+        
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getProductsList();
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);
+
+    }
+
     public function  getSalesSeriesData($lid){
         $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
