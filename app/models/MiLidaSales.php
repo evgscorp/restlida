@@ -66,7 +66,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     public function getSalesSeriesData($lid,$sname='', $ip = ''){
         $like="";
         if (strlen($sname)>0) $like.= "and series_name LIKE '%$sname%'"; 
-        if (strlen($ip)>0)  $like.= "and ip LIKE '%$ip%'"; 
+        if (strlen($ip)>0)  $like.= "and ip_name LIKE '%$ip%'"; 
         // andron
         //$sql ="SELECT * FROM sales_start where location_id = $lid $like limit 150";
 	$sql ="SELECT * FROM sales_series where location_id = $lid $like and avail > 0 limit 150";
