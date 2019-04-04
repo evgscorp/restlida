@@ -148,6 +148,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
  
+    
     private function utf8init()
     {
         $this->db->query("SET NAMES 'utf8'");
