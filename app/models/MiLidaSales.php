@@ -147,7 +147,6 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         }
         return $result;
     }
-
  
     private function utf8init()
     {
