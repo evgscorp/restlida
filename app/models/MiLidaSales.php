@@ -44,11 +44,13 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     {
         $result=[];
         $sql_jid='';
-        if ($jid>0) $sql_jobs="SELECT j.*, s.status_text, c.name_full FROM jobs j 
+        if ($jid>0) $sql_jobs="SELECT j.*, s.status_text, c.name_full, sum(t.weight) as ship_weight FROM jobs j 
         LEFT OUTER JOIN job_statuses s on s.status_id =  j.status  
         LEFT OUTER JOIN customers c on c.customer_id =  j.customer_id  
+        LEFT OUTER join jobs_items t on t.job_id = j.job_id  
         WHERE  j.job_id = ".$jid;
-        else $sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
+        else 
+	$sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
         LEFT OUTER join jobs_items s on s.job_id = j.job_id  
         LEFT OUTER JOIN job_statuses st on st.status_id =  j.status  group by j.job_id LIMIT 1000";
         $this->utf8init();
@@ -65,8 +67,9 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $like="";
         if (strlen($sname)>0) $like.= "and series_name LIKE '%$sname%'"; 
         if (strlen($ip)>0)  $like.= "and ip LIKE '%$ip%'"; 
-        
-        $sql ="SELECT * FROM sales_start where location_id = $lid $like limit 150";
+        // andron
+        //$sql ="SELECT * FROM sales_start where location_id = $lid $like limit 150";
+	$sql ="SELECT * FROM sales_series where location_id = $lid $like and avail > 0 limit 150";
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
