@@ -98,7 +98,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     public function saveDelivery($data){
         $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
                 array($data->invoice,$data->fullName,$data->invoice2, '-', $data->vehicle));
-        $shid=$this->db->lastInsertId();        
+        //$shid=$this->db->lastInsertId();  
+        $shid = $this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');      
         $this->db->query("CALL make_shipping($data->jid, $shid, @xmsg)");  
         return ['status'=>'ok', 'sql'=>"CALL make_shipping($data->jid, $shid, @xmsg)"];      
     }
