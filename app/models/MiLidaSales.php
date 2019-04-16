@@ -100,7 +100,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
                 array($data->invoice,$data->fullName,$data->invoice2, '-', $data->vehicle));
         $shid=$this->db->lastInsertId();        
         $this->db->query("CALL make_shipping($data->jid, $shid, @xmsg)");  
-        return ['status'=>'ok'];      
+        return ['status'=>'ok', 'sql'=>"CALL make_shipping($data->jid, $shid, @xmsg)"];      
     }
 
     public function  saveJob($data){
