@@ -50,7 +50,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             LEFT OUTER join jobs_items t on t.job_id = j.job_id  
             WHERE  j.job_id = ".$jid;
         else {
-            $where = "j.job_id >0 ";
+            $where = " WHERE j.job_id >0 ";
             if (!is_null($locationId)) $where.=" AND j.location_id = ".$locationId;
             if (!is_null($customerId)) $where.=" AND j.customer_id = ".$customerId;
             if (!is_null($statusId)) $where.=" AND j.status = ".$statusId;
