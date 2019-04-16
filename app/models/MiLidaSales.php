@@ -99,7 +99,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
                 array($data->invoice,$data->fullName,$data->invoice2, '-', $data->vehicle));
         $shid=$this->db->lastInsertId();        
-        $this->db->query("CALL make_shipping($data->jid, $shid)");  
+        $this->db->query("CALL make_shipping($data->jid, $shid, @xmsg)");  
         return ['status'=>'ok'];      
     }
 
