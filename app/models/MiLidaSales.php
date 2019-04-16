@@ -40,22 +40,30 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     }
 
-    public function getSalesDataJobs($jid=0)
+    public function getSalesDataJobs($jid=0, $locationId, $customerId, $statusId )
     {
         $result=[];
         $sql_jid='';
         if ($jid>0) $sql_jobs="SELECT j.*, s.status_text, c.name_full, sum(t.weight) as ship_weight FROM jobs j 
-        LEFT OUTER JOIN job_statuses s on s.status_id =  j.status  
-        LEFT OUTER JOIN customers c on c.customer_id =  j.customer_id  
-        LEFT OUTER join jobs_items t on t.job_id = j.job_id  
-        WHERE  j.job_id = ".$jid;
-        else 
-	$sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
-        LEFT OUTER join jobs_items s on s.job_id = j.job_id  
-        LEFT OUTER JOIN job_statuses st on st.status_id =  j.status  group by j.job_id LIMIT 1000";
-        $this->utf8init();
-        $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
-        $result['jid'] =  $jid;
+            LEFT OUTER JOIN job_statuses s on s.status_id =  j.status  
+            LEFT OUTER JOIN customers c on c.customer_id =  j.customer_id  
+            LEFT OUTER join jobs_items t on t.job_id = j.job_id  
+            WHERE  j.job_id = ".$jid;
+        else {
+            $where = "j.job_id >0 ";
+            if (!is_null($locationId)) $where.=" AND location_id = ".$locationId;
+            if (!is_null($customerId)) $where.=" AND customer_id = ".$customerId;
+            if (!is_null($statusId)) $where.=" AND status = ".$statusId;
+            
+            $sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
+            LEFT OUTER join jobs_items s on s.job_id = j.job_id  
+            LEFT OUTER JOIN job_statuses st on st.status_id =  j.status  group by j.job_id LIMIT 1000";
+
+        }
+            $this->utf8init();
+            $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+            $result['jid'] =  $jid;
+       
        /* $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
         foreach ($result['users'] as $key=>$val) {
             $result['users'][$key]['workshops']=$this->getUserWorkshops($val['uid']);
