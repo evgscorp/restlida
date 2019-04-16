@@ -40,7 +40,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     }
 
-    public function getSalesDataJobs($jid=0, $locationId, $customerId, $statusId )
+    public function getSalesDataJobs($jid=0, $locationI=null, $customerId=null, $statusId=null )
     {
         $result=[];
         $sql_jid='';
