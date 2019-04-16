@@ -51,13 +51,13 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             WHERE  j.job_id = ".$jid;
         else {
             $where = " WHERE j.job_id >0 ";
-            if (!is_null($locationId)) $where.=" AND j.location_id = ".$locationId;
-            if (!is_null($customerId)) $where.=" AND j.customer_id = ".$customerId;
-            if (!is_null($statusId)) $where.=" AND j.status = ".$statusId;
+            if (!is_null($locationId)&&$locationId!='null') $where.=" AND j.location_id = ".$locationId;
+            if (!is_null($customerId)&&$customerId!='null') $where.=" AND j.customer_id = ".$customerId;
+            if (!is_null($statusId)&&$statusId!='null') $where.=" AND j.status = ".$statusId;
             
             $sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
             LEFT OUTER join jobs_items s on s.job_id = j.job_id  
-            LEFT OUTER JOIN job_statuses st on st.status_id =  j.status  $where group by j.job_id LIMIT 1000";
+            LEFT OUTER JOIN job_statuses st on st.status_id =  j.status $where group by j.job_id LIMIT 1000";
 
         }
             $this->utf8init();
