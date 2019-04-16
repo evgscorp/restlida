@@ -61,8 +61,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
         }
             $this->utf8init();
-            //$result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
-            $result['sql'] =  $sql_jobs;
+            $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+            //$result['sql'] =  $sql_jobs;
             $result['jid'] =  $jid;
        
        /* $result['workshops']=$this->db->fetchAll($sql_workshops, \Phalcon\Db::FETCH_ASSOC, []);
