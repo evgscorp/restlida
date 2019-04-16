@@ -95,6 +95,14 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         array(0, $data->unp, $data->ctype, $data->shortName, $data->fullName, 1  ));
     }
 
+    public function saveDelivery($data){
+        $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
+                array($data->invoice,$data->fullName,$data->invoice2, '-', $data->vehicle));
+        $shid=$this->db->lastInsertId();        
+        $this->db->query("CALL make_shipping($data->job_id, $shid");  
+        return ['status'=>'ok'];      
+    }
+
     public function  saveJob($data){
         $this->utf8init();
         $result=[];
