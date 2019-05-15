@@ -5,6 +5,25 @@ namespace Controllers;
 
 class SalesDataController extends \Phalcon\Mvc\Controller
 {
+// REST for Warehouse terminals 
+   public function getJobsList($lid)
+    {
+	    $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getSalesJobsList($lid);
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);	
+    }
+    
+    public function getJobsItems ($lid)
+    {
+	    $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getSalesJobsItems($lid);
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);	
+    }
+// ----------------------------------
 
     public function getSalesDataJobs()
     {

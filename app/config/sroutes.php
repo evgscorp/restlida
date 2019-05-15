@@ -7,6 +7,21 @@ $routes=[];
 	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
 ];*/
 
+// REST for Warehouse terminals
+$routes[] = [
+	'method' => 'get',
+	'route' => '/jobs-list/{lid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getJobsList']
+];
+
+
+$routes[] = [
+	'method' => 'get',
+	'route' => '/jobs-items/{lid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getJobsItems']
+];
+
+// ---------------------------
 
 $routes[] = [
 	'method' => 'post',

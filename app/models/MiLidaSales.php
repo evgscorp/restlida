@@ -10,6 +10,40 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->utf8init();
     }
 
+    // REST for Warehouse terminals
+    public function getSalesJobsList($lid=21){
+        $result=[];
+        $sql_jobs="SELECT j.job_id, c.name_short as customer, j.plan_weight, j.plan_date  FROM fork.jobs j join customers c on j.customer_id = c.customer_id
+            WHERE j.`status` = 20 and j.location_id =" . $lid;
+        $this->utf8init();
+        $result['jobs']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
+        return $result;
+
+    }
+
+    public function getSalesJobsItems ($lid)
+    {
+        $result=[];
+        $sql="SELECT j.job_id, c.name_short as customer, j.plan_weight, j.plan_date  
+                FROM fork.jobs j 
+                join customers c on j.customer_id = c.customer_id
+            WHERE j.status = 20 and j.location_id = " . $lid;;
+        $this->utf8init();
+        $jobs=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
+        foreach ($jobs as $key=>$job){
+         
+            $sql1 = "SELECT p.label_id, pa.pallet_code, la.UUID, se.series_name FROM packages p
+            JOIN labels la on la.label_id = p.label_id
+            JOIN pallets pa on pa.pallet_id = p.pallet_id
+            JOIN series se on se.series_id = p.series_id
+            WHERE p.series_id IN 
+                (SELECT series_id FROM jobs_items WHERE job_id=" . $job['job_id'] .")";
+            $series['series']=$this->db->fetchAll($sql1, \Phalcon\Db::FETCH_ASSOC, []);    
+            $result["jobs"]["$key"] = array_merge_recursive($job, $series); 
+        }
+        return $result;
+    }
+    // -----------------------------------
     public function getSalesStorageLocations(){
         return ['data'=>$this->db->fetchAll("SELECT * FROM fork.locations where location_id >20 and  location_id <31", \Phalcon\Db::FETCH_ASSOC, [])];
     } 
@@ -101,6 +135,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         //$shid=$this->db->lastInsertId();  
         $shid = $this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');      
         $this->db->query("CALL make_shipping($data->jid, $shid, @xmsg)");  
+        $status = 50;
+        $this->db->query("UPDATE jobs SET status='$status' WHERE job_id=".$jid);
         return ['status'=>'ok', 'sql'=>"CALL make_shipping($data->jid, $shid, @xmsg)"];      
     }
 
