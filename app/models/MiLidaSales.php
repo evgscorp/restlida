@@ -74,7 +74,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     }
 
-    public function getSalesDataJobs($jid=0, $locationId=null, $customerId=null, $statusId=null )
+    public function getSalesDataJobs($jid=0, $locationId=null, $customerId=null, $statusId=null, $productId=null )
     {
         $result=[];
         $sql_jid='';
@@ -143,8 +143,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     public function  saveJob($data){
         $this->utf8init();
         $result=[];
-        $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`) VALUES ( ?, ?, ?, ?, ?, ?, ?)", 
-        array(0, $data->customerId, $data->location?$data->location:null , $data->weight, 10, $data->sdate, $data->priority ));
+        $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`, `product_id`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", 
+        array(0, $data->customerId, $data->location?$data->location:null , $data->weight, 10, $data->sdate, $data->priority, $data->product?$data->product:null ));
       /* $this->db->query("CALL create_job($data->customerId, $data->weight, $data->location, 
         $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', 
         $data->priority, @ID, @xmsg);", \Phalcon\Db::FETCH_ASSOC, []);
