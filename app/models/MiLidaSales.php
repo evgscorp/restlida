@@ -88,6 +88,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             if (!is_null($locationId)&&$locationId!='null') $where.=" AND j.location_id = ".$locationId;
             if (!is_null($customerId)&&$customerId!='null') $where.=" AND j.customer_id = ".$customerId;
             if (!is_null($statusId)&&$statusId!='null') $where.=" AND j.status = ".$statusId;
+            if (!is_null($productId)&&$productId!='null') $where.=" AND j.product_id = ".$productId;
+            
             
             $sql_jobs="SELECT j.*,  st.status_text, sum(s.weight) as task_weight from jobs j 
             LEFT OUTER join jobs_items s on s.job_id = j.job_id  
