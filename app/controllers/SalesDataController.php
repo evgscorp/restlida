@@ -19,9 +19,53 @@ class SalesDataController extends \Phalcon\Mvc\Controller
     {
 	    $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
-        $result = $MiLidaSalesModel->getSalesJobsItems($lid);
+        $result = $MiLidaSalesModel->getSalesJobsItems($lid, $request->get("job_id"));
         $Response = $this->allowCORS();
         return $Response->setJsonContent($result);	
+    }
+
+    public function getJobLock($jid)
+    {
+	    $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getSalesJobLock($jid);
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);	
+    }
+
+    public function getJobsItemsList(){
+        $jobs = [];
+        try {
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+            $data = $this->request->getJsonRawBody();
+            foreach ($data->rows as $row){
+                if($row->job_id){
+                    $jobs[] = $row->job_id;
+                }
+            }
+            $lid = 0; // Склад пофигу, передпем список заданий
+            $res = $MiLidaSalesModel->getSalesJobsItems($lid, $jobs);
+	
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
+    }
+
+    public function saveJobsResult()
+    {
+        $res = 'error';
+		try {
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+			$data = $this->request->getJsonRawBody();
+			$res = $MiLidaSalesModel->postJobsResults($data);
+	
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
     }
 // ----------------------------------
 

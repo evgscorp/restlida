@@ -21,13 +21,26 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     }
 
-    public function getSalesJobsItems ($lid)
+    public function getSalesJobsItems ($lid, $jid=null)
     {
+        /* -- По дефолту $lid>0 => отдаем ВСЕ задания по ID склада
+         * --- Если передан единственный job_id, => отдаем только его
+         * --- Если передан массив job_id, => ораничиваем WHERE IN (...) 
+         */
         $result=[];
         $sql="SELECT j.job_id, c.name_short as customer, j.plan_weight, j.plan_date  
                 FROM fork.jobs j 
                 join customers c on j.customer_id = c.customer_id
-            WHERE j.status = 20 and j.location_id = " . $lid;;
+            WHERE j.status = 20 ";
+        if ($lid>0){
+            $sql .= " AND j.location_id = " . $lid;
+        }
+        if (is_array($jid)){
+            $sql .= " AND j.job_id IN (". implode(",", $jid).")";
+        } elseif (!empty($jid)){
+            $sql .= " AND j.job_id =" . $jid;
+        }
+
         $this->utf8init();
         $jobs=$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
         foreach ($jobs as $key=>$job){
@@ -41,6 +54,46 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             $series['series']=$this->db->fetchAll($sql1, \Phalcon\Db::FETCH_ASSOC, []);    
             $result["jobs"]["$key"] = array_merge_recursive($job, $series); 
         }
+        return $result;
+    }
+    
+    public function getSalesJobLock($jid)
+    {
+        $this->db->query("UPDATE jobs SET `status` = 30 WHERE job_id = ?", array($jid));
+        return ['job'=>$this->db->fetchAll("SELECT `status` FROM jobs WHERE job_id = ?",\Phalcon\Db::FETCH_ASSOC, array($jid) )];
+    }
+
+    public function postJobsResults ($data)
+    {
+        $p = 0;
+        $l = 0;
+        $jobs = [];
+        foreach ($data->rows as $row){
+            if ($row->jobs_id) {
+                if (!in_array($row->jobs_id,$jobs)){
+                    $jobs[] = $row->jobs_id;
+                }
+            
+               if ($row->label_id) {
+                    $this->db->query("INSERT INTO jobs_results (job_id, label_id) SELECT ?, label_id FROM labels WHERE UUID=?",
+                    array($row->jobs_id, $row->label_id));
+                    $l = $l + 1;
+                }
+                if ($row->pallet_id) {
+                    $this->db->query("INSERT INTO jobs_results (job_id, label_id) SELECT ?, label_id FROM packages WHERE pallet_id in
+                    (SELECT pallet_id FROM pallets WHERE pallet_code = ?)",
+                    array($row->jobs_id, $row->pallet_id) );
+                    $p = $p + 1;
+                }
+            }
+        }
+
+        foreach ($jobs as $job){
+            $this->db->query("UPDATE jobs SET `status` = 40 WHERE job_id = ?", array($job));
+        }
+        $result['pallet'] = $p;
+        $result['labels'] = $l;
+        $result['jobs'] = $jobs;
         return $result;
     }
     // -----------------------------------
@@ -132,14 +185,19 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
     public function saveDelivery($data){
-        $this->db->query("INSERT INTO shipments (doc_number, client_name, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?, ?)", 
-                array($data->invoice,$data->fullName,$data->invoice2, '-', $data->vehicle));
-        //$shid=$this->db->lastInsertId();  
-        $shid = $this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');      
-        $this->db->query("CALL make_shipping($data->jid, $shid, @xmsg)");  
-        $status = 50;
-        $this->db->query("UPDATE jobs SET status='$status' WHERE job_id=".$jid);
-        return ['status'=>'ok', 'sql'=>"CALL make_shipping($data->jid, $shid, @xmsg)"];      
+		
+		$this->db->query("INSERT INTO shipments (doc_number, doc_number2, driver_name, vh_number) VALUES ( ?, ?, ?, ?)", 
+                   array($data->invoice,$data->invoice2, $data->fullName, $data->vehicle));
+		$shid = $this->db->fetchColumn("SELECT min(ship_id) ship_id FROM shipments", [], 'ship_id');      
+		$this->db->query("CALL make_shipping( $data->jid, $shid, @msg)");
+		$st = $this->db->fetchOne("SELECT @msg as msg", \Phalcon\Db::FETCH_ASSOC, []);
+		if ($st > 0) {
+			$rt = ['status' => 'ok'];
+		} else {
+			$rt = ['status' => 'error'];
+		}
+	
+	return $rt;      
     }
 
     public function  saveJob($data){

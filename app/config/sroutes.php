@@ -7,13 +7,13 @@ $routes=[];
 	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
 ];*/
 
-// REST for Warehouse terminals
+// ******* REST for Warehouse terminals ***********************************
+
 $routes[] = [
 	'method' => 'get',
 	'route' => '/jobs-list/{lid:[0-9]+}',
 	'handler' => [new \Controllers\SalesDataController(), 'getJobsList']
 ];
-
 
 $routes[] = [
 	'method' => 'get',
@@ -21,7 +21,30 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'getJobsItems']
 ];
 
-// ---------------------------
+$routes[] = [
+	'method' => 'get',
+	'route' => '/job-lock/{jid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getJobLock']
+];
+
+$routes[] = [
+	'method' => 'post',
+	'route' => '/jobs-items-list',
+	'handler' => [new \Controllers\SalesDataController(), 'getJobsItemsList']
+];
+
+$routes[] = [
+	'method' => 'post',
+	'route' => '/jobs-result',
+	'handler' => [new \Controllers\SalesDataController(), 'saveJobsResult']
+];
+
+$routes[] = [
+	'method' => 'options',
+	'route' => '/jobs-result',
+	'handler' => [new \Controllers\SalesDataController(), 'option']
+];
+// ******* --------------------------- **********************************
 
 $routes[] = [
 	'method' => 'post',
