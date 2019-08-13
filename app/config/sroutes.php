@@ -6,6 +6,7 @@ $routes=[];
 	'route' => '/sent-series/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
 ];*/
+
 $routes[] = [
 	'method' => 'get',
 	'route' => '/sales-loginform-data',
