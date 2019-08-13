@@ -369,10 +369,11 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $this->utf8init();
         $sdate=date("Y-m-d",intval($stdate)).' 00:00:00';
         $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
-        $wid= intval($wid)+10;
-        //$sql="SELECT * FROM fork.shipments order by ship_stmp desc limit 100";
-        $sql= "SELECT * FROM overwiew_shipment_2 where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and ship_from = $wid";
-      return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
+        //$wid= intval($wid)+10;
+        $sql= "SELECT * FROM overwiew_shipment_2 
+                where ship_stmp >= '$sdate' and ship_stmp <=  '$edate' and ( ship_from = $wid OR ship_from IN
+                (SELECT location_id FROM view_rules WHERE workshop_id = {$wid} and operation = 'ship'))";
+        return $this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, []);
     }
 
 
