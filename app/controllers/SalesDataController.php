@@ -14,6 +14,14 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         $Response = $this->allowCORS();
         return $Response->setJsonContent($result);	
     }
+
+    public function getSalesloginFormData(){
+        $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+		$result = $MiLidaSalesModel->getSalesloginFormData();
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent($result);
+    }
     
     public function getJobsItems ($lid)
     {

@@ -6,9 +6,16 @@ $routes=[];
 	'route' => '/sent-series/{wid:[0-9]+}',
 	'handler' => [new \Controllers\CommonDataController(), 'updateSeries']
 ];*/
-
 // ******* REST for Warehouse terminals ***********************************
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/sales-loginform-data',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesloginFormData']
+];
+
+
+// REST for Warehouse terminals
 $routes[] = [
 	'method' => 'get',
 	'route' => '/jobs-list/{lid:[0-9]+}',
@@ -118,7 +125,7 @@ $routes[] = [
 	'route' => '/sales-series-data/{lid:[0-9]+}',
 	'handler' => [new \Controllers\SalesDataController(), 'getSalesSeriesData']
 ];
-http://172.16.130.180/restlida/sales-job-items/1?token=V0GKFDzK38sYb8StQRcEkGDeU3CXUZ01BPXxDGZX&sname=%D0%A1%D0%9E%D0%9C
+//http://172.16.130.180/restlida/sales-job-items/1?token=V0GKFDzK38sYb8StQRcEkGDeU3CXUZ01BPXxDGZX&sname=%D0%A1%D0%9E%D0%9C
 $routes[] = [
 	'method' => 'get',
 	'route' => '/sales-job-items/{jid:[0-9]+}',
