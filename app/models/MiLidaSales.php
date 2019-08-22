@@ -181,11 +181,11 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     }
 
     public function getShipmentReport($days=31, $location='Склад КЦ', $customer=0){
-        $cfilter = "customer_id = $customer";
+        $cfilter = "customer_id = $customer and ";
         if ($customer<1){
             $cfilter = "";
         }
-        $sql = "SELECT *  FROM fork.shipment_report where $cfilter and ship_stmp > CURDATE() - $days and location_short= $location";
+        $sql = "SELECT *  FROM fork.shipment_report where $cfilter ship_stmp > CURDATE() - $days and location_short= $location";
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
