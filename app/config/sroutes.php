@@ -178,7 +178,7 @@ $routes[] = [
 
 $routes[] = [
 	'method' => 'get',
-	'route' => '/shipment_report',
+	'route' => '/shipment-report',
 	'handler' => [new \Controllers\SalesDataController(), 'getShipmentReport']
 ];
 
