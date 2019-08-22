@@ -191,7 +191,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         }
         
         $sql = "SELECT *  FROM fork.shipment_report where $cfilter ship_stmp > CURDATE() - $days $lfilter";
-        return ['sql'=>$sql];
+        //return ['sql'=>$sql];
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
