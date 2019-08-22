@@ -164,12 +164,24 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'getProductsList']
 ];
 
+$routes[] = [
+	'method' => 'get',
+	'route' => '/sales-storage-locations',
+	'handler' => [new \Controllers\SalesDataController(), 'getSalesStorageLocations']
+];
 
 $routes[] = [
 	'method' => 'get',
 	'route' => '/sales-storage-locations',
 	'handler' => [new \Controllers\SalesDataController(), 'getSalesStorageLocations']
 ];
+
+$routes[] = [
+	'method' => 'get',
+	'route' => '/shipment_report',
+	'handler' => [new \Controllers\SalesDataController(), 'getShipmentReport']
+];
+
 
 
 return $routes;
