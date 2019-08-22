@@ -189,8 +189,9 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         if (strlen($location)<2){
             $lfilter = "";
         }
-            
+        
         $sql = "SELECT *  FROM fork.shipment_report where $cfilter ship_stmp > CURDATE() - $days $lfilter";
+        return ['sql'=>$sql];
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
