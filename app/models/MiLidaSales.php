@@ -182,7 +182,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     public function getShipmentReport($days=31, $location='Склад КЦ', $customer=0){
         $cfilter = "customer_id = $customer and ";
-        $lfilter = "and location_short= $location";
+        $lfilter = "and location_short = '$location'";
         if ($customer<1){
             $cfilter = "";
         }
