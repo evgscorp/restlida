@@ -58,7 +58,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
 		}
 		$Response = $this->allowCORS();
-		return $Response->setJsonContent(['status' => $res]);
+		return $Response->setJsonContent($res);
     }
 
     public function saveJobsResult()
