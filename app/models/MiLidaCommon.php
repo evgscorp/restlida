@@ -89,7 +89,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $result['shipmentStatus']=$shipment;
         $result['shipment_pallets_24h']=$this->db->fetchOne("SELECT count(*)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
         $result['shipment_packages_24h']=$this->db->fetchOne("SELECT sum(total)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
-        $result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
+        //$result['shipment_weight_24h']=$this->db->fetchOne("SELECT FORMAT(sum(total_weight)/1000,2)  as val FROM overwiew_shipment where ship_stmp > NOW() - INTERVAL 1 DAY and workshop_id = :lid", \Phalcon\Db::FETCH_ASSOC, ['lid'=>$wid]);
        
         return $result;
     }

@@ -41,6 +41,16 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         return $Response->setJsonContent($result);	
     }
 
+    public function getJobUnLock($jid)
+    {
+	    $request = new \Phalcon\Http\Request();
+        $MiLidaSalesModel = new \Models\MiLidaSales();
+        $result = $MiLidaSalesModel->getSalesJobUnLock($jid);
+        $Response = $this->allowCORS();
+        return $Response->setJsonContent($result);	
+    }
+
+
     public function getJobsItemsList(){
         $jobs = [];
         try {
@@ -51,9 +61,12 @@ class SalesDataController extends \Phalcon\Mvc\Controller
                     $jobs[] = $row->job_id;
                 }
             }
-            $lid = 0; // Склад пофигу, передпем список заданий
+            $lid = 0; // Склад пофигу, передаем список заданий
             $res = $MiLidaSalesModel->getSalesJobsItems($lid, $jobs);
-	
+            // меняем статус задания
+            foreach ($jobs as $job_id){
+	            $x = $MiLidaSalesModel->getSalesJobLock($job_id);
+            }
 		} catch (\Exception $e) {
 			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
 		}
@@ -69,6 +82,29 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 			$data = $this->request->getJsonRawBody();
 			$res = $MiLidaSalesModel->postJobsResults($data);
 	
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent(['status' => $res]);
+    }
+
+    public function movePallets(){
+        $res = 'error';
+        error_log("Action movePallet");
+		try {
+            $MiLidaCommonModel = new \Models\MiLidaCommon();
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+            $data = $this->request->getJsonRawBody();
+            if (!$data){
+                error_log("Incorrect JSON input");
+            }
+            $user = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+            if ( !empty($user['uid'])){
+                 $res = $MiLidaSalesModel->movePallets($data, $user['uid']);
+                } else {
+                 $res = $MiLidaSalesModel->movePallets($data, 'null');    
+                }
 		} catch (\Exception $e) {
 			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
 		}

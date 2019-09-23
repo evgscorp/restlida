@@ -82,26 +82,33 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['job'=>$this->db->fetchAll("SELECT `status` FROM jobs WHERE job_id = ?",\Phalcon\Db::FETCH_ASSOC, array($jid) )];
     }
 
+    public function getSalesJobUnLock($jid)
+    {
+        $this->db->query("UPDATE jobs SET `status` = 20 WHERE job_id = ?", array($jid));
+        return ['job'=>$this->db->fetchAll("SELECT `status` FROM jobs WHERE job_id = ?",\Phalcon\Db::FETCH_ASSOC, array($jid) )];
+    }
+
+
     public function postJobsResults ($data)
     {
         $p = 0;
         $l = 0;
         $jobs = [];
         foreach ($data->rows as $row){
-            if ($row->jobs_id) {
-                if (!in_array($row->jobs_id,$jobs)){
-                    $jobs[] = $row->jobs_id;
+            if ($row->job_id) {
+                if (!in_array($row->job_id,$jobs)){
+                    $jobs[] = $row->job_id;
                 }
             
-               if ($row->label_id) {
+               if ($row->UUID) {
                     $this->db->query("INSERT INTO jobs_results (job_id, label_id) SELECT ?, label_id FROM labels WHERE UUID=?",
-                    array($row->jobs_id, $row->label_id));
+                    array($row->job_id, $row->UUID));
                     $l = $l + 1;
                 }
-                if ($row->pallet_id) {
+                if ($row->pallet_code) {
                     $this->db->query("INSERT INTO jobs_results (job_id, label_id) SELECT ?, label_id FROM packages WHERE pallet_id in
                     (SELECT pallet_id FROM pallets WHERE pallet_code = ?)",
-                    array($row->jobs_id, $row->pallet_id) );
+                    array($row->job_id, $row->pallet_code) );
                     $p = $p + 1;
                 }
             }
@@ -115,6 +122,21 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $result['jobs'] = $jobs;
         return $result;
     }
+    public function movePallets($data, $uid){
+        $pallets = 0;
+        foreach ($data->rows as $row){
+            if ($row->pallet_id && $row->location_id) {
+                $sql = "CALL move_pallet_ii($row->pallet_id, $row->location_id, $uid);";
+                $this->db->query($sql);        
+                $pallets++;   
+            } else {
+                error_log("Incorrect Tag supplied to movePallets");
+                error_log( print_r($row), true);
+            }
+        }
+        return ["pallets" => $pallets];
+    }
+
     // -----------------------------------
     public function getSalesStorageLocations(){
         return ['data'=>$this->db->fetchAll("SELECT * FROM fork.locations where location_id >20 and  location_id <31", \Phalcon\Db::FETCH_ASSOC, [])];

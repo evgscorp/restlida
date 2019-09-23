@@ -35,6 +35,12 @@ $routes[] = [
 ];
 
 $routes[] = [
+	'method' => 'get',
+	'route' => '/job-unlock/{jid:[0-9]+}',
+	'handler' => [new \Controllers\SalesDataController(), 'getJobUnLock']
+];
+
+$routes[] = [
 	'method' => 'post',
 	'route' => '/jobs-items-list',
 	'handler' => [new \Controllers\SalesDataController(), 'getJobsItemsList']
@@ -50,6 +56,12 @@ $routes[] = [
 	'method' => 'options',
 	'route' => '/jobs-result',
 	'handler' => [new \Controllers\SalesDataController(), 'option']
+];
+
+$routes[] = [
+	'method' => 'post',
+	'route'  => '/move-pallets',
+	'handler'=> [new \Controllers\SalesDataController(), 'movePallets']
 ];
 // ******* --------------------------- **********************************
 
