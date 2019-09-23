@@ -217,10 +217,12 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
 
-    public function getSalesSeriesData($lid,$sname='', $ip = ''){
+    public function getSalesSeriesData($lid,$sname='', $ip = '',$jid = "0"){
         $like="";
         if (strlen($sname)>0) $like.= "and series_name LIKE '%$sname%'"; 
         if (strlen($ip)>0)  $like.= "and ip = $ip"; 
+        if (intval($jid) > 0) $like.= " and product_id = (SELECT product_id FROM jobs where job_id = $jid)";
+        //SELECT product_id FROM jobs where job_id = 48
         // andron
         //$sql ="SELECT * FROM sales_start where location_id = $lid $like limit 150";
 	$sql ="SELECT * FROM sales_series where location_id = $lid $like and avail > 0 limit 150";

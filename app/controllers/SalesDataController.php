@@ -178,7 +178,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
         $Response = $this->allowCORS();
-		return $Response->setJsonContent($MiLidaSalesModel->getSalesSeriesData($lid,$request->get("sname"),$request->get("ip")));
+		return $Response->setJsonContent($MiLidaSalesModel->getSalesSeriesData($lid,$request->get("sname"),$request->get("ip"),$request->get("jid")));
     }
 
     public function getShipmentReport(){
