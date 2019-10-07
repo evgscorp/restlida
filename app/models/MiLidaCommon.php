@@ -405,7 +405,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
 
     public function getShiftSuggestionsInfo($wid){
         $result=$this->db->fetchOne("SELECT * FROM groups where workshop_id=:wid order by timestmp desc LIMIT 1 ", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
-        $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount, weight, product_id, series_id
+        $result['last_serises_data']=$this->db->fetchOne("SELECT series_num, series_year, amount,  (SELECT max(pallet_size) FROM pallets_config where workshop_id=1) amountp, weight, product_id, series_id
           FROM series where workshop_id=:wid and series_id = (select max(series_id) from series where workshop_id=:wid and is_manual<1 )", \Phalcon\Db::FETCH_ASSOC, ['wid'=>$wid]);
         return $result;
     }
