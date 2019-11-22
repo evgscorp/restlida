@@ -202,7 +202,10 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return $result;
     }
 
-    public function getShipmentReport($days=31, $location='Склад КЦ', $customer=0){
+    public function getShipmentReport($stdate, $etdate, $location='Склад КЦ', $customer=0){
+        $sdate=date("Y-m-d",intval($stdate)).' 00:00:00';
+        $edate=date("Y-m-d",intval($etdate)).' 23:59:59';
+      
         $cfilter = "customer_id = $customer and ";
         $lfilter = "and location_short = '$location'";
         if ($customer<1){
@@ -212,7 +215,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
             $lfilter = "";
         }
         
-        $sql = "SELECT *  FROM fork.shipment_report where $cfilter ship_stmp > CURDATE() - INTERVAL $days DAY $lfilter";
+       // $sql = "SELECT *  FROM fork.shipment_report where $cfilter ship_stmp > CURDATE() - INTERVAL $days DAY $lfilter";
+        $sql = "SELECT *  FROM fork.shipment_report where $cfilter  ship_stmp >= '$sdate' and ship_stmp <=  '$edate' $lfilter";
         //return ['sql'=>$sql];
         return ['data'=>$this->db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [])];
     }
