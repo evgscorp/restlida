@@ -142,9 +142,9 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['data'=>$this->db->fetchAll("SELECT * FROM fork.locations where location_id >20 and  location_id <31", \Phalcon\Db::FETCH_ASSOC, [])];
     } 
 
-    public function getCustomersList(){
+    public function getCustomersList($valid = 1){
         $result=[];
-        $sql_jobs="SELECT * FROM customers";
+        $sql_jobs="SELECT * FROM customers where valid = $valid";
         $this->utf8init();
         $result['customers']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
