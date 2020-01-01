@@ -144,8 +144,8 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     public function getCustomersList($valid = 1){
         $result=[];
-        $sql_jobs="SELECT * FROM customers where valid = 1";
-        if ($valid == 0)   $sql_jobs="SELECT * FROM customers";
+        $sql_jobs="SELECT * FROM customers where valid = $valid";
+       // if ($valid == 0)   $sql_jobs="SELECT * FROM customers";
         $this->utf8init();
         $result['customers']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
