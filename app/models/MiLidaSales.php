@@ -249,7 +249,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 
     public function  updateCustomer($data){
         $this->utf8init();
-        $this->db->query("UPDATE customers SET  `unp` = $data->unp, `type`= '$data->ctype', `name_short` = '$data->shortName', `name_full` = '$data->fullName', `valid` =  $data->valid WHERE customer_id = ?", array($data->id));
+        $this->db->query("UPDATE customers SET  `unp` = $data->unp, `type`= '$data->ctype', `name_short` = '$data->shortName', `name_full` = '$data->fullName', `valid` =  $data->valid WHERE customer_id = ?", array(intval($data->id)));
     }
 
 
