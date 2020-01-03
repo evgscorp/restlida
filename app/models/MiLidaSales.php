@@ -251,7 +251,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         $this->utf8init();
        // if (intval($data->valid) == 0) $this->db->query("UPDATE customers SET valid=0 WHERE customer_id=$data->id");
        // else {
-        $this->db->query("UPDATE customers SET  `unp` = $data->unp, `type`= '$data->ctype', `name_short` = '$data->shortName', `name_full` = '$data->fullName', `valid` =  $data->valid WHERE customer_id = $data->id", array());
+        $this->db->query("UPDATE customers SET  `unp` = $data->unp, `type`= '$data->ctype', `name_short` = '$data->shortName', `name_full` = '$data->fullName', `valid` =  $data->valid WHERE customer_id = $data->customer_id", array());
        // }    
     }
 
