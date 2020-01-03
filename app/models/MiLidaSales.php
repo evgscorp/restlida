@@ -246,6 +246,14 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         array(0, $data->unp, $data->ctype, $data->shortName, $data->fullName, 1  ));
     }
 
+    
+    public function  updateCustomer($data){
+        $this->utf8init();
+        if ($data->valid == 0) $this->db->query("UPDATE customers SET valid=0 WHERE customer_id=$data->customer_id");
+        else 
+        $this->db->query("UPDATE customers SET unp =  '$data->unp', type = '$data->ctype', name_short = '$data->shortName', name_full = '$data->fullName' WHERE customer_id=$data->customer_id");
+    }
+
     public function saveDelivery($data){
 		
 		$this->db->query("INSERT INTO shipments (doc_number, doc_number2, driver_name, vh_number, job_id ) VALUES ( ?, ?, ?, ?, ?)", 

@@ -216,6 +216,23 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     }
 
+    public function updateCustomer()
+	{
+		$res = 'error';
+		try {
+            $MiLidaSalesModel = new \Models\MiLidaSales();
+			$data = $this->request->getJsonRawBody();
+			$MiLidaSalesModel->updateCustomer($data);
+			$res = 'ok';
+			
+		} catch (\Exception $e) {
+			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
+		}
+		$Response = $this->allowCORS();
+		return $Response->setJsonContent($res);
+
+    }
+
     public function saveDelivery(){
 
         $res = 'error';

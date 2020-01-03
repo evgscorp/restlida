@@ -71,6 +71,12 @@ $routes[] = [
 	'handler' => [new \Controllers\SalesDataController(), 'saveCustomer']
 ];
 
+$routes[] = [
+	'method' => 'post',
+	'route' => '/update-customer',
+	'handler' => [new \Controllers\SalesDataController(), 'updateCustomer']
+];
+
 
 $routes[] = [
 	'method' => 'options',
