@@ -142,9 +142,10 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['data'=>$this->db->fetchAll("SELECT * FROM fork.locations where location_id >20 and  location_id <31", \Phalcon\Db::FETCH_ASSOC, [])];
     } 
 
-    public function getCustomersList(){
+    public function getCustomersList($valid = 1){
         $result=[];
-        $sql_jobs="SELECT * FROM customers";
+        $sql_jobs="SELECT * FROM customers where valid = $valid";
+        if (intval($valid) == 0)   $sql_jobs="SELECT * FROM customers";
         $this->utf8init();
         $result['customers']=$this->db->fetchAll($sql_jobs, \Phalcon\Db::FETCH_ASSOC, []);
         return $result;
@@ -246,13 +247,15 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         array(0, $data->unp, $data->ctype, $data->shortName, $data->fullName, 1  ));
     }
 
-    
     public function  updateCustomer($data){
         $this->utf8init();
-        if ($data->valid == 0) $this->db->query("UPDATE customers SET valid=0 WHERE customer_id=$data->customer_id");
-        else 
-        $this->db->query("UPDATE customers SET unp =  '$data->unp', type = '$data->ctype', name_short = '$data->shortName', name_full = '$data->fullName' WHERE customer_id=$data->customer_id");
+       // if (intval($data->valid) == 0) $this->db->query("UPDATE customers SET valid=0 WHERE customer_id=$data->id");
+       // else {
+        $this->db->query("UPDATE customers SET  `unp` = $data->unp, `type`= '$data->ctype', `name_short` = '$data->shortName', `name_full` = '$data->fullName', `valid` =  $data->valid WHERE customer_id = $data->id", array());
+       // }    
     }
+
+
 
     public function saveDelivery($data){
 		

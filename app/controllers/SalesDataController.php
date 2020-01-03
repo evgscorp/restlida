@@ -147,7 +147,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
     {
         $request = new \Phalcon\Http\Request();
         $MiLidaSalesModel = new \Models\MiLidaSales();
-        $result = $MiLidaSalesModel->getCustomersList();
+        $result = $MiLidaSalesModel->getCustomersList($request->get("valid"));
         $Response = $this->allowCORS();
         return $Response->setJsonContent($result);
 
