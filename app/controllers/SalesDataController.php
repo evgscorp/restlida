@@ -256,7 +256,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 		try {
             $MiLidaSalesModel = new \Models\MiLidaSales();
             $MiLidaCommonModel = new \Models\MiLidaCommon();
-			$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+			$UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 			$data = $this->request->getJsonRawBody();
 			$res = $MiLidaSalesModel->saveJob($data,$UserInfo['uname']);
 			
@@ -298,7 +298,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         $MiLidaSalesModel = new \Models\MiLidaSales();
         $request = new \Phalcon\Http\Request();
         $MiLidaCommonModel = new \Models\MiLidaCommon();
-        $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
+        $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 		$this->allowCORS($this->response);
 		$Response = $this->allowCORS();
 		return $Response->setJsonContent($MiLidaSalesModel->confirmJob($jid, $request->get("reverse"), $UserInfo['uname']));
