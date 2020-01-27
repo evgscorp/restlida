@@ -302,8 +302,8 @@ class SalesDataController extends \Phalcon\Mvc\Controller
         $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 		$this->allowCORS($this->response);
 		$Response = $this->allowCORS();
-        //return $Response->setJsonContent($MiLidaSalesModel->confirmJob($jid, $request->get("reverse"), $UserInfo['uname']));
-        return $Response->setJsonContent($UserInfo);
+        return $Response->setJsonContent($MiLidaSalesModel->confirmJob($jid, $request->get("reverse"), $UserInfo['uname']));
+        //return $Response->setJsonContent($UserInfo);
     }
 
     public function allowCORS()
