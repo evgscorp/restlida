@@ -249,13 +249,16 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     }
     
+    
     public function saveJob()
 	{
 		$res = 'error';
 		try {
             $MiLidaSalesModel = new \Models\MiLidaSales();
+            $MiLidaCommonModel = new \Models\MiLidaCommon();
+			$UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 			$data = $this->request->getJsonRawBody();
-			$res = $MiLidaSalesModel->saveJob($data);
+			$res = $MiLidaSalesModel->saveJob($data,$UserInfo['uname']);
 			
 		} catch (\Exception $e) {
 			$res = 'Error: ' . get_class($e) . ": " . $e->getMessage();
@@ -293,10 +296,12 @@ class SalesDataController extends \Phalcon\Mvc\Controller
 
     public function confirmJob($jid){
         $MiLidaSalesModel = new \Models\MiLidaSales();
-		$request = new \Phalcon\Http\Request();
+        $request = new \Phalcon\Http\Request();
+        $MiLidaCommonModel = new \Models\MiLidaCommon();
+        $UserInfo = $MiLidaCommonModel->getUserInfo($this->resource->getAccessToken());
 		$this->allowCORS($this->response);
 		$Response = $this->allowCORS();
-		return $Response->setJsonContent( $MiLidaSalesModel->confirmJob($jid, $request->get("reverse")));
+		return $Response->setJsonContent($MiLidaSalesModel->confirmJob($jid, $request->get("reverse"), $UserInfo['uname']));
     }
 
     public function allowCORS()

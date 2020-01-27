@@ -728,13 +728,17 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         $result=$this->db->fetchOne("SELECT * FROM active_user_sessions where access_token = :atoken", \Phalcon\Db::FETCH_ASSOC, ['atoken'=>$token]);
         $roles=[];
         $workshops=[];
+        $name = "";
 
         if ($result['uid']>0) {
             $roles=$this->getUserRoles($result['uid']);
             $workshops=$this->getUserWorkshops($result['uid']);
+            $resname = $this->db->fetchOne("SELECT concat(second_name, ' ', first_name) uname FROM fork.users where uid = :userid ",\Phalcon\Db::FETCH_ASSOC,['userid'=>$result['uid']]);
+            $name = $name['uname'];
         }
-        $result['roles']=$roles;
-        $result['workshops']=$workshops;
+        $result['roles'] = $roles;
+        $result['workshops'] = $workshops;
+        $result['uname'] = $name;
 
         return $result;
     }

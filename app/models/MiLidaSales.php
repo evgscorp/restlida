@@ -273,11 +273,11 @@ class MiLidaSales extends \Phalcon\Mvc\Model
 	return $rt;      
     }
 
-    public function  saveJob($data){
+    public function  saveJob($data,$uname){
         $this->utf8init();
         $result=[];
-        $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`, `product_id`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", 
-        array(0, $data->customerId, $data->location?$data->location:null , $data->weight, 10, $data->sdate, $data->priority, $data->product?$data->product:null ));
+        $this->db->query("INSERT INTO jobs (`job_id`, `customer_id`, `location_id`, `plan_weight`, `status`, `plan_date`, `rank`, `product_id`,`creation_user`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", 
+        array(0, $data->customerId, $data->location?$data->location:null , $data->weight, 10, $data->sdate, $data->priority, $data->product?$data->product:null, $uname));
       /* $this->db->query("CALL create_job($data->customerId, $data->weight, $data->location, 
         $data->product, $data->ip, $data->precise, '$data->sstdate', '$data->sedate', '$data->sdate', 
         $data->priority, @ID, @xmsg);", \Phalcon\Db::FETCH_ASSOC, []);
@@ -315,11 +315,11 @@ class MiLidaSales extends \Phalcon\Mvc\Model
         return ['ok'];
     }
 
-    public function  confirmJob($jid, $reverse=0){
+    public function  confirmJob($jid, $reverse=0, $uname=""){
         $status = 20;
         if ($reverse>0) $status = 10;
         if ($jid>0)
-        $this->db->query("UPDATE jobs SET status='$status' WHERE job_id=".$jid);
+        $this->db->query("UPDATE jobs SET status='$status', creation_user = '$uname' WHERE job_id=".$jid);
         return ['ok'];
 
     }
