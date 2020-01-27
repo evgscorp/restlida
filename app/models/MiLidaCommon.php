@@ -733,7 +733,7 @@ class MiLidaCommon extends \Phalcon\Mvc\Model
         if ($result['uid']>0) {
             $roles=$this->getUserRoles($result['uid']);
             $workshops=$this->getUserWorkshops($result['uid']);
-            $resname = $this->db->fetchOne("SELECT concat(second_name, ' ', first_name) uname FROM fork.users where uid = :userid ",\Phalcon\Db::FETCH_ASSOC,['userid'=>$result['uid']]);
+            $resname = $this->db->fetchOne("SELECT concat(first_name, ' ', second_name) uname FROM fork.users where uid = :userid ",\Phalcon\Db::FETCH_ASSOC,['userid'=>$result['uid']]);
             $name = $resname['uname'];
         }
         $result['roles'] = $roles;
