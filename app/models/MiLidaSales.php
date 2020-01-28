@@ -173,7 +173,7 @@ class MiLidaSales extends \Phalcon\Mvc\Model
     {
         $result=[];
         $sql_jid='';
-        if ($jid>0) $sql_jobs="SELECT j.*, s.status_text, c.name_full, sum(t.weight) as pship_weight FROM jobs j 
+        if ($jid>0) $sql_jobs="SELECT j.*, s.status_text, c.name_full, sum(t.weight) as task_weight FROM jobs j 
             LEFT OUTER JOIN job_statuses s on s.status_id =  j.status  
             LEFT OUTER JOIN customers c on c.customer_id =  j.customer_id  
             LEFT OUTER join jobs_items t on t.job_id = j.job_id  
