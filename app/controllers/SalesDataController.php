@@ -258,7 +258,7 @@ class SalesDataController extends \Phalcon\Mvc\Controller
             $MiLidaCommonModel = new \Models\MiLidaCommon();
             $request = new \Phalcon\Http\Request();
             $authHeader =$request->getHeaders()['Authorization'];
-            if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+            if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
                 $UserInfo = $MiLidaCommonModel->getUserInfo($matches[1]);
             } else $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 			$data = $this->request->getJsonRawBody();
