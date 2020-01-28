@@ -257,7 +257,10 @@ class SalesDataController extends \Phalcon\Mvc\Controller
             $MiLidaSalesModel = new \Models\MiLidaSales();
             $MiLidaCommonModel = new \Models\MiLidaCommon();
             $request = new \Phalcon\Http\Request();
-			$UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
+            $authHeader =$request->header('Authorization');
+            if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+                $UserInfo = $MiLidaCommonModel->getUserInfo($matches[1]);
+            } else $UserInfo = $MiLidaCommonModel->getUserInfo($request->get("token"));
 			$data = $this->request->getJsonRawBody();
 			$res = $MiLidaSalesModel->saveJob($data,$UserInfo['uname']);
 			
